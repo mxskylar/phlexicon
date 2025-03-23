@@ -1,0 +1,14 @@
+{
+    "name": "phonetic-flashcards",
+    "version": "0.0.0",
+    "description": "Desktop app to create flashcards for learning languages at a phonetic level.",
+    "main": "main.js",
+    "author": "https://github.com/mxskylar",
+    "scripts": {
+        "start": "electron ."
+    },
+    "devDependencies": {
+        "electron": "^35.0.3",
+        "@electron/rebuild": "^3.7.1"
+    }
+  }
