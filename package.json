@@ -5,7 +5,7 @@
     "main": "build/main.js",
     "author": "https://github.com/mxskylar",
     "scripts": {
-        "compile": "tsc && copyfiles -f src/*.html build && copyfiles --all node_modules/xel/**/* build",
+        "compile": "tsc && cp src/*.html build && cp src/*.css build && cp -r node_modules/xel build",
         "start": "npm run compile && electron ."
     },
     "dependencies": {
@@ -13,7 +13,6 @@
     },
     "devDependencies": {
         "electron": "^35.0.3",
-        "typescript": "^5.8.2",
-        "copyfiles": "^2.4.1"
+        "typescript": "^5.8.2"
     }
 }
