@@ -5,11 +5,11 @@
     "main": "build/main.js",
     "author": "https://github.com/mxskylar",
     "scripts": {
-        "compile": "tsc && cp src/*.html build && cp src/*.css build && cp -r node_modules/xel build",
+        "compile": "tsc && cp src/*.html build && cp src/*.css build && cp node_modules/bootstrap/dist/css/bootstrap.min.css build && cp node_modules/bootstrap/dist/js/bootstrap.bundle.min.js build",
         "start": "npm run compile && electron ."
     },
     "dependencies": {
-        "xel": "^0.33.7"
+        "bootstrap": "^5.3.3"
     },
     "devDependencies": {
         "electron": "^35.0.3",

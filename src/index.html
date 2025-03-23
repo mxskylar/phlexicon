@@ -3,26 +3,15 @@
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'">
     <title>Phonetic Flashcards</title>
-    <link rel="stylesheet" href="theme.css">
-    <script src="xel/xel.js" type="module"></script>
-    <meta name="xel-theme" content="xel/themes/adwaita.css">
-    <meta name="xel-accent-color" content="blue">
-    <meta name="xel-icons" content="xel/icons/material.svg">
+    <!-- Bootstrap -->
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <script src="bootstrap.bundle.min.js"></script>
+    <!-- Custom Styling & Scripts -->
+    <link rel="stylesheet" href="hexagons.css">
   </head>
   <body>
     <h1>Hello World!</h1>
-    <x-buttons tracking="-1">
-      <x-button>
-        <x-icon href="#home"></x-icon>
-      </x-button>
-      <x-button>
-        <x-icon href="#mail"></x-icon>
-      </x-button>
-      <x-button>
-        <x-icon href="#settings"></x-icon>
-      </x-button>
-    </x-buttons>
   </body>
 </html>
