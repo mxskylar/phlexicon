@@ -1,2 +1,2 @@
-# phonetic-flashcards
-Desktop app to create flashcards for learning languages at a phonetic level.
+# phlexicon
+A phonetic catalog for lexions: Study a language. Document its vocabulary. Anlyze its accents.
