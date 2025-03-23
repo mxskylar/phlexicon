@@ -5,7 +5,7 @@
     "main": "build/main.js",
     "author": "https://github.com/mxskylar",
     "scripts": {
-        "compile": "tsc && cp src/*.html build && cp src/*.css build && cp node_modules/bootstrap/dist/css/bootstrap.min.css build && cp node_modules/bootstrap/dist/js/bootstrap.bundle.min.js build",
+        "compile": "rm -rf build && tsc && cp src/*.html build && cp src/*.css build && cp node_modules/bootstrap/dist/css/bootstrap.min.css build && cp node_modules/bootstrap/dist/js/bootstrap.bundle.min.js build",
         "start": "npm run compile && electron ."
     },
     "dependencies": {
