@@ -1,2 +1,2 @@
 # phlexicon
-A phonetic catalog for lexions: Study a language. Document its vocabulary. Anlyze its accents.
+A phonetic catalog for lexicons: Study a language. Document its vocabulary. Analyze its accents.

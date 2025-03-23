@@ -1,7 +1,7 @@
 {
     "name": "phlexicon",
     "version": "0.0.0",
-    "description": "A phonetic catalog for lexions: Study a language. Document its vocabulary. Anlyze its accents.",
+    "description": "A phonetic catalog for lexicons: Study a language. Document its vocabulary. Analyze its accents.",
     "main": "build/main.js",
     "author": "https://github.com/mxskylar",
     "license": "MIT",
