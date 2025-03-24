@@ -8,18 +8,22 @@
     "scripts": {
         "install-theme": "curl -o resources/bootstrap.min.css https://bootswatch.com/5/cerulean/bootstrap.min.css",
         "install-js": "curl -o resources/bootstrap.bundle.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
-        "postinstall": "npm run install-js && npm run install-theme",
+        "rebuild-sqlite3": "electron-rebuild -f -w sqlite3",
+        "postinstall": "npm run install-js && npm run install-theme && npm run rebuild-sqlite3",
+        "prep-build-dir": "rm -rf build && cp -r resources build",
         "compile-react": "webpack --mode development --config webpack.react.config.js",
-        "compile": "rm -rf build && cp -r resources build && tsc && npm run compile-react",
-        "start": "npm run compile && electron ."
+        "tsc": "tsc",
+        "start": "npm run prep-build-dir && npm run tsc && npm run compile-react && electron ."
     },
     "dependencies": {
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
-        "react-router-dom": "^7.4.0"
+        "react-router-dom": "^7.4.0",
+        "sqlite3": "^5.1.7"
     },
     "devDependencies": {
         "electron": "^35.0.3",
+        "@electron/rebuild": "^3.7.1",
         "typescript": "^5.8.2",
         "@types/react-dom": "^19.0.4",
         "webpack": "^5.98.0",
