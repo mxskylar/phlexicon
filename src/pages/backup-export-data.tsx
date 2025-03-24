@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-export const Page = () => {
+export const BackupExportData = () => {
     return (
         <div className="container-fluid">
-            <p>My React app</p>
+            <p>Backup & Export Data!</p>
         </div>
     );
 };

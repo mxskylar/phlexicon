@@ -5,7 +5,8 @@
         "strict": true,          
         "esModuleInterop": true,    
         "outDir": "./build",
-        "jsx": "preserve"
+        "jsx": "react"
     },
+    "include": ["src/**/*.ts", "tests/**/*.ts"],
     "exclude": ["node_modules"]
 }
