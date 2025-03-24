@@ -1,5 +1,5 @@
 {
-    "name": "phlexicon",
+    "name": "Phlexicon",
     "version": "0.0.0",
     "description": "A phonetic catalog for lexicons: Study a language. Document vocabulary. Analyze accents.",
     "main": "build/main.js",
