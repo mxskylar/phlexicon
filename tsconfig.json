@@ -4,7 +4,8 @@
         "module": "commonjs",    
         "strict": true,          
         "esModuleInterop": true,    
-        "outDir": "./build"
+        "outDir": "./build",
+        "jsx": "preserve"
     },
     "exclude": ["node_modules"]
 }

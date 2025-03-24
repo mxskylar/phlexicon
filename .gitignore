@@ -1,5 +1,5 @@
 package-lock.json
 node_modules
 build
-src/bootstrap.min.css
-src/bootstrap.bundle.min.js
+resources/bootstrap.min.css
+resources/bootstrap.bundle.min.js
