@@ -12,8 +12,8 @@
         "postinstall": "npm run install-js && npm run install-theme && npm run rebuild-sqlite3",
         "prep-build-dir": "rm -rf build && cp -r resources build",
         "compile-react": "webpack --mode development --config webpack.react.config.js",
-        "tsc": "tsc",
-        "start": "npm run prep-build-dir && npm run tsc && npm run compile-react && electron ."
+        "compile-typescript": "tsc",
+        "start": "npm run prep-build-dir && npm run compile-typescript && npm run compile-react && electron ."
     },
     "dependencies": {
         "react": "^19.0.0",
