@@ -3,7 +3,7 @@ import * as React from 'react';
 
 export const AddVocab = () => {
     const add = () => {
-        //query("CREATE DATABASE asl;");
+        //query("CREATE DATABASE phlexicon;");
         console.log("hi")
     }
     return (
