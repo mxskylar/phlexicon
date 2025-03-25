@@ -55,3 +55,7 @@ const getSignLanguages = async (fileName) => {
 const signLanguagesFile = "sign-languages.json";
 const signLanguages = await getSignLanguages(signLanguagesFile);
 fs.writeFileSync(`${DB_DATA_DIR}/${signLanguagesFile}`, JSON.stringify(signLanguages))
+
+// TODO: Create sign-phonemes.json from alphabets pulled from this Sign Puddle endpoint: /dictionary/{name}/alphabet{?update}
+// Parse unique unicode characters from navigatable tree of unicode characters returned
+// Detect if character represents a handshape, the right or left hand, a particular palm facing or rotational orientation, a movement, or a facial expression based on unicode ID of character
