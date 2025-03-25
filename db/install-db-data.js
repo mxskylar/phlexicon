@@ -14,3 +14,4 @@ const downloadFile = async (url, fileName) => {
 };
 
 await downloadFile("https://raw.githubusercontent.com/phoible/dev/master/mappings/InventoryID-LanguageCodes.csv", "spoken-languages.csv");
+await downloadFile("https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv", "spoken-phonemes.csv");
