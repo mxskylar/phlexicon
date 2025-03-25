@@ -1,4 +1,7 @@
 const { app, BrowserWindow, shell } = require('electron');
+const sqlite3 = require('sqlite3').verbose();
+
+const db = new sqlite3.Database('db/phlexicon.db');
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -15,4 +18,9 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
     createWindow();
+});
+
+app.on('window-all-closed', () => {
+    db.close();
+    app.quit();
 });
