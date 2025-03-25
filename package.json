@@ -4,7 +4,7 @@
     "description": "A phonetic catalog for lexicons: Study a language. Document vocabulary. Analyze accents.",
     "main": "build/main.js",
     "author": "https://github.com/mxskylar",
-    "license": "MIT",
+    "license": "GNU General Public License v3.0",
     "scripts": {
         "install-bootswatch-theme": "curl -o resources/bootstrap.min.css https://bootswatch.com/5/cerulean/bootstrap.min.css",
         "install-bootstrap-js": "curl -o resources/bootstrap.bundle.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
