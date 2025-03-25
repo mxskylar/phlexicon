@@ -1,7 +1,11 @@
 import * as React from 'react';
 import {Keyboard} from '../components/keyboard'
+import {ankiPost} from '../utils/anki-client'
 
 export const AddVocab = () => {
+    ankiPost({action: "deckNames"})
+        .then(result => console.log(result))
+        .catch(failureCallback => console.log(failureCallback));
     const add = () => {
         console.log("My query");
     };
