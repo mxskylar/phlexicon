@@ -1,16 +1,30 @@
 .keyboard {
     width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.keyboard .nav-tabs {
     margin-bottom: 10px;
 }
 
-.keyboard .keyboard-row {
+.keyboard .btn-toolbar .btn-group {
+    margin-top: 10px;
+}
+
+.keyboard .btn-toolbar .btn-group .input-group-text {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.keys .key-row {
     text-align: center;
 }
 
-.keyboard .keyboard-row:not(:first-child) {
+.keys .key-row:not(:first-child) {
     margin-top: 5px;
 }
 
-.keyboard-row button:not(:first-child) {
+.keys .key-row button:not(:first-child) {
     margin-left: 5px;
 }
