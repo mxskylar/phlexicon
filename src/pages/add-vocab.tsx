@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {query} from '../utils/sqlite-dao';
-import {Keyboard} from '../keyboard/keyboard'
+import {Keyboard} from '../components/keyboard'
 
 export const AddVocab = () => {
     const add = () => {

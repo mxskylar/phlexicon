@@ -7,6 +7,6 @@
         "outDir": "./build",
         "jsx": "react"
     },
-    "include": ["src/**/*.ts", "tests/**/*.ts", "src/keyboard/keyboard.tsx"],
+    "include": ["src/**/*.ts", "tests/**/*.ts", "src/components/keyboard.tsx"],
     "exclude": ["node_modules"]
 }
