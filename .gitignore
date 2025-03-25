@@ -3,4 +3,4 @@ node_modules
 build
 resources/bootstrap.min.css
 resources/bootstrap.bundle.min.js
-db/phlexicon.db
+db/data

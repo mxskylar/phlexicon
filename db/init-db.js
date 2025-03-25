@@ -1,5 +1,8 @@
-const sqlite3 = require('sqlite3').verbose();
-const fs = require('fs');
+import * as fs from 'fs';
+import {mkdir} from 'fs/promises';
+import {createRequire} from "module";
+const require = createRequire(import.meta.url);
+const sqlite3 = require('sqlite3');
 
 const runQueriesFromFile = filePath => {
     const fileContents = fs.readFileSync(filePath).toString();
@@ -13,7 +16,11 @@ const runQueriesFromFile = filePath => {
     });
 };
 
-const db = new sqlite3.Database('db/phlexicon.db');
+const dataDir = "db/data"
+if (!fs.existsSync(dataDir)) {
+    await mkdir(dataDir);
+}
+const db = new sqlite3.Database(`${dataDir}/phlexicon.db`);
 
 runQueriesFromFile('db/create-tables.sql');
 
