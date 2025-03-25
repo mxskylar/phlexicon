@@ -6,11 +6,10 @@
     "author": "https://github.com/mxskylar",
     "license": "GNU General Public License v3.0",
     "scripts": {
-        "install-bootswatch-theme": "curl -o resources/bootstrap.min.css https://bootswatch.com/5/cerulean/bootstrap.min.css",
-        "install-bootstrap-js": "curl -o resources/bootstrap.bundle.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+        "install-bootstrap": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON install-bootstrap.js",
         "rebuild-sqlite3": "electron-rebuild -f -w sqlite3",
         "install-db-data": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON db/install-db-data.js",
-        "postinstall": "npm run install-bootstrap-js && npm run install-bootswatch-theme && npm run rebuild-sqlite3",
+        "postinstall": "npm run install-bootstrap && npm run rebuild-sqlite3 && npm run install-db-data",
         "init-db": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON db/init-db.js",
         "prep-build-dir": "rm -rf build && cp -r resources build",
         "compile-react": "webpack --mode development --config webpack.react.config.js",
