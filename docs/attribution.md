@@ -9,6 +9,7 @@ Phlexicon would be nothing without the open source data and frameworks it depend
 - [Bootswatch](https://bootswatch.com/): Theme for Bootstrap
 - [React](https://react.dev/): Framework for web development
 - [Electron](https://www.electronjs.org/): Framework to distribute web apps as desktop apps
+- [Node.js](https://nodejs.org/): JavaScript development tool
 
 ## PHOIBLE
 

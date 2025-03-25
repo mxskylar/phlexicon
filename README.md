@@ -9,3 +9,16 @@ Phlexicon would be nothing without the open source data and frameworks it depend
 Read more about those [here](https://mxskylar.github.io/phlexicon/attribution).
 
 ## Development
+
+Phlexicon is an [Electron](https://www.electronjs.org/) app built with [node](https://nodejs.org/) `v23.10.0`.
+
+Setup the app:
+```bash
+npm install
+npm init-db
+```
+
+Run the app:
+```bash
+npm start
+```
