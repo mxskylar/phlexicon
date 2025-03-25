@@ -13,5 +13,9 @@ const downloadFile = async (url, fileName) => {
     Readable.fromWeb(response.body).pipe(fileStream);
 };
 
+// ISO language codes & names
+await downloadFile("https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3_Name_Index.tab", "iso-languages.tab");
+
+// Phoible data on spoken languages
 await downloadFile("https://raw.githubusercontent.com/phoible/dev/master/mappings/InventoryID-LanguageCodes.csv", "spoken-languages.csv");
 await downloadFile("https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv", "spoken-phonemes.csv");
