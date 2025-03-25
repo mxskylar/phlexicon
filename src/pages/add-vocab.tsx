@@ -1,10 +1,9 @@
 import * as React from 'react';
-import {query} from '../utils/sqlite-dao';
 import {Keyboard} from '../components/keyboard'
 
 export const AddVocab = () => {
     const add = () => {
-        query("My query");
+        console.log("My query");
     };
     return (
         <div className="container-fluid">
