@@ -6,10 +6,10 @@
     "author": "https://github.com/mxskylar",
     "license": "MIT",
     "scripts": {
-        "install-theme": "curl -o resources/bootstrap.min.css https://bootswatch.com/5/cerulean/bootstrap.min.css",
-        "install-js": "curl -o resources/bootstrap.bundle.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+        "install-bootswatch-theme": "curl -o resources/bootstrap.min.css https://bootswatch.com/5/cerulean/bootstrap.min.css",
+        "install-bootstrap-js": "curl -o resources/bootstrap.bundle.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
         "rebuild-sqlite3": "electron-rebuild -f -w sqlite3",
-        "postinstall": "npm run install-js && npm run install-theme && npm run rebuild-sqlite3",
+        "postinstall": "npm run install-bootstrap-js && npm run install-bootswatch-theme && npm run rebuild-sqlite3",
         "init-db": "node db/init-db.js",
         "prep-build-dir": "rm -rf build && cp -r resources build",
         "compile-react": "webpack --mode development --config webpack.react.config.js",
