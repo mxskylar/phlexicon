@@ -16,8 +16,9 @@ Phlexicon is an [Electron](https://www.electronjs.org/) app built with [node](ht
 
 Setup the app:
 ```bash
-npm install
-npm run init-db
+npm install # Install JS & CSS dependencies
+npm run install-db-data # Download data for database
+npm run init-db # Create & populate database tables
 ```
 
 Run the app:

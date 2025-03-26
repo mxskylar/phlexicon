@@ -9,7 +9,7 @@
         "install-bootstrap": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON install-bootstrap.js",
         "rebuild-sqlite3": "electron-rebuild -f -w sqlite3",
         "install-db-data": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON db/install-db-data.js",
-        "postinstall": "npm run install-bootstrap && npm run rebuild-sqlite3 && npm run install-db-data",
+        "postinstall": "npm run install-bootstrap && npm run rebuild-sqlite3",
         "init-db": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON db/init-db.js",
         "prep-build-dir": "rm -rf build && cp -r resources build",
         "compile-react": "webpack --mode development --config webpack.react.config.js",
