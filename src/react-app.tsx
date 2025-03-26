@@ -4,7 +4,6 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes, Link, Navigate } from 'react-router-dom';
 import { AddVocab } from './pages/add-vocab';
 import { SearchCustomizeVocab } from './pages/search-customize-vocab';
-import { CustomizePhonemes } from './pages/customize-phonemes';
 import { BackupExportData } from './pages/backup-export-data';
 
 const Navbar = () => {
