@@ -24,9 +24,6 @@ const Navbar = () => {
                             <Link className="nav-link" to="/search-customize-vocab">🔍&nbsp;&nbsp;Search & Customize Vocab</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/customize-phonemes">🔠&nbsp;&nbsp;Customize Phonemes</Link>
-                        </li>
-                        <li className="nav-item">
                             <Link className="nav-link" to="/backup-export-data">💾&nbsp;&nbsp;Backup & Export Data</Link>
                         </li>
                         <li className="nav-item">
@@ -46,7 +43,6 @@ const App = () => {
             <Routes>
                 <Route path="/add-vocab" element={<AddVocab/>}/>
                 <Route path="/search-customize-vocab"  element={<SearchCustomizeVocab/>}/>
-                <Route path="/customize-phonemes"  element={<CustomizePhonemes/>}/>
                 <Route path="/backup-export-data"  element={<BackupExportData/>}/>
                 <Route path="*" element={<Navigate to="/add-vocab" replace />}/>
             </Routes>

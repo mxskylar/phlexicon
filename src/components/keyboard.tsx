@@ -18,14 +18,14 @@ export const Keyboard = () => {
                     <button type="button" className="btn btn-outline-info active">Right</button>
                 </div>
                 <div className="btn-group me-2" role="group" aria-label="Palm Facing">
-                    <div className="input-group-text" id="btnGroupAddon">Palm Facing</div>
+                    <div className="input-group-text" id="btnGroupAddon">Palms Facing</div>
                     <button type="button" className="btn btn-outline-info active">↑</button>
                     <button type="button" className="btn btn-outline-info">↓</button>
                     <button type="button" className="btn btn-outline-info">←</button>
                     <button type="button" className="btn btn-outline-info">→</button>
                 </div>
                 <div className="btn-group me-2" role="group" aria-label="Hand">
-                    <div className="input-group-text" id="btnGroupAddon">Rotate Palm</div>
+                    <div className="input-group-text" id="btnGroupAddon">Rotate Palms</div>
                     <button type="button" className="btn btn-outline-info">↺</button>
                     <button type="button" className="btn btn-outline-info">↻</button>
                 </div>
