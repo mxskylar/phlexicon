@@ -5,7 +5,7 @@ const db = new sqlite3.Database('db/data/phlexicon.db');
 
 const createWindow = () => {
     const win = new BrowserWindow({
-        width: 800,
+        width: 700,
         height: 700
     });
     win.loadFile('build/index.html');
