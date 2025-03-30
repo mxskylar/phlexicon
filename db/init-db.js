@@ -5,15 +5,9 @@ const require = createRequire(import.meta.url);
 const sqlite3 = require('sqlite3');
 
 const runQueriesFromFile = filePath => {
-    const fileContents = fs.readFileSync(filePath).toString();
-    const queries = fileContents.split(";").map(q => q.trim()).filter(q => q !== "");
-    queries.forEach((query, i) => {
-        console.log(`${i !== 0 ? "\n" : ""}Executing query...`)
-        console.log(query);
-        db.serialize(() => {
-            db.run(query);
-        });
-    });
+    const queries = fs.readFileSync(filePath).toString();
+    console.log(`Running queries in ${filePath}`);
+    db.exec(queries);
 };
 
 const dataDir = "db/data"
