@@ -8,13 +8,14 @@
     "scripts": {
         "install-bootstrap": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON install-bootstrap.js",
         "rebuild-sqlite3": "electron-rebuild -f -w sqlite3",
-        "install-db-data": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON db/install-db-data.js",
         "postinstall": "npm run install-bootstrap && npm run rebuild-sqlite3",
+        "install-db-data": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON db/install-db-data.js",
         "init-db": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON db/init-db.js",
         "prep-build-dir": "rm -rf build && mkdir build && cp -r installed-resources/* build && cp -r custom-resources/* build",
         "compile-react": "webpack --mode development --config webpack.react.config.js",
         "compile-typescript": "tsc",
-        "start": "npm run prep-build-dir && npm run compile-typescript && npm run compile-react && electron ."
+        "app": "npm run prep-build-dir && npm run compile-typescript && npm run compile-react && electron .",
+        "start": "npm install && npm run install-db-data && npm run init-db && npm run app"
     },
     "dependencies": {
         "react": "^19.0.0",

@@ -13,15 +13,17 @@ Read more about those [here](https://mxskylar.github.io/phlexicon/attribution).
 ## Development
 
 Phlexicon is an [Electron](https://www.electronjs.org/) app built with [node](https://nodejs.org/) `v23.10.0`.
+Python scripts used in the CI are run via [Docker]().
 
-Setup the app:
-```bash
-npm install # Install JS & CSS dependencies
-npm run install-db-data # Download data for database
-npm run init-db # Create & populate database tables
-```
-
-Run the app:
+To build and launch the app from scratch:
 ```bash
 npm start
+```
+
+Alternatively, you may run individual steps within `npm start` one at a time:
+```bash
+npm install # Installs Node & web dependencies
+npm run install-db-data # Download data for database
+npm run init-db # Creates & populates database tables
+npm run app # Compiles Typescript, bundles application, then launches Electron app
 ```
