@@ -1,6 +1,12 @@
 import * as fs from 'fs';
 import {downloadFile} from "../install-utils.js";
-import {DATA_DIR, ISO_LANGUAGES_FILE, SPOKEN_PHONEMES_FILE, SIGN_LANGUAGES_FILE_PATH} from './db-constants.js';
+import {
+    DATA_DIR,
+    ISO_LANGUAGES_FILE,
+    SPOKEN_PHONEMES_FILE,
+    SIGN_LANGUAGES_FILE_PATH,
+    SIGN_KEYBOARDS_FILE_PATH
+} from './db-constants.js';
 
 // ISO language codes & names
 // ISO 639-3 Code Set: https://iso639-3.sil.org/code_tables/download_tables#639-3%20Code%20Set
@@ -34,39 +40,49 @@ const getSignLanguages = async () => {
     })
         .then(response => response.json())
         .then(responseData => responseData);
-    const signLanguageRows = dictionaries.map((dictionary, i) => {
-        const dictNamePieces = dictionary.split("-");
-       return [
-            i + 1, // id
-            dictNamePieces[0], // iso_code
-            dictNamePieces[1] // region
-        ];
+    const signLanguageRows = [];
+    const signDictiontionaries = {};
+    dictionaries.forEach((dict, i) => {
+        const dictNamePieces = dict.split("-");
+        const id = i + 1
+        const isoCode = dictNamePieces[0];
+        const region = dictNamePieces[1];
+        signLanguageRows.push([id, isoCode, region]);
+        signDictiontionaries[dict] = {id, isoCode};
     });
     return {
         signLanguageRows,
-        signLanguageDictionaries: dictionaries
+        signDictiontionaries
     }
 };
 
-const getSignLanguageAlphabets = async dictionary => {
+const getSignAlphabet = async (dictionary) => {
     const urlPath = `/dictionary/${dictionary}/alphabet?update=1`;
     const url = `${SIGN_PUDDLE_HOST}${urlPath}`;
     console.log(`Requesting: ${url}`);
-    const alphabet = await fetch(url, {method: "GET"})
+    return await fetch(url, {method: "GET"})
         .then(response => response.json())
         .then(responseData => responseData);
-    console.log(alphabet);
 };
 
-const {signLanguageRows, signLanguageDictionaries} = await getSignLanguages();
+const {signLanguageRows, signDictiontionaries} = await getSignLanguages();
 console.log(`Creating ${SIGN_LANGUAGES_FILE_PATH}`);
 fs.writeFileSync(SIGN_LANGUAGES_FILE_PATH, JSON.stringify({
     columns: ["id", "iso_code", "dialect"],
     rows: signLanguageRows
 }));
 
-//console.log(signLanguageDictionaries);
-//await getSignLanguageAlphabets("ase-US-dictionary-public");
+const signKeyboardRows = [];
+for (const [dict, values] of Object.entries(signDictiontionaries)) {
+    const {id, isoCode} = values;
+    const alphabet = await getSignAlphabet(dict);
+    signKeyboardRows.push([id, isoCode, alphabet]);
+    //break;
+}
+fs.writeFileSync(SIGN_KEYBOARDS_FILE_PATH, JSON.stringify({
+    columns: ["language_id", "iso_code", "phoneme"],
+    rows: signKeyboardRows
+}));
 
 // TODO: Create sign-phonemes.json from alphabets pulled from this Sign Puddle endpoint: /dictionary/{name}/alphabet{?update}
 // Parse unique unicode characters from navigatable tree of unicode characters returned
