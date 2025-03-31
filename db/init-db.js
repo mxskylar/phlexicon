@@ -43,7 +43,7 @@ const insertRowsFromSeperatedValueFile = async (tableName, filePath, columnOverr
         .pipe(csvParse.parse(parserOptions));
     for await (const record of parser) {
         const row = columnOverrides
-            ? record.filter((_, i) => columnOverrides[i])
+            ? record.filter((_, i) => typeof columnOverrides[i] !== "undefined"  && columnOverrides[i])
             : record;
         records.push(row);
     }
@@ -72,6 +72,9 @@ runQueriesFromFile(`${DB_DIR}/create-tables-views.sql`);
 await insertRowsFromSeperatedValueFile("iso_languages", `${DATA_DIR}/${ISO_LANGUAGES_FILE}`, ["id", null, null, null, null, null, "ref_name", null], {delimiter: "\t"});
 await insertRowsFromSeperatedValueFile("spoken_languages", `${DATA_DIR}/${SPOKEN_LANGUAGES_FILE}`, ["id", "iso_code", null, "variety_name", null]);
 await insertRowsFromJsonFile("sign_language_dictionaries", SIGN_LANGUAGES_FILE_PATH);
+
+// Insert data into phoneme tables
+await insertRowsFromSeperatedValueFile("spoken_phonemes", `${DATA_DIR}/${SPOKEN_PHONEMES_FILE}`, ["variety_id", null, null, null, null, null, "phoneme"]);
 
 // Create tables built from custom queries and drop tables that do not need to be bundled with applicatino
 runQueriesFromFile(`${DB_DIR}/etl.sql`);

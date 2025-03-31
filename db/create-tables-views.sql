@@ -14,6 +14,14 @@ CREATE TABLE IF NOT EXISTS main.spoken_languages(
     iso_code CHAR(3) NOT NULL
 );
 
+DROP TABLE IF EXISTS main.spoken_phonemes;
+CREATE TABLE IF NOT EXISTS main.spoken_phonemes(
+    phoneme STRING NOT NULL,
+    variety_id CHAR(3) NOT NULL,
+    FOREIGN KEY(variety_id) REFERENCES spoken_languages(id),
+    PRIMARY KEY (phoneme, variety_id)
+);
+
 -- Sign Languages
 DROP TABLE IF EXISTS main.sign_language_dictionaries;
 CREATE TABLE IF NOT EXISTS main.sign_language_dictionaries(
