@@ -3,7 +3,14 @@ import {mkdir} from 'fs/promises';
 import * as os from 'os';
 import {createRequire} from "module";
 import * as csvParse from "csv-parse";
-import {DATA_DIR, DB_DIR, ISO_LANGUAGES_FILE, SIGN_LANGUAGES_FILE_PATH, SPOKEN_LANGUAGES_FILE} from "./db-constants.js";
+import {
+    DATA_DIR,
+    DB_DIR,
+    ISO_LANGUAGES_FILE,
+    SIGN_LANGUAGES_FILE_PATH,
+    SPOKEN_LANGUAGES_FILE,
+    SPOKEN_PHONEMES_FILE
+} from "./db-constants.js";
 const require = createRequire(import.meta.url);
 const sqlite3 = require('sqlite3');
 
@@ -16,7 +23,11 @@ const runQueriesFromFile = filePath => {
 const insertRows = (tableName, columnNames, records) => {
     const columns = columnNames.map(column => "`" + column + "`");
     const queries = ["BEGIN TRANSACTION;"]
-    const rows = records.map(row => row.map(value => typeof value === 'string' ? `"${value.split('"').join(" || '\"' || ")}"`: value));
+    const rows = records.map(
+        row => row.map(
+            value => typeof value === 'string' ? `"${value.split('"').join(" || '\"' || ")}"`: value
+        )
+    );
     rows.forEach(values => {
         queries.push(`INSERT INTO \`${tableName}\` (${columns.join(", ")}) VALUES (${values.join(", ")});`);
     });
