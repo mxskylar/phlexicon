@@ -1,5 +1,5 @@
-INSERT INTO sign_languages
-SELECT sld.id, iso_code, ref_name || " (" || region || ")" AS variety_name
+INSERT INTO sign_languages (id, iso_code, variety_name)
+SELECT sld.id, iso_code, ref_name || " (" || region || ")"
 FROM sign_language_dictionaries sld
 JOIN iso_languages il
 ON iso_code = il.id;
