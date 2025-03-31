@@ -3,7 +3,7 @@ import {mkdir} from 'fs/promises';
 import * as os from 'os';
 import {createRequire} from "module";
 import * as csvParse from "csv-parse";
-import {DATA_DIR, DB_DIR, ISO_LANGUAGES_FILE, SIGN_LANGUAGES_FILE_PATH} from "./db-constants.js";
+import {DATA_DIR, DB_DIR, ISO_LANGUAGES_FILE, SIGN_LANGUAGES_FILE_PATH, SPOKEN_LANGUAGES_FILE} from "./db-constants.js";
 const require = createRequire(import.meta.url);
 const sqlite3 = require('sqlite3');
 
@@ -55,6 +55,7 @@ const db = new sqlite3.Database(`${DATA_DIR}/phlexicon.db`);
 
 runQueriesFromFile(`${DB_DIR}/create-tables.sql`);
 await insertRowsFromSeperatedValueFile("iso_languages", `${DATA_DIR}/${ISO_LANGUAGES_FILE}`, ["id", null, null, null, null, null, "ref_name", null], {delimiter: "\t"});
+await insertRowsFromSeperatedValueFile("spoken_languages", `${DATA_DIR}/${SPOKEN_LANGUAGES_FILE}`, ["id", "iso_code", null, "variety_name", null]);
 insertRowsFromJsonFile("sign_language_dictionaries", SIGN_LANGUAGES_FILE_PATH);
 runQueriesFromFile(`${DB_DIR}/join-drop.sql`);
 
