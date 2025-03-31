@@ -2,21 +2,28 @@
 DROP TABLE IF EXISTS main.iso_languages;
 CREATE TABLE IF NOT EXISTS main.iso_languages(
     id CHAR(3) NOT NULL,
-    print_name VARCHAR(75) NOT NULL,
-    inverted_name VARCHAR(75) NOT NULL
+    ref_name VARCHAR(75) NOT NULL
 );
 
 DROP TABLE IF EXISTS main.spoken_languages;
 CREATE TABLE IF NOT EXISTS main.spoken_languages(
-    language_variety STRING NOT NULL PRIMARY KEY,
+    id INTEGER NOT NULL PRIMARY KEY,
+    variety_name STRING NOT NULL,
+    iso_code CHAR(3) NOT NULL
+);
+
+DROP TABLE IF EXISTS main.sign_language_dictionaries;
+CREATE TABLE IF NOT EXISTS main.sign_language_dictionaries(
+    id INTEGER NOT NULL PRIMARY KEY,
+    sign_puddle_dictionary STRING NOT NULL,
+    region STRING NOT NULL,
     iso_code CHAR(3) NOT NULL,
     FOREIGN KEY(iso_code) REFERENCES iso_languages(id)
 );
 
 DROP TABLE IF EXISTS main.sign_languages;
 CREATE TABLE IF NOT EXISTS main.sign_languages(
-    sign_puddle_dictionary STRING NOT NULL PRIMARY KEY,
-    region STRING NOT NULL,
-    iso_code CHAR(3) NOT NULL,
-    FOREIGN KEY(iso_code) REFERENCES iso_languages(id)
+    id INTEGER NOT NULL PRIMARY KEY,
+    variety_name STRING NOT NULL,
+    iso_code CHAR(3) NOT NULL
 );

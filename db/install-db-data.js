@@ -3,8 +3,8 @@ import {downloadFile} from "../install-utils.js";
 import {DATA_DIR, ISO_LANGUAGES_FILE, SPOKEN_LANGUAGES_FILE, SPOKEN_PHONEMES_FILE, SIGN_LANGUAGES_FILE_PATH} from './db-constants.js';
 
 // ISO language codes & names
-// See Language Names Index at: https://iso639-3.sil.org/code_tables/download_tables
-await downloadFile("https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3_Name_Index.tab", DATA_DIR, ISO_LANGUAGES_FILE);
+// ISO 639-3 Code Set: https://iso639-3.sil.org/code_tables/download_tables#639-3%20Code%20Set
+await downloadFile("https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3.tab", DATA_DIR, ISO_LANGUAGES_FILE);
 
 // Phoible data on spoken languages
 // https://phoible.org/download
@@ -35,10 +35,11 @@ const getSignLanguages = async (filePath) => {
     })
         .then(response => response.json())
         .then(responseData => responseData);
-    return dictionaries.map(dictionaryName => {
-        const dictNamePieces = dictionaryName.split("-");
+    return dictionaries.map((dictionary, i) => {
+        const dictNamePieces = dictionary.split("-");
        return [
-            dictionaryName, // sign_puddle_dictionary
+            i + 1, // id
+            dictionary, // sign_puddle_dictionary
             dictNamePieces[0], // iso_code
             dictNamePieces[1] // region
         ];
@@ -46,7 +47,7 @@ const getSignLanguages = async (filePath) => {
 };
 
 fs.writeFileSync(SIGN_LANGUAGES_FILE_PATH, JSON.stringify({
-    columns: ["sign_puddle_dictionary", "iso_code", "region"],
+    columns: ["id", "sign_puddle_dictionary", "iso_code", "region"],
     rows: await getSignLanguages(SIGN_LANGUAGES_FILE_PATH)
 }));
 

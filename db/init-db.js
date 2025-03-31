@@ -58,7 +58,8 @@ if (!fs.existsSync(DATA_DIR)) {
 const db = new sqlite3.Database(`${DATA_DIR}/phlexicon.db`);
 
 runQueriesFromFile(`${DB_DIR}/create-tables.sql`);
-insertRowsFromSeperatedValuesFile("iso_languages", ISO_LANGUAGES_FILE, "\t", ["id", "inverted_name", "print_name"]);
-insertRowsFromJsonFile("sign_languages", SIGN_LANGUAGES_FILE_PATH);
+insertRowsFromSeperatedValuesFile("iso_languages", ISO_LANGUAGES_FILE, "\t", ["id", null, null, null, null, null, "ref_name", null]);
+insertRowsFromJsonFile("sign_language_dictionaries", SIGN_LANGUAGES_FILE_PATH);
+runQueriesFromFile(`${DB_DIR}/join-drop.sql`);
 
 db.close();
