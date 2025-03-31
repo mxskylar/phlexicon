@@ -11,10 +11,11 @@ const runQueriesFromFile = filePath => {
     db.exec(queries);
 };
 
-const insertRowsFromFile = (filePath, seperator, columnNames, tableName) => {
+const insertRowsFromFile = (tableName, filePath, seperator, overridenColumnNames = null) => {
     const rows = [];
     let i = 0;
     const lines = fs.readFileSync(filePath).toString().split(os.EOL);
+    const columnNames = overridenColumnNames ? overridenColumnNames : lines[0].split(seperator);
     lines.forEach(line => {
         if (i > 0 && line) {
             const rawValues = line.split(seperator);
@@ -49,6 +50,6 @@ if (!fs.existsSync(DATA_DIR)) {
 const db = new sqlite3.Database(`${DATA_DIR}/phlexicon.db`);
 
 runQueriesFromFile(`${DB_DIR}/create-tables.sql`);
-insertRowsFromFile(`${DATA_DIR}/iso-languages.tab`, "\t", ["id", "inverted_name", "print_name"], "iso_languages")
+insertRowsFromFile("iso_languages", `${DATA_DIR}/iso-languages.tab`, "\t", ["id", "inverted_name", "print_name"]);
 
 db.close();
