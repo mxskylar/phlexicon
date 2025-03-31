@@ -9,7 +9,6 @@ await downloadFile("https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-
 // Phoible data on spoken languages
 // https://phoible.org/download
 // https://github.com/phoible/dev/tree/master/data
-await downloadFile("https://raw.githubusercontent.com/phoible/dev/master/mappings/InventoryID-LanguageCodes.csv", DATA_DIR, SPOKEN_LANGUAGES_FILE);
 await downloadFile("https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv", DATA_DIR, SPOKEN_PHONEMES_FILE);
 
 // SignPuddle API for SignWriting
@@ -39,7 +38,6 @@ const getSignLanguages = async (filePath) => {
         const dictNamePieces = dictionary.split("-");
        return [
             i + 1, // id
-            dictionary, // sign_puddle_dictionary
             dictNamePieces[0], // iso_code
             dictNamePieces[1] // region
         ];
@@ -47,7 +45,7 @@ const getSignLanguages = async (filePath) => {
 };
 
 fs.writeFileSync(SIGN_LANGUAGES_FILE_PATH, JSON.stringify({
-    columns: ["id", "sign_puddle_dictionary", "iso_code", "region"],
+    columns: ["id", "iso_code", "dialect"],
     rows: await getSignLanguages(SIGN_LANGUAGES_FILE_PATH)
 }));
 

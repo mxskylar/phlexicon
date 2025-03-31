@@ -68,15 +68,16 @@ const db = new sqlite3.Database(`${DATA_DIR}/phlexicon.db`);
 // Create tables & views
 runQueriesFromFile(`${DB_DIR}/create-tables-views.sql`);
 
-// Insert data into language tables
-await insertRowsFromSeperatedValueFile("iso_languages", `${DATA_DIR}/${ISO_LANGUAGES_FILE}`, ["id", null, null, null, null, null, "ref_name", null], {delimiter: "\t"});
-await insertRowsFromSeperatedValueFile("spoken_languages", `${DATA_DIR}/${SPOKEN_LANGUAGES_FILE}`, ["id", "iso_code", null, "variety_name", null]);
-await insertRowsFromJsonFile("sign_language_dictionaries", SIGN_LANGUAGES_FILE_PATH);
+// Insert data for ISO languages
+await insertRowsFromSeperatedValueFile("languages", `${DATA_DIR}/${ISO_LANGUAGES_FILE}`, ["iso_code", null, null, null, null, null, "language_name", null], {delimiter: "\t"});
 
-// Insert data into phoneme tables
-await insertRowsFromSeperatedValueFile("spoken_phonemes", `${DATA_DIR}/${SPOKEN_PHONEMES_FILE}`, ["variety_id", null, null, null, null, null, "phoneme"]);
+// Insert data into spoken languages
+await insertRowsFromSeperatedValueFile("spoken_phonemes", `${DATA_DIR}/${SPOKEN_PHONEMES_FILE}`, ["variety_id", null, "language_variety", "dialect_description", null, null, "phoneme"]);
+
+// Insert data for sign languages
+await insertRowsFromJsonFile("sign_languages", SIGN_LANGUAGES_FILE_PATH);
 
 // Create tables built from custom queries and drop tables that do not need to be bundled with applicatino
-runQueriesFromFile(`${DB_DIR}/etl.sql`);
+//runQueriesFromFile(`${DB_DIR}/etl.sql`);
 
 db.close();
