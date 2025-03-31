@@ -35,3 +35,12 @@ CREATE TABLE IF NOT EXISTS main.sign_dialects(
     iso_code CHAR(3) NOT NULL,
     FOREIGN KEY (iso_code) REFERENCES iso_languages(iso_code)
 );
+
+-- Create union views of spoken & sign language tables
+DROP VIEW IF EXISTS dialects;
+CREATE VIEW dialects AS
+SELECT *, "SPOKEN" AS language_type
+FROM spoken_dialects
+UNION
+SELECT *, "SIGN" AS language_type
+FROM sign_dialects;
