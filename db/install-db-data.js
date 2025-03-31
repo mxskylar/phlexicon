@@ -5,7 +5,8 @@ import {
     ISO_LANGUAGES_FILE,
     SPOKEN_PHONEMES_FILE,
     SIGN_LANGUAGES_FILE_PATH,
-    SIGN_KEYBOARDS_FILE_PATH
+    SIGN_KEYBOARDS_FILE_PATH,
+    SIGN_WRITING_FONT_FILE
 } from './db-constants.js';
 
 // ISO language codes & names
@@ -24,6 +25,7 @@ await downloadFile("https://raw.githubusercontent.com/phoible/dev/master/data/ph
 // SignWriting Tutorial: https://www.signwriting.org/lessons/lessonsw/000%20Cover.html
 // SignWriting Characters: https://signbank.org/SignWriting_Character_Viewer.html#?ui=en&set=uni8
 // SignMaker: https://www.signbank.org/signmaker.html
+// SignWriting Fonts: https://www.sutton-signwriting.io/#fonts
 const SIGN_PUDDLE_HOST = "https://signpuddle.com/server";
 
 const getSignLanguages = async () => {
@@ -72,12 +74,13 @@ fs.writeFileSync(SIGN_LANGUAGES_FILE_PATH, JSON.stringify({
     rows: signLanguageRows
 }));
 
+await downloadFile("https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingLine.ttf", DATA_DIR, SIGN_WRITING_FONT_FILE, true);
 const signKeyboardRows = [];
 for (const [dict, values] of Object.entries(signDictiontionaries)) {
     const {id, isoCode} = values;
     const alphabet = await getSignAlphabet(dict);
     signKeyboardRows.push([id, isoCode, alphabet]);
-    //break;
+    break;
 }
 fs.writeFileSync(SIGN_KEYBOARDS_FILE_PATH, JSON.stringify({
     columns: ["language_id", "iso_code", "phoneme"],
