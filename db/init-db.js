@@ -114,7 +114,7 @@ await insertRowsFromSeperatedValueFile(
 );
 
 // Insert data for sign languages
-await insertRowsFromJsonFile("sign_languages", SIGN_LANGUAGES_FILE_PATH);
+await insertRowsFromJsonFile("sign_dialects", SIGN_LANGUAGES_FILE_PATH);
 
 // Create tables built from custom queries and drop tables that do not need to be bundled with applicatino
 runQueriesFromFile(`${DB_DIR}/etl.sql`);

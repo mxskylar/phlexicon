@@ -1,6 +1,6 @@
 -- Choose dialect for spoken languages and insert unique values
 -- Then, drop columns no longer needed
-INSERT INTO spoken_languages (id, iso_code, dialect)
+INSERT INTO spoken_dialects (id, iso_code, dialect)
 SELECT
     language_id,
     iso_code,
