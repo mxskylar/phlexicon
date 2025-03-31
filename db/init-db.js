@@ -20,13 +20,28 @@ const runQueriesFromFile = filePath => {
     db.exec(queries);
 };
 
-const insertRows = (tableName, columnNames, records) => {
+const insertRows = (
+    tableName,
+    columnNames,
+    records,
+    customValueParser = (value, i) => false
+) => {
     const columns = columnNames.map(column => "`" + column + "`");
     const queries = ["BEGIN TRANSACTION;"]
     const rows = records.map(
-        row => row.map(
-            value => typeof value === 'string' ? `"${value.split('"').join(" || '\"' || ")}"`: value
-        )
+        row => row.map((value, i) => {
+            const customValue = customValueParser(value, i);
+            if (customValue) {
+                return customValue;
+            }
+            if (typeof value === 'string') {
+                return `"${value.split('"').join(" || '\"' || ")}"`;
+            }
+            if (value === null) {
+                return "NULL"
+            }
+            return value;
+        })
     );
     rows.forEach(values => {
         queries.push(`INSERT INTO \`${tableName}\` (${columns.join(", ")}) VALUES (${values.join(", ")});`);
@@ -36,7 +51,13 @@ const insertRows = (tableName, columnNames, records) => {
     db.exec(queries.join(os.EOL));
 }
 
-const insertRowsFromSeperatedValueFile = async (tableName, filePath, columnOverrides = null, parserOptions = {}) => {
+const insertRowsFromSeperatedValueFile = async (
+    tableName,
+    filePath,
+    columnOverrides = null,
+    parserOptions = {},
+    customValueParser = (value, i) => false
+) => {
     const records = [];
     const parser = fs
         .createReadStream(filePath)
@@ -50,7 +71,8 @@ const insertRowsFromSeperatedValueFile = async (tableName, filePath, columnOverr
     insertRows(
         tableName,
         columnOverrides ? columnOverrides.filter(c => c) : records[0],
-        records.slice(1)
+        records.slice(1),
+        customValueParser
     );
 };
 
@@ -69,15 +91,32 @@ const db = new sqlite3.Database(`${DATA_DIR}/phlexicon.db`);
 runQueriesFromFile(`${DB_DIR}/create-tables-views.sql`);
 
 // Insert data for ISO languages
-await insertRowsFromSeperatedValueFile("languages", `${DATA_DIR}/${ISO_LANGUAGES_FILE}`, ["iso_code", null, null, null, null, null, "language_name", null], {delimiter: "\t"});
+await insertRowsFromSeperatedValueFile(
+    "languages",
+    `${DATA_DIR}/${ISO_LANGUAGES_FILE}`,
+    ["iso_code", null, null, null, null, null, "language_name", null],
+    {delimiter: "\t"}
+);
 
 // Insert data into spoken languages
-await insertRowsFromSeperatedValueFile("spoken_phonemes", `${DATA_DIR}/${SPOKEN_PHONEMES_FILE}`, ["language_id", null, "iso_code", "language_variety", "dialect_description", null, "phoneme"]);
+await insertRowsFromSeperatedValueFile(
+    "spoken_phonemes",
+    `${DATA_DIR}/${SPOKEN_PHONEMES_FILE}`,
+    ["language_id", null, "iso_code", "language_variety", "dialect_description", null, "phoneme"],
+    {},
+    (value, i) => {
+        // If dialect_description column is "NA"
+        if (value === "NA" && i === 3) {
+            return "NULL";
+        }
+        return false;
+    }
+);
 
 // Insert data for sign languages
 await insertRowsFromJsonFile("sign_languages", SIGN_LANGUAGES_FILE_PATH);
 
 // Create tables built from custom queries and drop tables that do not need to be bundled with applicatino
-//runQueriesFromFile(`${DB_DIR}/etl.sql`);
+runQueriesFromFile(`${DB_DIR}/etl.sql`);
 
 db.close();
