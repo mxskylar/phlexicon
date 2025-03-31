@@ -34,7 +34,7 @@ const getSignLanguages = async () => {
     })
         .then(response => response.json())
         .then(responseData => responseData);
-    return dictionaries.map((dictionary, i) => {
+    const signLanguageRows = dictionaries.map((dictionary, i) => {
         const dictNamePieces = dictionary.split("-");
        return [
             i + 1, // id
@@ -42,6 +42,10 @@ const getSignLanguages = async () => {
             dictNamePieces[1] // region
         ];
     });
+    return {
+        signLanguageRows,
+        signLanguageDictionaries: dictionaries
+    }
 };
 
 const getSignLanguageAlphabets = async dictionary => {
@@ -54,12 +58,14 @@ const getSignLanguageAlphabets = async dictionary => {
     console.log(alphabet);
 };
 
+const {signLanguageRows, signLanguageDictionaries} = await getSignLanguages();
 console.log(`Creating ${SIGN_LANGUAGES_FILE_PATH}`);
 fs.writeFileSync(SIGN_LANGUAGES_FILE_PATH, JSON.stringify({
     columns: ["id", "iso_code", "dialect"],
-    rows: await getSignLanguages()
+    rows: signLanguageRows
 }));
 
+//console.log(signLanguageDictionaries);
 //await getSignLanguageAlphabets("ase-US-dictionary-public");
 
 // TODO: Create sign-phonemes.json from alphabets pulled from this Sign Puddle endpoint: /dictionary/{name}/alphabet{?update}
