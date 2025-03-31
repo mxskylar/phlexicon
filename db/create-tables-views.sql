@@ -15,13 +15,23 @@ CREATE TABLE IF NOT EXISTS main.spoken_dialects(
     FOREIGN KEY (iso_code) REFERENCES iso_languages(iso_code)
 );
 
-DROP TABLE IF EXISTS main.spoken_phonemes;
-CREATE TABLE IF NOT EXISTS main.spoken_phonemes(
+DROP TABLE IF EXISTS main.tmp_spoken_phonemes;
+CREATE TABLE IF NOT EXISTS main.tmp_spoken_phonemes(
     phoneme STRING NOT NULL,
     language_id INTEGER NOT NULL,
     iso_code CHAR(3) NOT NULL,
     language_variety STRING NOT NULL,
     dialect_description STRING,
+    FOREIGN KEY (language_id) REFERENCES spoken_dialects(id),
+    FOREIGN KEY (iso_code) REFERENCES iso_languages(iso_code),
+    PRIMARY KEY (phoneme, language_id)
+);
+
+DROP TABLE IF EXISTS main.spoken_phonemes;
+CREATE TABLE IF NOT EXISTS main.spoken_phonemes(
+    phoneme STRING NOT NULL,
+    language_id INTEGER NOT NULL,
+    iso_code CHAR(3) NOT NULL,
     FOREIGN KEY (language_id) REFERENCES spoken_dialects(id),
     FOREIGN KEY (iso_code) REFERENCES iso_languages(iso_code),
     PRIMARY KEY (phoneme, language_id)
@@ -36,6 +46,16 @@ CREATE TABLE IF NOT EXISTS main.sign_dialects(
     FOREIGN KEY (iso_code) REFERENCES iso_languages(iso_code)
 );
 
+DROP TABLE IF EXISTS main.sign_phonemes;
+CREATE TABLE IF NOT EXISTS main.sign_phonemes(
+    phoneme STRING NOT NULL,
+    language_id INTEGER NOT NULL,
+    iso_code CHAR(3) NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES sign_dialects(id),
+    FOREIGN KEY (iso_code) REFERENCES iso_languages(iso_code),
+    PRIMARY KEY (phoneme, language_id)
+);
+
 -- Create union views of spoken & sign language tables
 DROP VIEW IF EXISTS dialects;
 CREATE VIEW dialects AS
@@ -44,3 +64,11 @@ FROM spoken_dialects
 UNION
 SELECT *, "SIGN" AS language_type
 FROM sign_dialects;
+
+DROP VIEW IF EXISTS phonemes;
+CREATE VIEW phonemes AS
+SELECT *, "SPOKEN" AS language_type
+FROM spoken_phonemes
+UNION
+SELECT *, "SIGN" AS language_type
+FROM sign_phonemes;

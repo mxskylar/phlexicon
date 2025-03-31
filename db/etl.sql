@@ -1,5 +1,5 @@
 -- Choose dialect for spoken languages and insert unique values
--- Then, drop columns no longer needed
+-- Then, drop the staging table with excess columns
 INSERT INTO spoken_dialects (id, iso_code, dialect)
 SELECT
     language_id,
@@ -10,11 +10,14 @@ SELECT
     END
 FROM (
     SELECT DISTINCT language_id, iso_code, language_variety, dialect_description
-    FROM spoken_phonemes
+    FROM tmp_spoken_phonemes
 );
 
-ALTER TABLE spoken_phonemes DROP COLUMN language_variety;
-ALTER TABLE spoken_phonemes DROP COLUMN dialect_description;
+INSERT INTO spoken_phonemes (phoneme, language_id, iso_code)
+SELECT phoneme, language_id, iso_code
+FROM tmp_spoken_phonemes;
+
+DROP TABLE tmp_spoken_phonemes;
 
 -- Drop rows from iso_languages table  that are not supported
 DELETE FROM iso_languages

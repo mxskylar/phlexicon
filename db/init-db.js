@@ -100,7 +100,7 @@ await insertRowsFromSeperatedValueFile(
 
 // Insert data into spoken languages
 await insertRowsFromSeperatedValueFile(
-    "spoken_phonemes",
+    "tmp_spoken_phonemes",
     `${DATA_DIR}/${SPOKEN_PHONEMES_FILE}`,
     ["language_id", null, "iso_code", "language_variety", "dialect_description", null, "phoneme"],
     {},
