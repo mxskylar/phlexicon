@@ -24,10 +24,11 @@ const insertRows = (tableName, columnNames, rows) => {
 };
 
 const insertRowsFromSeperatedValuesFile = (tableName, fileName, seperator, overridenColumnNames = null) => {
+    const isInQuotes = str => str[0] === '"' && str[str.length - 1] === '"';
     const rows = [];
     let i = 0;
     const lines = fs.readFileSync(`${DATA_DIR}/${fileName}`).toString().split(os.EOL);
-    const columnNames = overridenColumnNames ? overridenColumnNames : lines[0].split(seperator);
+    const columnNames = overridenColumnNames ? overridenColumnNames : lines[0].split(seperator).map(c => isInQuotes(c) ? c.slice(1, c.length - 1) : c);
     lines.forEach(line => {
         if (i > 0 && line) {
             const rawValues = line.split(seperator);
@@ -35,8 +36,7 @@ const insertRowsFromSeperatedValuesFile = (tableName, fileName, seperator, overr
             columnNames.forEach((column, i) => {
                 if (column) {
                     const rawValue = rawValues[i];
-                    const isInQuotes = rawValue[0] === '"' && rawValue[rawValue.length - 1] === '"';
-                    const value = isInQuotes ? rawValue : `"${rawValue}"`
+                    const value = isInQuotes(rawValue) ? rawValue : `"${rawValue}"`
                     values.push(value);
                 }
             });
