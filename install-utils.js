@@ -10,7 +10,4 @@ export const downloadFile = async (url, filePath, fileName) => {
     }
     const fileStream = fs.createWriteStream(`${filePath}/${fileName}`);
     Readable.fromWeb(response.body).pipe(fileStream);
-    fileStream.on("finish", () => {
-        fileStream.close();
-    });
 };
