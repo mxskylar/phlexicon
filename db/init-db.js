@@ -43,9 +43,9 @@ const insertRowsFromSeperatedValueFile = async (tableName, filePath, columnOverr
     );
 };
 
-const insertRowsFromJsonFile = (tableName, filePath) => {
+const insertRowsFromJsonFile = async (tableName, filePath) => {
     const {columns, rows} = JSON.parse(fs.readFileSync(filePath).toString());
-    insertRows(tableName, columns, rows);
+    await insertRows(tableName, columns, rows);
 }
 
 if (!fs.existsSync(DATA_DIR)) {
@@ -56,7 +56,7 @@ const db = new sqlite3.Database(`${DATA_DIR}/phlexicon.db`);
 runQueriesFromFile(`${DB_DIR}/create-tables.sql`);
 await insertRowsFromSeperatedValueFile("iso_languages", `${DATA_DIR}/${ISO_LANGUAGES_FILE}`, ["id", null, null, null, null, null, "ref_name", null], {delimiter: "\t"});
 await insertRowsFromSeperatedValueFile("spoken_languages", `${DATA_DIR}/${SPOKEN_LANGUAGES_FILE}`, ["id", "iso_code", null, "variety_name", null]);
-insertRowsFromJsonFile("sign_language_dictionaries", SIGN_LANGUAGES_FILE_PATH);
+await insertRowsFromJsonFile("sign_language_dictionaries", SIGN_LANGUAGES_FILE_PATH);
 runQueriesFromFile(`${DB_DIR}/etl.sql`);
 
 db.close();
