@@ -37,6 +37,17 @@ CREATE TABLE IF NOT EXISTS main.spoken_phonemes(
     PRIMARY KEY (phoneme, language_id)
 );
 
+DROP TABLE IF EXISTS main.spoken_entries;
+CREATE TABLE IF NOT EXISTS main.spoken_entries(
+    phonemes STRING NOT NULL, -- Insert with json_array and query with json_each: https://www.sqlite.org/json1.html
+    language_id INTEGER NOT NULL,
+    iso_code CHAR(3) NOT NULL,
+    recording BLOB NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES spoken_dialects(id),
+    FOREIGN KEY (iso_code) REFERENCES iso_languages(iso_code),
+    PRIMARY KEY (phonemes, language_id)
+);
+
 -- Sign Languages
 DROP TABLE IF EXISTS main.sign_dialects;
 CREATE TABLE IF NOT EXISTS main.sign_dialects(
@@ -56,6 +67,17 @@ CREATE TABLE IF NOT EXISTS main.sign_phonemes(
     PRIMARY KEY (phoneme, language_id)
 );
 
+DROP TABLE IF EXISTS main.sign_entries;
+CREATE TABLE IF NOT EXISTS main.sign_entries(
+    phonemes STRING NOT NULL, -- Insert with json_array and query with json_each: https://www.sqlite.org/json1.html
+    language_id INTEGER NOT NULL,
+    iso_code CHAR(3) NOT NULL,
+    recording BLOB NOT NULL,
+    FOREIGN KEY (language_id) REFERENCES sign_dialects(id),
+    FOREIGN KEY (iso_code) REFERENCES iso_languages(iso_code),
+    PRIMARY KEY (phonemes, language_id)
+);
+
 -- Create union views of spoken & sign language tables
 DROP VIEW IF EXISTS dialects;
 CREATE VIEW dialects AS
@@ -72,3 +94,11 @@ FROM spoken_phonemes
 UNION
 SELECT *, "SIGN" AS language_type
 FROM sign_phonemes;
+
+DROP VIEW IF EXISTS entries;
+CREATE VIEW entries AS
+SELECT *, "SPOKEN" AS language_type
+FROM spoken_entries
+UNION
+SELECT *, "SIGN" AS language_type
+FROM sign_entries;
