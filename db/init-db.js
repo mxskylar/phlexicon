@@ -80,11 +80,17 @@ const insertRowsFromJsonFile = async (tableName, filePath) => {
     await insertRows(tableName, columns, rows);
 }
 
+const DATABASE_FILE = `${DATA_DIR}/phlexicon.db`;
+// Delete existing data and start fresh
+if (fs.existsSync(DATA_DIR)) {
+    console.log(`Deleting database: ${DATABASE_FILE}`);
+    fs.rmSync(DATABASE_FILE);
+}
 // Create database
 if (!fs.existsSync(DATA_DIR)) {
     await mkdir(DATA_DIR);
 }
-const db = new sqlite3.Database(`${DATA_DIR}/phlexicon.db`);
+const db = new sqlite3.Database(DATABASE_FILE);
 
 // Create tables & views
 runQueriesFromFile(`${DB_DIR}/create-tables-views.sql`);
