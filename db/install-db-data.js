@@ -48,7 +48,7 @@ const getSignLanguages = async (filePath) => {
 fs.writeFileSync(SIGN_LANGUAGES_FILE_PATH, JSON.stringify({
     columns: ["sign_puddle_dictionary", "iso_code", "region"],
     rows: await getSignLanguages(SIGN_LANGUAGES_FILE_PATH)
-}))
+}));
 
 // TODO: Create sign-phonemes.json from alphabets pulled from this Sign Puddle endpoint: /dictionary/{name}/alphabet{?update}
 // Parse unique unicode characters from navigatable tree of unicode characters returned
