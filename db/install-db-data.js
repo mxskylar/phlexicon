@@ -9,13 +9,14 @@ import {
     SIGN_WRITING_FONT_FILE
 } from './db-constants.js';
 
-// Delete existing data and download fresh
+// Delete existing data and recreate directory to download fresh data
 if (fs.existsSync(DATA_DIR)) {
     console.log(`Deleting existing directory: ${DATA_DIR}`);
     fs.rmSync(DATA_DIR, {
         recursive: true,
         force: true
     });
+    fs.mkdirSync(DATA_DIR);
 }
 
 // ISO language codes & names

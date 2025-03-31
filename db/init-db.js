@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import {mkdir} from 'fs/promises';
 import * as os from 'os';
 import {createRequire} from "module";
 import * as csvParse from "csv-parse";
@@ -82,13 +81,13 @@ const insertRowsFromJsonFile = async (tableName, filePath) => {
 
 const DATABASE_FILE = `${DATA_DIR}/phlexicon.db`;
 // Delete existing data and start fresh
-if (fs.existsSync(DATA_DIR)) {
+if (fs.existsSync(DATABASE_FILE)) {
     console.log(`Deleting database: ${DATABASE_FILE}`);
     fs.rmSync(DATABASE_FILE);
 }
 // Create database
 if (!fs.existsSync(DATA_DIR)) {
-    await mkdir(DATA_DIR);
+    fs.mkdirSync(DATA_DIR);
 }
 const db = new sqlite3.Database(DATABASE_FILE);
 

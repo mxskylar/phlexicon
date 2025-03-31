@@ -1,6 +1,5 @@
 package-lock.json
 node_modules
 build
-resources/bootstrap.min.css
-resources/bootstrap.bundle.min.js
+installed-resources
 db/data

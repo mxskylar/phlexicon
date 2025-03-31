@@ -11,7 +11,7 @@
         "install-db-data": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON db/install-db-data.js",
         "postinstall": "npm run install-bootstrap && npm run rebuild-sqlite3",
         "init-db": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON db/init-db.js",
-        "prep-build-dir": "rm -rf build && cp -r resources build",
+        "prep-build-dir": "rm -rf build && mkdir build && cp -r installed-resources/* build && cp -r custom-resources/* build",
         "compile-react": "webpack --mode development --config webpack.react.config.js",
         "compile-typescript": "tsc",
         "start": "npm run prep-build-dir && npm run compile-typescript && npm run compile-react && electron ."
