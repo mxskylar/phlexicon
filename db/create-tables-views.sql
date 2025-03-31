@@ -27,6 +27,8 @@ CREATE TABLE IF NOT EXISTS main.tmp_spoken_phonemes(
     PRIMARY KEY (phoneme, language_id)
 );
 
+-- TODO: Add table with unique spoken phonemes for all spoken languages, rename the table below to spoken_keyboards
+
 DROP TABLE IF EXISTS main.spoken_phonemes;
 CREATE TABLE IF NOT EXISTS main.spoken_phonemes(
     phoneme STRING NOT NULL,
@@ -56,6 +58,8 @@ CREATE TABLE IF NOT EXISTS main.sign_dialects(
     iso_code CHAR(3) NOT NULL,
     FOREIGN KEY (iso_code) REFERENCES iso_languages(iso_code)
 );
+
+-- TODO: Add table with unique sign phonemes for all sign languages, rename the table below to sign_keyboards
 
 DROP TABLE IF EXISTS main.sign_phonemes;
 CREATE TABLE IF NOT EXISTS main.sign_phonemes(
