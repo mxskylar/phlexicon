@@ -9,5 +9,7 @@ export const downloadFile = async (url, filePath, fileName) => {
         await mkdir(filePath);
     }
     const fileStream = fs.createWriteStream(`${filePath}/${fileName}`);
-    Readable.fromWeb(response.body).pipe(fileStream);
+    fileStream.on("finish", () => {
+        file.close();
+    });
 };
