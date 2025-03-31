@@ -48,15 +48,21 @@ const insertRowsFromJsonFile = async (tableName, filePath) => {
     await insertRows(tableName, columns, rows);
 }
 
+// Create database
 if (!fs.existsSync(DATA_DIR)) {
     await mkdir(DATA_DIR);
 }
 const db = new sqlite3.Database(`${DATA_DIR}/phlexicon.db`);
 
-runQueriesFromFile(`${DB_DIR}/create-tables.sql`);
+// Create tables & views
+runQueriesFromFile(`${DB_DIR}/create-tables-views.sql`);
+
+// Insert data into language tables
 await insertRowsFromSeperatedValueFile("iso_languages", `${DATA_DIR}/${ISO_LANGUAGES_FILE}`, ["id", null, null, null, null, null, "ref_name", null], {delimiter: "\t"});
 await insertRowsFromSeperatedValueFile("spoken_languages", `${DATA_DIR}/${SPOKEN_LANGUAGES_FILE}`, ["id", "iso_code", null, "variety_name", null]);
 await insertRowsFromJsonFile("sign_language_dictionaries", SIGN_LANGUAGES_FILE_PATH);
+
+// Create tables built from custom queries and drop tables that do not need to be bundled with applicatino
 runQueriesFromFile(`${DB_DIR}/etl.sql`);
 
 db.close();
