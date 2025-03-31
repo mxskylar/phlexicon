@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS main.languages(
 DROP TABLE IF EXISTS main.spoken_languages;
 CREATE TABLE IF NOT EXISTS main.spoken_languages(
     id INTEGER NOT NULL PRIMARY KEY,
-    dialect STRING NOT NULL,
     iso_code CHAR(3) NOT NULL,
+    dialect STRING NOT NULL,
     FOREIGN KEY (iso_code) REFERENCES languages(iso_code)
 );
 
