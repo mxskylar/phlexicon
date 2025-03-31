@@ -17,9 +17,17 @@ ALTER TABLE spoken_phonemes DROP COLUMN language_variety;
 ALTER TABLE spoken_phonemes DROP COLUMN dialect_description;
 
 -- Create union views of spoken & sign language tables
+DROP VIEW IF EXISTS dialects;
 CREATE VIEW dialects AS
 SELECT *, "SPOKEN" AS language_type
 FROM spoken_dialects
 UNION
 SELECT *, "SIGN" AS language_type
 FROM sign_dialects;
+
+-- Drop rows from iso_languages table  that are not supported
+DELETE FROM iso_languages
+WHERE iso_code NOT IN (
+    SELECT DISTINCT iso_code
+    FROM dialects
+);
