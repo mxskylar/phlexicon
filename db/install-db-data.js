@@ -20,10 +20,10 @@ await downloadFile("https://raw.githubusercontent.com/phoible/dev/master/data/ph
 // SignMaker: https://www.signbank.org/signmaker.html
 const SIGN_PUDDLE_HOST = "https://signpuddle.com/server";
 
-const getSignLanguages = async (filePath) => {
+const getSignLanguages = async () => {
     const urlPath = "/dictionary?name=public";
     const url = `${SIGN_PUDDLE_HOST}${urlPath}`;
-    console.log(`Creating ${filePath} from request to: ${url}`);
+    console.log(`Requesting: ${url}`);
     const dictionaries = await fetch(url, {
         method: "GET",
         headers: {
@@ -44,10 +44,23 @@ const getSignLanguages = async (filePath) => {
     });
 };
 
+const getSignLanguageAlphabets = async dictionary => {
+    const urlPath = `/dictionary/${dictionary}/alphabet?update=1`;
+    const url = `${SIGN_PUDDLE_HOST}${urlPath}`;
+    console.log(`Requesting: ${url}`);
+    const alphabet = await fetch(url, {method: "GET"})
+        .then(response => response.json())
+        .then(responseData => responseData);
+    console.log(alphabet);
+};
+
+console.log(`Creating ${SIGN_LANGUAGES_FILE_PATH}`);
 fs.writeFileSync(SIGN_LANGUAGES_FILE_PATH, JSON.stringify({
     columns: ["id", "iso_code", "dialect"],
-    rows: await getSignLanguages(SIGN_LANGUAGES_FILE_PATH)
+    rows: await getSignLanguages()
 }));
+
+//await getSignLanguageAlphabets("ase-US-dictionary-public");
 
 // TODO: Create sign-phonemes.json from alphabets pulled from this Sign Puddle endpoint: /dictionary/{name}/alphabet{?update}
 // Parse unique unicode characters from navigatable tree of unicode characters returned
