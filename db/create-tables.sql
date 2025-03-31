@@ -1,12 +1,14 @@
 
-DROP TABLE IF EXISTS main.language_codes;
-CREATE TABLE IF NOT EXISTS main.language_codes(
-    code string PRIMARY KEY
+DROP TABLE IF EXISTS main.iso_languages;
+CREATE TABLE IF NOT EXISTS main.iso_languages(
+    id char(3) NOT NULL,
+    print_name varchar(75) NOT NULL,
+    inverted_name varchar(75) NOT NULL
 );
 
-DROP TABLE IF EXISTS main.language_varieties;
-CREATE TABLE IF NOT EXISTS main.language_varieties(
-    variety_name string PRIMARY KEY,
-    language_code string,
-    FOREIGN KEY(language_code) REFERENCES language_codes(code)
+DROP TABLE IF EXISTS main.spoken_languages;
+CREATE TABLE IF NOT EXISTS main.spoken_languages(
+    language_variety string NOT NULL PRIMARY KEY,
+    iso_code char(3) NOT NULL,
+    FOREIGN KEY(iso_code) REFERENCES iso_languages(id)
 );
