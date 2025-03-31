@@ -57,6 +57,6 @@ runQueriesFromFile(`${DB_DIR}/create-tables.sql`);
 await insertRowsFromSeperatedValueFile("iso_languages", `${DATA_DIR}/${ISO_LANGUAGES_FILE}`, ["id", null, null, null, null, null, "ref_name", null], {delimiter: "\t"});
 await insertRowsFromSeperatedValueFile("spoken_languages", `${DATA_DIR}/${SPOKEN_LANGUAGES_FILE}`, ["id", "iso_code", null, "variety_name", null]);
 insertRowsFromJsonFile("sign_language_dictionaries", SIGN_LANGUAGES_FILE_PATH);
-runQueriesFromFile(`${DB_DIR}/join-drop.sql`);
+runQueriesFromFile(`${DB_DIR}/etl.sql`);
 
 db.close();
