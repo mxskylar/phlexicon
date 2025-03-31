@@ -72,7 +72,7 @@ runQueriesFromFile(`${DB_DIR}/create-tables-views.sql`);
 await insertRowsFromSeperatedValueFile("languages", `${DATA_DIR}/${ISO_LANGUAGES_FILE}`, ["iso_code", null, null, null, null, null, "language_name", null], {delimiter: "\t"});
 
 // Insert data into spoken languages
-await insertRowsFromSeperatedValueFile("spoken_phonemes", `${DATA_DIR}/${SPOKEN_PHONEMES_FILE}`, ["variety_id", null, "language_variety", "dialect_description", null, null, "phoneme"]);
+await insertRowsFromSeperatedValueFile("spoken_phonemes", `${DATA_DIR}/${SPOKEN_PHONEMES_FILE}`, ["language_id", null, "iso_code", "language_variety", "dialect_description", null, "phoneme"]);
 
 // Insert data for sign languages
 await insertRowsFromJsonFile("sign_languages", SIGN_LANGUAGES_FILE_PATH);
