@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import {downloadFile} from "../install-utils.js";
-import {DATA_DIR, ISO_LANGUAGES_FILE, SPOKEN_LANGUAGES_FILE, SPOKEN_PHONEMES_FILE, SIGN_LANGUAGES_FILE_PATH} from './db-constants.js';
+import {DATA_DIR, ISO_LANGUAGES_FILE, SPOKEN_PHONEMES_FILE, SIGN_LANGUAGES_FILE_PATH} from './db-constants.js';
 
 // ISO language codes & names
 // ISO 639-3 Code Set: https://iso639-3.sil.org/code_tables/download_tables#639-3%20Code%20Set

@@ -8,7 +8,6 @@ import {
     DB_DIR,
     ISO_LANGUAGES_FILE,
     SIGN_LANGUAGES_FILE_PATH,
-    SPOKEN_LANGUAGES_FILE,
     SPOKEN_PHONEMES_FILE
 } from "./db-constants.js";
 const require = createRequire(import.meta.url);
