@@ -21,11 +21,11 @@ await downloadFile("https://raw.githubusercontent.com/phoible/dev/master/data/ph
 // SignMaker: https://www.signbank.org/signmaker.html
 const SIGN_PUDDLE_HOST = "https://signpuddle.com/server";
 
-const getSignPuddleDictionaries = filePath => {
+const getSignLanguages = async (filePath) => {
     const urlPath = "/dictionary?name=public";
     const url = `${SIGN_PUDDLE_HOST}${urlPath}`;
     console.log(`Creating ${filePath} from request to: ${url}`);
-    return fetch(url, {
+    const dictionaries = await fetch(url, {
         method: "GET",
         headers: {
             "Description": "Get available dictionaries",
@@ -35,24 +35,20 @@ const getSignPuddleDictionaries = filePath => {
     })
         .then(response => response.json())
         .then(responseData => responseData);
+    return dictionaries.map(dictionaryName => {
+        const dictNamePieces = dictionaryName.split("-");
+       return [
+            dictionaryName, // sign_puddle_dictionary
+            dictNamePieces[0], // iso_code
+            dictNamePieces[1] // region
+        ];
+    });
 };
 
-const getSignLanguages = async (filePath) => {
-    const dictionaries = await getSignPuddleDictionaries(filePath);
-    const signLanguages = [];
-    dictionaries.forEach(dictionaryName => {
-        const dictNamePieces = dictionaryName.split("-");
-        signLanguages.push({
-            sign_puddle_dictionary: dictionaryName,
-            iso_code: dictNamePieces[0],
-            region: dictNamePieces[1]
-        });
-    });
-    return signLanguages;
-}
-
-const signLanguages = await getSignLanguages(SIGN_LANGUAGES_FILE_PATH);
-fs.writeFileSync(SIGN_LANGUAGES_FILE_PATH, JSON.stringify(signLanguages))
+fs.writeFileSync(SIGN_LANGUAGES_FILE_PATH, JSON.stringify({
+    columns: ["sign_puddle_dictionary", "iso_code", "region"],
+    rows: await getSignLanguages(SIGN_LANGUAGES_FILE_PATH)
+}))
 
 // TODO: Create sign-phonemes.json from alphabets pulled from this Sign Puddle endpoint: /dictionary/{name}/alphabet{?update}
 // Parse unique unicode characters from navigatable tree of unicode characters returned

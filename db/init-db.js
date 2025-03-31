@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import {mkdir} from 'fs/promises';
 import * as os from 'os';
 import {createRequire} from "module";
-import {DATA_DIR, DB_DIR, ISO_LANGUAGES_FILE} from "./db-constants.js";
+import {DATA_DIR, DB_DIR, ISO_LANGUAGES_FILE, SIGN_LANGUAGES_FILE_PATH} from "./db-constants.js";
 const require = createRequire(import.meta.url);
 const sqlite3 = require('sqlite3');
 
@@ -13,7 +13,7 @@ const runQueriesFromFile = filePath => {
 };
 
 const insertRows = (tableName, columnNames, rows) => {
-    const columns = columnNames.filter(column => column).map(column => "`" + column + "`");
+    const columns = columnNames.map(column => "`" + column + "`");
     const queries = ["BEGIN TRANSACTION;"]
     rows.forEach(values => {
         queries.push(`INSERT INTO \`${tableName}\` (${columns.join(", ")}) VALUES (${values.join(", ")});`);
@@ -44,7 +44,12 @@ const insertRowsFromSeperatedValuesFile = (tableName, fileName, seperator, overr
         }
         i++;
     });
-    insertRows(tableName, columnNames, rows);
+    insertRows(tableName, columnNames.filter(column => column), rows);
+}
+
+const insertRowsFromJsonFile = (tableName, filePath) => {
+    const {columns, rows} = JSON.parse(fs.readFileSync(filePath).toString());
+    insertRows(tableName, columns, rows.map(values => values.map(value => `"${value}"`)));
 }
 
 if (!fs.existsSync(DATA_DIR)) {
@@ -54,5 +59,6 @@ const db = new sqlite3.Database(`${DATA_DIR}/phlexicon.db`);
 
 runQueriesFromFile(`${DB_DIR}/create-tables.sql`);
 insertRowsFromSeperatedValuesFile("iso_languages", ISO_LANGUAGES_FILE, "\t", ["id", "inverted_name", "print_name"]);
+insertRowsFromJsonFile("sign_languages", SIGN_LANGUAGES_FILE_PATH);
 
 db.close();

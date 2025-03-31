@@ -12,3 +12,11 @@ CREATE TABLE IF NOT EXISTS main.spoken_languages(
     iso_code char(3) NOT NULL,
     FOREIGN KEY(iso_code) REFERENCES iso_languages(id)
 );
+
+DROP TABLE IF EXISTS main.sign_languages;
+CREATE TABLE IF NOT EXISTS main.sign_languages(
+    sign_puddle_dictionary string NOT NULL PRIMARY KEY,
+    region string NOT NULL,
+    iso_code char(3) NOT NULL,
+    FOREIGN KEY(iso_code) REFERENCES iso_languages(id)
+);
