@@ -1,10 +1,12 @@
 
+-- ISO Languages
 DROP TABLE IF EXISTS main.iso_languages;
 CREATE TABLE IF NOT EXISTS main.iso_languages(
     id CHAR(3) NOT NULL,
     ref_name VARCHAR(75) NOT NULL
 );
 
+-- Spoken Languages
 DROP TABLE IF EXISTS main.spoken_languages;
 CREATE TABLE IF NOT EXISTS main.spoken_languages(
     id INTEGER NOT NULL PRIMARY KEY,
@@ -12,6 +14,7 @@ CREATE TABLE IF NOT EXISTS main.spoken_languages(
     iso_code CHAR(3) NOT NULL
 );
 
+-- Sign Languages
 DROP TABLE IF EXISTS main.sign_language_dictionaries;
 CREATE TABLE IF NOT EXISTS main.sign_language_dictionaries(
     id INTEGER NOT NULL PRIMARY KEY,
