@@ -23,21 +23,19 @@ const insertRows = (tableName, columnNames, rows) => {
     db.exec(queries.join(os.EOL));
 };
 
-const insertRowsFromSeperatedValuesFile = (tableName, fileName, seperator, overridenColumnNames = null) => {
-    const isInQuotes = str => str[0] === '"' && str[str.length - 1] === '"';
+// Does NOT support quotes around values or values containing a tab value
+const insertRowsFromTsvFile = (tableName, fileName, overridenColumnNames = null) => {
     const rows = [];
     let i = 0;
     const lines = fs.readFileSync(`${DATA_DIR}/${fileName}`).toString().split(os.EOL);
-    const columnNames = overridenColumnNames ? overridenColumnNames : lines[0].split(seperator).map(c => isInQuotes(c) ? c.slice(1, c.length - 1) : c);
+    const columnNames = overridenColumnNames ? overridenColumnNames : lines[0].split("\t");
     lines.forEach(line => {
         if (i > 0 && line) {
-            const rawValues = line.split(seperator);
+            const rawValues = line.split("\t");
             const values = [];
             columnNames.forEach((column, i) => {
                 if (column) {
-                    const rawValue = rawValues[i];
-                    const value = isInQuotes(rawValue) ? rawValue : `"${rawValue}"`
-                    values.push(value);
+                    values.push(`"${rawValues[i]}"`);
                 }
             });
             rows.push(values);
@@ -58,7 +56,7 @@ if (!fs.existsSync(DATA_DIR)) {
 const db = new sqlite3.Database(`${DATA_DIR}/phlexicon.db`);
 
 runQueriesFromFile(`${DB_DIR}/create-tables.sql`);
-insertRowsFromSeperatedValuesFile("iso_languages", ISO_LANGUAGES_FILE, "\t", ["id", null, null, null, null, null, "ref_name", null]);
+insertRowsFromTsvFile("iso_languages", ISO_LANGUAGES_FILE, ["id", null, null, null, null, null, "ref_name", null]);
 insertRowsFromJsonFile("sign_language_dictionaries", SIGN_LANGUAGES_FILE_PATH);
 runQueriesFromFile(`${DB_DIR}/join-drop.sql`);
 
