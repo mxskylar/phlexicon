@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import {mkdir} from 'fs/promises';
-import {Readable} from 'stream';
 
 export const downloadFile = async (url, filePath, fileName) => {
     console.log(`Downloading ${filePath}/${fileName} from: ${url}`)
