@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "es5",         
+        "module": "commonjs",    
+        "strict": true,          
+        "esModuleInterop": true,    
+        "outDir": "./build",
+        "jsx": "react"
+    },
+    "include": ["src/**/*.ts", "tests/**/*.ts", "src/components/keyboard.tsx"],
+    "exclude": ["node_modules"]
+}

@@ -1,0 +1,28 @@
+.keyboard {
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.keyboard .nav-tabs {
+    margin-bottom: 5px;
+}
+
+.keyboard .btn-toolbar .btn-group {
+    margin-top: 10px;
+}
+
+.keyboard .btn-toolbar .btn-group .input-group-text {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.keyboard .keys {
+    text-align: center;
+    max-width: 650px;
+}
+
+.keyboard .keys button {
+    margin-top: 5px;
+    margin-right: 5px;
+}
