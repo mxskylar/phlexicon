@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS main.spoken_phonemes(
     PRIMARY KEY (phoneme, language_id)
 );
 
+-- TODO: Get rid of this table
 CREATE TABLE IF NOT EXISTS main.spoken_entries(
     phonemes STRING NOT NULL, -- Insert with json_array and query with json_each: https://www.sqlite.org/json1.html
     language_id INTEGER NOT NULL,
@@ -64,6 +65,7 @@ CREATE TABLE IF NOT EXISTS main.sign_phonemes(
     PRIMARY KEY (phoneme, language_id)
 );
 
+-- TODO: Get rid of this table
 CREATE TABLE IF NOT EXISTS main.sign_entries(
     phonemes STRING NOT NULL, -- Insert with json_array and query with json_each: https://www.sqlite.org/json1.html
     language_id INTEGER NOT NULL,
@@ -89,6 +91,7 @@ UNION
 SELECT *, "SIGN" AS language_type
 FROM sign_phonemes;
 
+-- TODO: Get rid of this table
 CREATE VIEW entries AS
 SELECT *, "SPOKEN" AS language_type
 FROM spoken_entries

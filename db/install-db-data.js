@@ -93,3 +93,7 @@ for (const [dict, values] of Object.entries(signDictiontionaries)) {
     break;
 }
 fs.writeFileSync(SIGN_ALPHABETS_FILE_PATH, JSON.stringify(signKeyboards));
+
+// TODO: Get all SignWriting phonemes from font file using opentype
+// https://github.com/opentypejs/opentype.js
+// https://opentype.js.org/glyph-inspector.html
