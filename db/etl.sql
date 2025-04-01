@@ -25,3 +25,5 @@ WHERE iso_code NOT IN (
     SELECT DISTINCT iso_code
     FROM dialects
 );
+
+-- TODO: Insert data for demo spoken & sign languages
