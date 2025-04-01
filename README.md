@@ -13,7 +13,6 @@ Read more about those [here](https://mxskylar.github.io/phlexicon/attribution).
 ## Development
 
 Phlexicon is an [Electron](https://www.electronjs.org/) app built with [node](https://nodejs.org/) `v23.10.0`.
-Python scripts used in the CI are run via [Docker](https://www.docker.com/).
 
 To build and launch the app from scratch:
 ```bash

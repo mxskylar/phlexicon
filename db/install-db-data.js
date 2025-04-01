@@ -93,5 +93,3 @@ for (const [dict, values] of Object.entries(signDictiontionaries)) {
     break;
 }
 fs.writeFileSync(SIGN_ALPHABETS_FILE_PATH, JSON.stringify(signKeyboards));
-console.log("Parsing SignWriting font and generating sign phonemes...");
-runShellCommand("docker-compose up --build get_sign_phonemes");

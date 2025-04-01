@@ -1,5 +1,0 @@
-services:
-  get_sign_phonemes:
-    build:
-      context: .
-    entrypoint: "python get_sign_phonemes.py"
