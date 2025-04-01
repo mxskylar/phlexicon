@@ -11,5 +11,5 @@ TBD
 
 ---
 
-> Phlexicon would be nothing without the open source data and frameworks it depends on.
-> Read more about those [here](./attribution.md).
+Phlexicon would be nothing without the open source data and frameworks it depends on.
+Read more about those [here](./attribution.md).
