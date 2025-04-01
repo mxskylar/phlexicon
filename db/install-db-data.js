@@ -1,11 +1,11 @@
 import * as fs from 'fs';
-import {downloadFile} from "../install-utils.js";
+import {downloadFile, runShellCommand} from "../install-utils.js";
 import {
     DATA_DIR,
     ISO_LANGUAGES_FILE,
     SPOKEN_PHONEMES_FILE,
     SIGN_LANGUAGES_FILE_PATH,
-    SIGN_KEYBOARDS_FILE_PATH,
+    SIGN_ALPHABETS_FILE_PATH,
     SIGN_WRITING_FONT_FILE
 } from './db-constants.js';
 
@@ -60,7 +60,7 @@ const getSignLanguages = async () => {
         const isoCode = dictNamePieces[0];
         const region = dictNamePieces[1];
         signLanguageRows.push([id, isoCode, region]);
-        signDictiontionaries[dict] = {id, isoCode};
+        signDictiontionaries[dict] = {language_id: id, iso_code: isoCode};
     });
     return {
         signLanguageRows,
@@ -85,18 +85,13 @@ fs.writeFileSync(SIGN_LANGUAGES_FILE_PATH, JSON.stringify({
 }));
 
 await downloadFile("https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/SuttonSignWritingLine.ttf", DATA_DIR, SIGN_WRITING_FONT_FILE, true);
-const signKeyboardRows = [];
+const signKeyboards = [];
 for (const [dict, values] of Object.entries(signDictiontionaries)) {
-    const {id, isoCode} = values;
+    const {language_id, iso_code} = values;
     const alphabet = await getSignAlphabet(dict);
-    signKeyboardRows.push([id, isoCode, alphabet]);
+    signKeyboards.push({language_id, iso_code, alphabet});
     break;
 }
-fs.writeFileSync(SIGN_KEYBOARDS_FILE_PATH, JSON.stringify({
-    columns: ["language_id", "iso_code", "phoneme"],
-    rows: signKeyboardRows
-}));
-
-// TODO: Create sign-phonemes.json from alphabets pulled from this Sign Puddle endpoint: /dictionary/{name}/alphabet{?update}
-// Parse unique unicode characters from navigatable tree of unicode characters returned
-// Detect if character represents a handshape, the right or left hand, a particular palm facing or rotational orientation, a movement, or a facial expression based on unicode ID of character
+fs.writeFileSync(SIGN_ALPHABETS_FILE_PATH, JSON.stringify(signKeyboards));
+console.log("Parsing SignWriting font and generating sign phonemes...");
+runShellCommand("docker-compose up --build get_sign_phonemes");
