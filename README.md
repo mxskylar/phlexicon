@@ -3,12 +3,10 @@
 Beginner-friendly phonetic keyboards for spoken & sign languages on desktop Mac, Windows, & Linux.
 Use them to type out vocobulary [phoneme](https://en.wikipedia.org/wiki/Phoneme) by phoneme and build your lexicon!
 
-> See the [user guide](https://mxskylar.github.io/phlexicon/) to install and use the application.
+See the [user guide](https://mxskylar.github.io/phlexicon/) to install and use the application.
 
----
-
-Phlexicon would be nothing without the open source data and frameworks it depends on.
-Read more about those [here](https://mxskylar.github.io/phlexicon/attribution).
+> Phlexicon would be nothing without the open source data and frameworks it depends on.
+> Read more about those [here](https://mxskylar.github.io/phlexicon/attribution).
 
 ## Development
 
