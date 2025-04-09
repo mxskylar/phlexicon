@@ -3,11 +3,12 @@ import {downloadFile, runShellCommand} from "../install-utils.js";
 import {
     DATA_DIR,
     ISO_LANGUAGES_FILE,
-    SPOKEN_PHONEMES_FILE,
+    SPOKEN_PHONEMES_ZIP_FILE,
     SIGN_LANGUAGES_FILE_PATH,
     SIGN_ALPHABETS_FILE_PATH,
     SIGN_WRITING_FONT_FILE
 } from './db-constants.js';
+import StreamZip from "node-stream-zip";
 
 // Delete existing data and recreate directory to download fresh data
 if (fs.existsSync(DATA_DIR)) {
@@ -23,10 +24,12 @@ if (fs.existsSync(DATA_DIR)) {
 // ISO 639-3 Code Set: https://iso639-3.sil.org/code_tables/download_tables#639-3%20Code%20Set
 await downloadFile("https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3.tab", DATA_DIR, ISO_LANGUAGES_FILE);
 
-// Phoible data on spoken languages
-// https://phoible.org/download
-// https://github.com/phoible/dev/tree/master/data
-await downloadFile("https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv", DATA_DIR, SPOKEN_PHONEMES_FILE);
+// PBase data on spoken languages
+// https://pbase.phon.chass.ncsu.edu/
+await downloadFile("https://phon.chass.ncsu.edu/pbase/pbasefiles.zip", DATA_DIR, SPOKEN_PHONEMES_ZIP_FILE, true);
+const pbaseZipFile = await new StreamZip.async({file: `${DATA_DIR}/${SPOKEN_PHONEMES_ZIP_FILE}`});
+await pbaseZipFile.extract(null, DATA_DIR);
+await pbaseZipFile.close();
 
 // SignPuddle API for SignWriting
 // API: https://signpuddle.com/client/api/

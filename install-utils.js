@@ -1,10 +1,10 @@
 import * as fs from 'fs';
 import {Readable} from 'stream';
-import {exec} from 'child_process';
+import {execSync} from 'child_process';
 
 export const runShellCommand = command => {
     console.log(command);
-    exec(command, (error, stdout, stderr) => {
+    execSync(command, (error, stdout, stderr) => {
         if (stdout) {
             console.log(stdout);
         }

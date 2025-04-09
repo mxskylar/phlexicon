@@ -2,7 +2,7 @@
 # Attribution
 
 Phlexicon would be nothing without the open source data and frameworks it depends on:
-- [POIBLE](https://phoible.org/): Phonetic data for spoken languages
+- [PBase](https://pbase.phon.chass.ncsu.edu/): Phonetic data for spoken languages
 - [SignWriting](https://www.signwriting.org/) & [SignPuddle](https://signpuddle.org/): Writing system & phonetic data for sign languages
 - [SIL ISO 639-3](https://iso639-3.sil.org/): Language names & identifiers
 - [Bootstrap](https://getbootstrap.com/): UI framework
