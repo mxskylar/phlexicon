@@ -6,8 +6,7 @@ import {
     DATA_DIR,
     DB_DIR,
     ISO_LANGUAGES_FILE,
-    SIGN_LANGUAGES_FILE_PATH,
-    SPOKEN_PHONEMES_FILE
+    SIGN_LANGUAGES_FILE_PATH
 } from "./db-constants.js";
 const require = createRequire(import.meta.url);
 const sqlite3 = require('sqlite3');
@@ -95,7 +94,7 @@ const db = new sqlite3.Database(DATABASE_FILE);
 runQueriesFromFile(`${DB_DIR}/create-tables-views.sql`);
 
 // Insert data for ISO languages
-await insertRowsFromSeperatedValueFile(
+/*await insertRowsFromSeperatedValueFile(
     "iso_languages",
     `${DATA_DIR}/${ISO_LANGUAGES_FILE}`,
     ["iso_code", null, null, null, null, null, "language_name", null],
@@ -121,6 +120,6 @@ await insertRowsFromSeperatedValueFile(
 await insertRowsFromJsonFile("sign_dialects", SIGN_LANGUAGES_FILE_PATH);
 
 // Create tables built from custom queries and drop tables that do not need to be bundled with applicatino
-runQueriesFromFile(`${DB_DIR}/etl.sql`);
+runQueriesFromFile(`${DB_DIR}/etl.sql`);*/
 
 db.close();
