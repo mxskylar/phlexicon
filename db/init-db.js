@@ -97,7 +97,7 @@ runQueriesFromFile(`${DB_DIR}/create-tables-views.sql`);
 /*await insertRowsFromSeperatedValueFile(
     "iso_languages",
     `${DATA_DIR}/${ISO_LANGUAGES_FILE}`,
-    ["iso_code", null, null, null, null, null, "language_name", null],
+    ["iso_code", null, null, null, null, null, "name", null],
     {delimiter: "\t"}
 );
 
