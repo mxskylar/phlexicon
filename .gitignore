@@ -2,4 +2,4 @@ package-lock.json
 node_modules
 build
 installed-resources
-db/data
+data
