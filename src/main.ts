@@ -1,5 +1,5 @@
-const {app, BrowserWindow, shell} = require('electron');
-const sqlite3 = require('sqlite3').verbose();
+import {app, BrowserWindow, shell} from 'electron';
+import sqlite3 from 'sqlite3';
 
 // TODO: Expose the database via inter-process communication so it may be queried from the UI
 // https://www.electronjs.org/docs/latest/tutorial/ipc

@@ -1,6 +1,5 @@
-
-const path = require("path");
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+import path from "path";
+import HtmlWebPackPlugin from "html-webpack-plugin";
 
 const htmlPlugin = new HtmlWebPackPlugin({
   template: "./src/index.html",
@@ -13,7 +12,7 @@ const config = {
   entry: "./src/react-app.tsx",
   output: {
     filename: "react-app.js",
-    path: path.resolve(__dirname, "build")
+    path: path.resolve("build")
   },
   module: {
     rules: [
@@ -32,6 +31,4 @@ const config = {
   plugins: [htmlPlugin]
 };
 
-module.exports = (env, argv) => {
-  return config;
-};
+export default (env, argv) => config;
