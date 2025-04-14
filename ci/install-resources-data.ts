@@ -1,16 +1,6 @@
 import * as fs from 'fs';
 import StreamZip from "node-stream-zip";
-
-export const recreateDirectory = (path: string) => {
-    if (fs.existsSync(path)) {
-        console.log(`Deleting then recreating directory: ${path}`);
-        fs.rmSync(path, {
-            recursive: true,
-            force: true
-        });
-        fs.mkdirSync(path);
-    }
-};
+import { recreateDirectory } from './utils';
 
 export const downloadFile = async (url: string, dir: string) => {
     const path = new URL(url).pathname.split("/");
@@ -19,7 +9,7 @@ export const downloadFile = async (url: string, dir: string) => {
         fs.mkdirSync(dir);
     }
     const filePath = `${dir}/${fileName}`;
-    console.log(`Downloading ${filePath} from: ${url}`);
+    console.log(`=> Downloading ${filePath} from: ${url}`);
     await fetch(url, {method: "GET"})
         .then(response => response.arrayBuffer())
         .then(responseData => fs.appendFileSync(filePath, Buffer.from(responseData)));
@@ -54,3 +44,51 @@ const pbaseZipFile = await new StreamZip.async({file: `${DATA_DIR}/pbasefiles.zi
 await pbaseZipFile.extract(null, DATA_DIR);
 await pbaseZipFile.close();
 export const UNZIPPED_PBASE_FILES_DIR = "pbase";
+
+
+// SignPuddle API for SignWriting
+// API: https://signpuddle.com/client/api/
+// Tools: https://signpuddle.com/tools/
+// Dictionary UI: https://signpuddle.com/client/
+// SignWriting Tutorial: https://www.signwriting.org/lessons/lessonsw/000%20Cover.html
+// SignWriting Characters: https://signbank.org/SignWriting_Character_Viewer.html#?ui=en&set=uni8
+// SignMaker: https://www.signbank.org/signmaker.html
+const SIGN_PUDDLE_HOST = "https://signpuddle.com/server";
+
+const getSignWritingDictionaries = async () => {
+    const urlPath = "/dictionary?name=public";
+    const url = `${SIGN_PUDDLE_HOST}${urlPath}`;
+    console.log(`=> Fetching SignWriting dictionaries from: ${url}`);
+    return await fetch(url, {
+        method: "GET",
+        headers: {
+            "Description": "Get available dictionaries",
+            "Location": urlPath,
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+    })
+        .then(response => response.json())
+        .then(responseData => responseData);
+};
+
+let numberFetchedAlphabets = 0;
+const getSignWritingAlphabet = (dictionary, totalAlphabets) => {
+    const urlPath = `/dictionary/${dictionary}/alphabet?update=1`;
+    const url = `${SIGN_PUDDLE_HOST}${urlPath}`;
+    return fetch(url, {method: "GET"})
+        .then(response => response.json())
+        .then(responseData => {
+            numberFetchedAlphabets++;
+            console.log(`==> Fetched SignWriting alphabet ${numberFetchedAlphabets}/${totalAlphabets} from: ${url}`);
+            return responseData
+        });
+};
+
+const signWritingDictionaries = await getSignWritingDictionaries();
+console.log(`=> Fetching ${signWritingDictionaries.length} SignWriting alphabets...`);
+const signWritingAlphabets = await Promise.all(
+    signWritingDictionaries.map(dictionary => getSignWritingAlphabet(dictionary, signWritingDictionaries.length))
+);
+export const SIGN_WRITING_ALPHABETS_FILE_PATH = `${DATA_DIR}/sign-writing-alphabets.json`;
+fs.writeFileSync(SIGN_WRITING_ALPHABETS_FILE_PATH, JSON.stringify(signWritingAlphabets));
+console.log(`=> Wrote ${signWritingDictionaries.length} SignWriting alphabets to: ${SIGN_WRITING_ALPHABETS_FILE_PATH}`);

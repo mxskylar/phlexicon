@@ -39,7 +39,7 @@ await pbaseZipFile.close();
 // SignWriting Characters: https://signbank.org/SignWriting_Character_Viewer.html#?ui=en&set=uni8
 // SignMaker: https://www.signbank.org/signmaker.html
 // SignWriting Fonts: https://www.sutton-signwriting.io/#fonts
-/*const SIGN_PUDDLE_HOST = "https://signpuddle.com/server";
+const SIGN_PUDDLE_HOST = "https://signpuddle.com/server";
 
 const getSignLanguages = async () => {
     const urlPath = "/dictionary?name=public";
@@ -99,4 +99,4 @@ fs.writeFileSync(SIGN_ALPHABETS_FILE_PATH, JSON.stringify(signKeyboards));
 
 // TODO: Get all SignWriting phonemes from font file using opentype
 // https://github.com/opentypejs/opentype.js
-// https://opentype.js.org/glyph-inspector.html*/
+// https://opentype.js.org/glyph-inspector.html
