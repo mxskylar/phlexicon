@@ -7,7 +7,7 @@
     "license": "GNU General Public License v3.0",
     "type": "module",
     "scripts": {
-        "install-resources-data": "npx tsx ci/install.ts",
+        "install-resources-data": "npx tsx ci/install-resources-data.ts",
         "rebuild-sqlite3": "electron-rebuild -f -w sqlite3",
         "postinstall": "npm run install-resources-data && npm run rebuild-sqlite3",
         "init-db": "npx tsx ci/init-db.ts",
