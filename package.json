@@ -7,7 +7,7 @@
     "license": "GNU General Public License v3.0",
     "type": "module",
     "scripts": {
-        "install-bootstrap": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON install-bootstrap.js",
+        "install-bootstrap": "npx tsx ci/install-bootstrap.ts",
         "rebuild-sqlite3": "electron-rebuild -f -w sqlite3",
         "postinstall": "npm run install-bootstrap && npm run rebuild-sqlite3",
         "install-db-data": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON db/install-db-data.js",
@@ -40,8 +40,8 @@
         "electron": "^35.0.3",
         "html-webpack-plugin": "^5.6.3",
         "node-stream-zip": "^1.15.0",
-        "ts-node": "^10.9.2",
         "typescript": "^5.8.2",
+        "tsx": "^4.19.3",
         "webpack": "^5.98.0",
         "webpack-cli": "^6.0.1"
     }
