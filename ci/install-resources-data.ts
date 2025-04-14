@@ -1,8 +1,15 @@
 import * as fs from 'fs';
-import StreamZip from "node-stream-zip";
-import { recreateDirectory } from './utils';
+import StreamZip from 'node-stream-zip';
+import {recreateDirectory} from './utils';
+import {
+    INSTALLED_RESOURCES_DIR,
+    SIGNWRITING_FONT_FILE,
+    DATA_DIR,
+    ISO_FILE,
+    SIGN_WRITING_ALPHABETS_FILE_PATH
+} from './install-constants';
 
-export const downloadFile = async (url: string, dir: string) => {
+const downloadFile = async (url: string, dir: string) => {
     const path = new URL(url).pathname.split("/");
     const fileName = path[path.length - 1];
     if (!fs.existsSync(dir)) {
@@ -16,7 +23,6 @@ export const downloadFile = async (url: string, dir: string) => {
 };
 
 // INSTALLED RESOURCES
-const INSTALLED_RESOURCES_DIR = "installed-resources";
 recreateDirectory(INSTALLED_RESOURCES_DIR);
 
 // Bootswatch theme for Bootstrap UI: https://bootswatch.com/cerulean/
@@ -27,15 +33,12 @@ await downloadFile("https://bootswatch.com/5/cerulean/bootstrap.min.css", INSTAL
 await downloadFile("https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js", INSTALLED_RESOURCES_DIR);
 
 // SignWriting Fonts: https://www.sutton-signwriting.io/#fonts
-export const SIGNWRITING_FONT_FILE = "SuttonSignWritingLine.ttf";
 await downloadFile(`https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/${SIGNWRITING_FONT_FILE}`, INSTALLED_RESOURCES_DIR);
 
 // RAW DB DATA
-export const DATA_DIR = "data";
 recreateDirectory(DATA_DIR);
 
 // ISO 639-3 Code Set: https://iso639-3.sil.org/code_tables/download_tables#639-3%20Code%20Set
-export const ISO_FILE = "iso-639-3.tab";
 await downloadFile(`https://iso639-3.sil.org/sites/iso639-3/files/downloads/${ISO_FILE}`, DATA_DIR);
 
 // PBase data on spoken languages: https://pbase.phon.chass.ncsu.edu/
@@ -89,6 +92,5 @@ console.log(`=> Fetching ${signWritingDictionaries.length} SignWriting alphabets
 const signWritingAlphabets = await Promise.all(
     signWritingDictionaries.map(dictionary => getSignWritingAlphabet(dictionary, signWritingDictionaries.length))
 );
-export const SIGN_WRITING_ALPHABETS_FILE_PATH = `${DATA_DIR}/sign-writing-alphabets.json`;
 fs.writeFileSync(SIGN_WRITING_ALPHABETS_FILE_PATH, JSON.stringify(signWritingAlphabets));
 console.log(`=> Wrote ${signWritingDictionaries.length} SignWriting alphabets to: ${SIGN_WRITING_ALPHABETS_FILE_PATH}`);

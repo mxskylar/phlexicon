@@ -1,18 +1,30 @@
 import * as fs from 'fs';
-import * as os from 'os';
-//import {createRequire} from "module";
 import * as csvParse from "csv-parse";
-import {
-    DATA_DIR,
-    DB_DIR,
-    ISO_LANGUAGES_FILE,
-    SIGN_LANGUAGES_FILE_PATH
-} from "./db-constants.js";
 import sqlite3 from "sqlite3";
-//const require = createRequire(import.meta.url);
-//const sqlite3 = require('sqlite3');
+import {recreateDirectory} from './utils';
+import {
+    INSTALLED_RESOURCES_DIR
+} from './install-constants';
 
-const runQueriesFromFile = filePath => {
+const BUILD_DIR = "build";
+recreateDirectory(BUILD_DIR);
+
+console.log(`Copying contents of ${INSTALLED_RESOURCES_DIR} to ${BUILD_DIR}`);
+fs.cpSync(INSTALLED_RESOURCES_DIR, BUILD_DIR, {recursive: true});
+
+const CUSTOM_RESOURCES_DIR = "custom-resources";
+console.log(`Copying contents of ${CUSTOM_RESOURCES_DIR} to ${BUILD_DIR}`);
+fs.cpSync(CUSTOM_RESOURCES_DIR, BUILD_DIR, {recursive: true});
+
+const DATABASE_FILE_PATH = `${BUILD_DIR}/phlexicon.db`;
+if (fs.existsSync(DATABASE_FILE_PATH)) {
+    console.log(`Deleting existing database: ${DATABASE_FILE_PATH}`);
+    fs.rmSync(DATABASE_FILE_PATH);
+}
+console.log(`Creating database: ${DATABASE_FILE_PATH}`);
+const db = new sqlite3.Database(DATABASE_FILE_PATH);
+
+/*aconst runQueriesFromFile = filePath => {
     const queries = fs.readFileSync(filePath).toString();
     console.log(`Running queries in ${filePath}`);
     db.exec(queries);
@@ -95,7 +107,7 @@ const db = new sqlite3.Database(DATABASE_FILE);
 runQueriesFromFile(`${DB_DIR}/create-tables-views.sql`);
 
 // Insert data for ISO languages
-/*await insertRowsFromSeperatedValueFile(
+await insertRowsFromSeperatedValueFile(
     "iso_languages",
     `${DATA_DIR}/${ISO_LANGUAGES_FILE}`,
     ["iso_code", null, null, null, null, null, "name", null],

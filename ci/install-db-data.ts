@@ -7,7 +7,7 @@ import {
     SIGN_LANGUAGES_FILE_PATH,
     SIGN_ALPHABETS_FILE_PATH,
     SIGN_WRITING_FONT_FILE
-} from './db-constants.js';
+} from './install-constants.js';
 import StreamZip from "node-stream-zip";
 
 // Delete existing data and recreate directory to download fresh data

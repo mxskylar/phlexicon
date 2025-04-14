@@ -10,13 +10,12 @@
         "install-resources-data": "npx tsx ci/install-resources-data.ts",
         "rebuild-sqlite3": "electron-rebuild -f -w sqlite3",
         "postinstall": "npm run install-resources-data && npm run rebuild-sqlite3",
-        "init-db": "npx tsx ci/init-db.ts",
-        "prep-build-dir": "rm -rf build && mkdir build && cp -r installed-resources/* build && cp -r custom-resources/* build",
+        "init-app": "npx tsx ci/init-app.ts",
         "compile-typescript": "tsc",
         "compile-react": "webpack --mode development --config webpack.react.config.js",
         "electron": "electron .",
-        "app": "npm run prep-build-dir && npm run compile-typescript && npm run compile-react && npm run electron",
-        "start": "npm install && npm run install-db-data && npm run init-db && npm run app"
+        "app": "npm run init-app && npm run compile-typescript && npm run compile-react && npm run electron",
+        "start": "npm install && npm run app"
     },
     "dependencies": {
         "react": "^19.0.0",
