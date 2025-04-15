@@ -71,13 +71,13 @@ export const CONSONANTS_TABLE = new Table(
     new BasicColumn("affricate", BasicType.BOOLEAN).required(),
     new BasicColumn("fricative", BasicType.BOOLEAN).required(),
     new BasicColumn("approximant", BasicType.BOOLEAN).required(),
-    new BasicColumn("lateral_approximant", BasicType.BOOLEAN).required(),
     new BasicColumn("flap", BasicType.BOOLEAN).required(),
     new BasicColumn("trill", BasicType.BOOLEAN).required(),
     new BasicColumn("implosive", BasicType.BOOLEAN).required(),
     new BasicColumn("stop", BasicType.BOOLEAN).required(),
-    new BasicColumn("lateral_stop", BasicType.BOOLEAN).required(),
-    new BasicColumn("click", BasicType.BOOLEAN).required()
+    new BasicColumn("click", BasicType.BOOLEAN).required(),
+    new BasicColumn("lateral_approximant", BasicType.BOOLEAN).required(),
+    new BasicColumn("lateral_stop", BasicType.BOOLEAN).required()
 );
 
 // The Phonemes of Spoken Dialects

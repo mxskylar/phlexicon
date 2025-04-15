@@ -13,7 +13,7 @@ import {
     VOWELS_TABLE,
     CONSONANTS_TABLE
 } from '../src/db/tables';
-import { getSeperatedValueData } from './data-utils'
+import { CONSONANT_MANNER_ATTRIBUTES, CONSONANT_PLACE_ATTRIBUTES, getSeperatedValueData, IpaPhonemeTypes, SPECIFIC_CONSONANT_MANNER_ATTRIBUTES, VOWEL_X_AXIS_ATTRIBUTES, VOWEL_Y_AXIS_ATTRIBUTES } from './data-utils'
 import { DialectType } from '../src/db/column-enums';
 
 // BUILD DIRECTORY
@@ -59,7 +59,7 @@ const ipaSymbolData = rawIpaSymbolData.slice(0, INVALID_IPA_SYMBOL_INDEX)
     .concat(rawIpaSymbolData.slice(INVALID_IPA_SYMBOL_INDEX + 1));
 
 // IPA phoneme symbols
-const SPOKEN_PHONEME_TYPES = ["vowel", "consonant"];
+const SPOKEN_PHONEME_TYPES = Object.values(IpaPhonemeTypes).map(val => val.valueOf());
 db.createTable(IPA_PHONEME_SYMBOLS_TABLE);
 const ipaPhonemeSymbolValues = ipaSymbolData.filter(row => SPOKEN_PHONEME_TYPES.includes(row[2]))
     .map(row => row[1]);
@@ -72,11 +72,52 @@ const otherIpaSymbolRows = ipaSymbolData.filter(row => !SPOKEN_PHONEME_TYPES.inc
     .map(row => [row[1]]);
 db.insertRows(OTHER_IPA_SYMBOLS_TABLE, otherIpaSymbolRows);
 
+// Vowels & Consonants
+const isSubType = (attribute: string, definedAttributes: string[]) => {
+    for (const i in definedAttributes) {
+        const definedAttribute = definedAttributes[i];
+        if (attribute.includes(definedAttribute)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+const getIpaAttributes = (
+    attributeString: string,
+    definedAttributes: string[],
+    specificAttributes: string[] = []
+): any[] => {
+    let attributes: string[] = [];
+    attributeString.split("_")
+        .map(str => str.split("-to-"))
+        .forEach(a => {
+            attributes = attributes.concat(a);
+        });
+    return definedAttributes.map(attribute => {
+        return attributes.includes(attribute) || (
+            !specificAttributes.includes(attribute) && isSubType(attribute, definedAttributes)
+        );
+    });
+}
+
 // Vowels
 db.createTable(VOWELS_TABLE);
+const vowelRows = ipaSymbolData.filter(row => row[2] === IpaPhonemeTypes.VOWEL)
+    .map(row => [row[1]]
+        .concat(getIpaAttributes(row[4], VOWEL_X_AXIS_ATTRIBUTES))
+        .concat(getIpaAttributes(row[3], VOWEL_Y_AXIS_ATTRIBUTES))
+    );
+//db.insertRows(VOWELS_TABLE, vowelRows);
 
 // Consonants
 db.createTable(CONSONANTS_TABLE);
+const consonantRows= ipaSymbolData.filter(row => row[2] === IpaPhonemeTypes.CONSONANT)
+    .map(row => [row[1]]
+        .concat(getIpaAttributes(row[4], CONSONANT_PLACE_ATTRIBUTES))
+        .concat(getIpaAttributes(row[3], CONSONANT_MANNER_ATTRIBUTES, SPECIFIC_CONSONANT_MANNER_ATTRIBUTES))
+    );
+//db.insertRows(CONSONANTS_TABLE, consonantRows);
 
 // The Phonemes of Spoken Dialects
 db.createTable(SPOKEN_DIALECT_PHONEMES_TABLE);
