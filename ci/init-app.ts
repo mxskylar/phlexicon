@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import {recreateDirectory} from './utils';
+import { recreateDirectory } from './utils';
 import {
     INSTALLED_RESOURCES_DIR,
     UNZIPPED_PBASE_FILES_DIR
