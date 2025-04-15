@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import { recreateDirectory } from './utils';
 import {
-    DATA_DIR,
     INSTALLED_RESOURCES_DIR,
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
     UNZIPPED_PBASE_FILES_DIR
@@ -15,8 +14,15 @@ import {
     VOWELS_TABLE,
     CONSONANTS_TABLE
 } from '../src/db/tables';
-import { CONSONANT_MANNER_ATTRIBUTES, CONSONANT_PLACE_ATTRIBUTES, getSeperatedValueData, IpaPhonemeTypes, SPECIFIC_CONSONANT_MANNER_ATTRIBUTES, VOWEL_X_AXIS_ATTRIBUTES, VOWEL_Y_AXIS_ATTRIBUTES } from './data-utils'
-import { DialectType } from '../src/db/column-enums';
+import {
+    CONSONANT_MANNER_ATTRIBUTES,
+    CONSONANT_PLACE_ATTRIBUTES,
+    getSeperatedValueData,
+    IpaPhonemeTypes,
+    SPECIFIC_CONSONANT_MANNER_ATTRIBUTES,
+    VOWEL_X_AXIS_ATTRIBUTES,
+    VOWEL_Y_AXIS_ATTRIBUTES
+} from './data-utils'
 
 // BUILD DIRECTORY
 const BUILD_DIR = "build";
@@ -41,7 +47,7 @@ const spokenDialectData = await getSeperatedValueData(
 );
 
 db.createTable(SPOKEN_DIALECTS_TABLE);
-const spokenDialectRows = spokenDialectData.map(row => [row[0], DialectType.SPOKEN]);
+const spokenDialectRows = spokenDialectData.map(row => [row[1], row[0]]);
 db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectRows);
 
 // IPA Symbols
@@ -156,13 +162,12 @@ db.insertRows(CONSONANTS_TABLE, consonantRows);
 db.createTable(SPOKEN_DIALECT_PHONEMES_TABLE);
 const spokenPhonemeRows: Array<Array<string>> = [];
 spokenDialectData.forEach(row => {
-    const dialect = row[0];
     const phonemes = row[4].split(",")
         .concat(row[5].split(","))
         .filter(phoneme => phoneme !== "");
     const uniquePhonemes = [...new Set(phonemes)];
     uniquePhonemes.forEach(phoneme => {
-        spokenPhonemeRows.push([dialect, phoneme]);
+        spokenPhonemeRows.push([row[1], phoneme]);
     });
 });
 db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenPhonemeRows);

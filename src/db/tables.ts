@@ -5,16 +5,15 @@ import {
     LengthColumn,
     LengthType
 } from "./column.ts";
-import { DialectType, getColumnFromEnum } from "./column-enums.ts";
 import { Table } from "./table.ts";
 import { ForeignKey } from "./foreign-key.ts";
 
 // SPOKEN DIALECTS
-const spokenDialectName = new LengthColumn("name", LengthType.VARCHAR, 100).primaryKey();
+const spokenDialectId = new LengthColumn("id", LengthType.CHAR, 4).primaryKey();
 export const SPOKEN_DIALECTS_TABLE = new Table(
     "spoken_dialects",
-    spokenDialectName,
-    getColumnFromEnum(DialectType, "type", BasicType.STRING)
+    spokenDialectId,
+    new LengthColumn("name", LengthType.VARCHAR, 100)
 );
 
 // IPA phoneme symbols
@@ -83,7 +82,7 @@ export const CONSONANTS_TABLE = new Table(
 // The Phonemes of Spoken Dialects
 export const SPOKEN_DIALECT_PHONEMES_TABLE = new Table(
     "spoken_dialect_phonemes",
-    getColumnWithForeignKey("dialect", new ForeignKey(SPOKEN_DIALECTS_TABLE, spokenDialectName))
+    getColumnWithForeignKey("dialect_id", new ForeignKey(SPOKEN_DIALECTS_TABLE, spokenDialectId))
         .primaryKey(),
     getColumnWithForeignKey("symbol", new ForeignKey(IPA_PHONEME_SYMBOLS_TABLE, ipaPhonemeSymbol))
         .primaryKey()
