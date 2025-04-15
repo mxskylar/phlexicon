@@ -101,25 +101,54 @@ const getIpaAttributes = (
     });
 }
 
+const getIpaTypeRows = (
+    ipaType: IpaPhonemeTypes,
+    horizontalAttributes: string[],
+    verticalAttributes: string[],
+    specificHorizontalAttributes: string[] = [],
+    specificVerticalAttributes: string[] = [],
+): string[][] => {
+    const rowsWithDuplicates = ipaSymbolData.filter(row => row[2] === ipaType)
+        .map(row => [row[1]]
+            .concat(getIpaAttributes(row[4], horizontalAttributes, specificHorizontalAttributes))
+            .concat(getIpaAttributes(row[3], verticalAttributes, specificVerticalAttributes))
+        );
+    const uniqueRowMap = {};
+    rowsWithDuplicates.forEach(row => {
+        const symbol = row[0];
+        if (uniqueRowMap.hasOwnProperty(symbol)) {
+            for (let i = 1; i < row.length; i++) {
+                const rowToMerge = uniqueRowMap[symbol];
+                if (!rowToMerge[i]) {
+                    rowToMerge[i] = row[i]
+                }
+            }
+        } else {
+            uniqueRowMap[symbol] = row;
+        }
+    });
+    return Object.values(uniqueRowMap);
+};
+
 // Vowels
 db.createTable(VOWELS_TABLE);
-const vowelRows = ipaSymbolData.filter(row => row[2] === IpaPhonemeTypes.VOWEL)
-    .map(row => [row[1]]
-        .concat(getIpaAttributes(row[4], VOWEL_X_AXIS_ATTRIBUTES))
-        .concat(getIpaAttributes(row[3], VOWEL_Y_AXIS_ATTRIBUTES))
-    );
-console.log(vowelRows);
-//db.insertRows(VOWELS_TABLE, vowelRows);
+const vowelRows = getIpaTypeRows(
+    IpaPhonemeTypes.VOWEL,
+    VOWEL_X_AXIS_ATTRIBUTES,
+    VOWEL_Y_AXIS_ATTRIBUTES
+);
+db.insertRows(VOWELS_TABLE, vowelRows);
 
 // Consonants
 db.createTable(CONSONANTS_TABLE);
-const consonantRows = ipaSymbolData.filter(row => row[2] === IpaPhonemeTypes.CONSONANT)
-    .map(row => [row[1]]
-        .concat(getIpaAttributes(row[4], CONSONANT_PLACE_ATTRIBUTES))
-        .concat(getIpaAttributes(row[3], CONSONANT_MANNER_ATTRIBUTES, SPECIFIC_CONSONANT_MANNER_ATTRIBUTES))
-    );
-console.log(consonantRows);
-//db.insertRows(CONSONANTS_TABLE, consonantRows);
+const consonantRows = getIpaTypeRows(
+    IpaPhonemeTypes.CONSONANT,
+    CONSONANT_PLACE_ATTRIBUTES,
+    CONSONANT_MANNER_ATTRIBUTES,
+    [],
+    SPECIFIC_CONSONANT_MANNER_ATTRIBUTES
+);
+db.insertRows(CONSONANTS_TABLE, consonantRows);
 
 // The Phonemes of Spoken Dialects
 db.createTable(SPOKEN_DIALECT_PHONEMES_TABLE);
