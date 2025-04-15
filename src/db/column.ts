@@ -13,6 +13,13 @@ export enum BasicType {
     BOOLEAN = "BOOLEAN"
 }
 
+// For some reason, instanceof isn't working on union types
+// Checking the enum value instead
+export const isBasicType = (value: any) =>
+    Object.values(BasicType)
+        .map(val => val.valueOf())
+        .includes(value.valueOf());
+
 export enum LengthType {
     CHAR = "CHAR",
     VARCHAR = "VARCHAR"
@@ -21,44 +28,54 @@ export enum LengthType {
 class SqlColumn {
     name: string;
     type: BasicType | LengthType
-    protected isRequired: boolean;
-    isPrimaryKey: boolean;
-    foreignKey: ForeignKey | null;
-    protected check: string | null;
+    protected isRequired: boolean = false;
+    isPrimaryKey: boolean = false;
+    foreignKey: ForeignKey | null = null;
+    protected checkStatement: string | null = null;
+    protected isUnique: boolean = false;
 
-    constructor(
-        name: string,
-        type: BasicType | LengthType,
-        isRequired: boolean = false,
-        isPrimaryKey: boolean = false,
-        foreignKey: ForeignKey | null = null,
-        check: string | null = null
-    ) {
+    constructor(name: string, type: BasicType | LengthType) {
         this.name = name;
         this.type = type;
-        this.isRequired = isRequired;
-        this.isPrimaryKey = isPrimaryKey;
-        this.foreignKey = foreignKey;
-        this.check = check;
     }
 
     protected getColumnDeclaration(typeDeclaration: string): string {
         const notNullSuffix = this.isRequired ? " NOT NULL" : "";
-        const checkClause = this.check ? ` CHECK(\`${this.name}\` ${this.check})` : "";
-        return typeDeclaration + notNullSuffix + checkClause;
+        const uniqueSuffix = this.isUnique ? " UNIQUE" : "";
+        const checkClause = this.checkStatement ? ` CHECK(\`${this.name}\` ${this.checkStatement})` : "";
+        return typeDeclaration + notNullSuffix + uniqueSuffix + checkClause;
+    }
+
+    public required() {
+        this.isRequired = true;
+        return this;
+    }
+
+    public primaryKey() {
+        this.isPrimaryKey = true;
+        this.isRequired = true;
+        return this;
+    }
+
+    public withForeignKey(foreignKey: ForeignKey) {
+        this.foreignKey = foreignKey;
+        return this;
+    }
+
+    public check(checkStatement: string) {
+        this.checkStatement = checkStatement;
+        return this;
+    }
+
+    public unique() {
+        this.isUnique = true;
+        return this;
     }
 }
 
 export class BasicColumn extends SqlColumn implements Column {
-    constructor(
-        name: string,
-        type: BasicType,
-        isRequired: boolean = false,
-        isPrimaryKey: boolean = false,
-        foreignKey: ForeignKey | null = null,
-        check: string | null = null
-    ) {
-        super(name, type, isRequired, isPrimaryKey, foreignKey, check);
+    constructor(name: string, type: BasicType) {
+        super(name, type);
     }
 
     public getDeclaration(): string {
@@ -70,16 +87,8 @@ export class BasicColumn extends SqlColumn implements Column {
 export class LengthColumn extends SqlColumn implements Column {
     typeLength: number;
 
-    constructor(
-        name: string,
-        type: LengthType,
-        typeLength: number,
-        isRequired: boolean = false,
-        isPrimaryKey: boolean = false,
-        foreignKey: ForeignKey | null = null,
-        check: string | null = null
-    ) {
-        super(name, type, isRequired, isPrimaryKey, foreignKey, check);
+    constructor(name: string, type: LengthType, typeLength: number) {
+        super(name, type);
         this.typeLength = typeLength;
     }
 
@@ -87,4 +96,15 @@ export class LengthColumn extends SqlColumn implements Column {
         const typeDeclaratrion = "`" + this.name + "` " + `${this.type.valueOf()}(${this.typeLength})`;
         return this.getColumnDeclaration(typeDeclaratrion);
     }
+}
+
+export const getColumnWithForeignKey = (name: string, foreignKey: ForeignKey) => {
+    const type = foreignKey.column.type;
+    if (isBasicType(type)) {
+        return new BasicColumn(name, type as BasicType)
+            .withForeignKey(foreignKey);
+    }
+    const typeLength = (foreignKey.column as LengthColumn).typeLength;
+    return new LengthColumn(name, type as LengthType, typeLength)
+        .withForeignKey(foreignKey);
 }

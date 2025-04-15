@@ -3,7 +3,7 @@ import { Table } from "./table.ts";
 
 export class ForeignKey {
     private table: Table;
-    private column: Column;
+    column: Column;
 
     constructor(table: Table, column: Column) {
         this.table = table;

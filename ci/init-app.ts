@@ -5,11 +5,6 @@ import {
     UNZIPPED_PBASE_FILES_DIR
 } from './install-constants';
 import { Database } from '../src/db/database';
-import { Table } from '../src/db/table';
-import {
-    LengthColumn,
-    LengthType
-} from '../src/db/column';
 import {
     SPOKEN_DIALECTS_TABLE,
     OTHER_IPA_SYMBOLS_TABLE,

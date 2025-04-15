@@ -1,17 +1,21 @@
-import { BasicColumn } from "./column.ts";
+import { BasicColumn, BasicType, isBasicType, LengthColumn, LengthType } from "./column.ts";
 
 export enum DialectType {
     SPOKEN = "spoken",
     SIGN = "sign"
 };
 
-export const getBasicColumnFromEnum = (
+export const getColumnFromEnum = (
+    enumObject: object,
     name: string,
-    type: BasicType,
-    enumObject: object
+    type: BasicType | LengthType,
+    typeLength: number | null = null
 ): BasicColumn => {
-    return new BasicColumn(
-        name, type, true, false, null,
-        `IN (${Object.values(enumObject).map(value => `"${value}"`).join(', ')})`
-    );
+    const checkStatement =  `IN (${Object.values(enumObject).map(value => `"${value}"`).join(', ')})`;
+    if (isBasicType(type)) {
+        return new BasicColumn(name, type as BasicType)
+            .check(checkStatement);
+    }
+    return new LengthColumn(name, type as LengthType, typeLength)
+            .check(checkStatement);
 } 
