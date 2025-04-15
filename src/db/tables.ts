@@ -1,4 +1,5 @@
 import {
+    BasicColumn,
     BasicType,
     getColumnWithForeignKey,
     LengthColumn,
@@ -27,8 +28,57 @@ export const OTHER_IPA_SYMBOLS_TABLE = new Table(
 );
 
 // Vowels
+export const VOWELS_TABLE = new Table(
+    "vowels",
+    getColumnWithForeignKey("symbol", new ForeignKey(IPA_PHONEME_SYMBOLS_TABLE, ipaPhonemeSymbol))
+        .primaryKey(),
+    // Position in IPA vowel chart: https://en.wikipedia.org/wiki/IPA_vowel_chart_with_audio
+    // X-Axis
+    new BasicColumn("front", BasicType.BOOLEAN).required(),
+    new BasicColumn("central", BasicType.BOOLEAN).required(),
+    new BasicColumn("back", BasicType.BOOLEAN).required(),
+    // Y-Axis
+    new BasicColumn("close", BasicType.BOOLEAN).required(),
+    new BasicColumn("near_close", BasicType.BOOLEAN).required(),
+    new BasicColumn("close_mid", BasicType.BOOLEAN).required(),
+    new BasicColumn("mid", BasicType.BOOLEAN).required(),
+    new BasicColumn("open_mid", BasicType.BOOLEAN).required(),
+    new BasicColumn("near_open", BasicType.BOOLEAN).required(),
+    new BasicColumn("open", BasicType.BOOLEAN).required()
+);
 
 // Consonants
+export const CONSONANTS_TABLE = new Table(
+    "consonants",
+    getColumnWithForeignKey("symbol", new ForeignKey(IPA_PHONEME_SYMBOLS_TABLE, ipaPhonemeSymbol))
+        .primaryKey(),
+    // Position in IPA consonant chart: https://en.wikipedia.org/wiki/IPA_consonant_chart_with_audio
+    // Place
+    new BasicColumn("bilabial", BasicType.BOOLEAN).required(),
+    new BasicColumn("labiodental", BasicType.BOOLEAN).required(),
+    new BasicColumn("dental", BasicType.BOOLEAN).required(),
+    new BasicColumn("alveolar", BasicType.BOOLEAN).required(),
+    new BasicColumn("postalveolar", BasicType.BOOLEAN).required(),
+    new BasicColumn("retroflex", BasicType.BOOLEAN).required(),
+    new BasicColumn("palatal", BasicType.BOOLEAN).required(),
+    new BasicColumn("velar", BasicType.BOOLEAN).required(),
+    new BasicColumn("uvular", BasicType.BOOLEAN).required(),
+    new BasicColumn("pharyngeal", BasicType.BOOLEAN).required(),
+    new BasicColumn("epiglottal", BasicType.BOOLEAN).required(),
+    new BasicColumn("glottal", BasicType.BOOLEAN).required(),
+    // Manner
+    new BasicColumn("nasal", BasicType.BOOLEAN).required(),
+    new BasicColumn("affricate", BasicType.BOOLEAN).required(),
+    new BasicColumn("fricative", BasicType.BOOLEAN).required(),
+    new BasicColumn("approximant", BasicType.BOOLEAN).required(),
+    new BasicColumn("lateral_approximant", BasicType.BOOLEAN).required(),
+    new BasicColumn("flap", BasicType.BOOLEAN).required(),
+    new BasicColumn("trill", BasicType.BOOLEAN).required(),
+    new BasicColumn("implosive", BasicType.BOOLEAN).required(),
+    new BasicColumn("stop", BasicType.BOOLEAN).required(),
+    new BasicColumn("lateral_stop", BasicType.BOOLEAN).required(),
+    new BasicColumn("click", BasicType.BOOLEAN).required()
+);
 
 // The Phonemes of Spoken Dialects
 export const SPOKEN_DIALECT_PHONEMES_TABLE = new Table(

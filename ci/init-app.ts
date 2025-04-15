@@ -9,7 +9,9 @@ import {
     SPOKEN_DIALECTS_TABLE,
     OTHER_IPA_SYMBOLS_TABLE,
     IPA_PHONEME_SYMBOLS_TABLE,
-    SPOKEN_DIALECT_PHONEMES_TABLE
+    SPOKEN_DIALECT_PHONEMES_TABLE,
+    VOWELS_TABLE,
+    CONSONANTS_TABLE
 } from '../src/db/tables';
 import { getSeperatedValueData } from './data-utils'
 import { DialectType } from '../src/db/column-enums';
@@ -71,8 +73,10 @@ const otherIpaSymbolRows = ipaSymbolData.filter(row => !SPOKEN_PHONEME_TYPES.inc
 db.insertRows(OTHER_IPA_SYMBOLS_TABLE, otherIpaSymbolRows);
 
 // Vowels
+db.createTable(VOWELS_TABLE);
 
 // Consonants
+db.createTable(CONSONANTS_TABLE);
 
 // The Phonemes of Spoken Dialects
 db.createTable(SPOKEN_DIALECT_PHONEMES_TABLE);
