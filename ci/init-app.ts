@@ -12,7 +12,8 @@ import {
     IPA_PHONEME_SYMBOLS_TABLE,
     SPOKEN_DIALECT_PHONEMES_TABLE,
     VOWELS_TABLE,
-    CONSONANTS_TABLE
+    CONSONANTS_TABLE,
+    SIGN_DIALECTS_TABLE
 } from '../src/db/tables';
 import {
     CONSONANT_MANNER_ATTRIBUTES,
@@ -175,8 +176,20 @@ db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenPhonemeRows);
 // SIGN DIALECTS
 const getJsonFromFile = (filePath: string) =>
     JSON.parse(fs.readFileSync(filePath).toString());
+const getSignDialectIsoCode = (dictionaryName: string) =>
+    dictionaryName.split("-")[0];
+const getSignDialectRegion = (dictionaryName: string) =>
+    dictionaryName.split("-")[1];
 
-const signDialectData: string[] = getJsonFromFile(SIGN_WRITING_DICTIONARIES_FILE_PATH);
+db.createTable(SIGN_DIALECTS_TABLE);
+const signDialects = getJsonFromFile(SIGN_WRITING_DICTIONARIES_FILE_PATH)
+    .map(dictionary => {
+        return {
+            isoCode: getSignDialectIsoCode(dictionary),
+            region: getSignDialectRegion(dictionary)
+        }
+    });
+console.log(signDialects);
 
 // SignWriting Symbols
 

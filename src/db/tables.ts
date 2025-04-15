@@ -13,7 +13,7 @@ const spokenDialectId = new LengthColumn("id", LengthType.CHAR, 4).primaryKey();
 export const SPOKEN_DIALECTS_TABLE = new Table(
     "spoken_dialects",
     spokenDialectId,
-    new LengthColumn("name", LengthType.VARCHAR, 100)
+    new BasicColumn("name", BasicType.STRING)
 );
 
 // IPA phoneme symbols
@@ -89,6 +89,12 @@ export const SPOKEN_DIALECT_PHONEMES_TABLE = new Table(
 );
 
 // SIGN DIALECTS
+const signDialectId = new LengthColumn("id", LengthType.CHAR, 3).primaryKey();
+export const SIGN_DIALECTS_TABLE = new Table(
+    "sign_dialects",
+    signDialectId,
+    new BasicColumn("name", BasicType.STRING)
+);
 
 // SignWriting Symbols
 
