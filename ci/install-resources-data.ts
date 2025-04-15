@@ -6,7 +6,8 @@ import {
     SIGNWRITING_FONT_FILE,
     DATA_DIR,
     ISO_FILE,
-    SIGN_WRITING_ALPHABETS_FILE_PATH
+    SIGN_WRITING_ALPHABETS_FILE_PATH,
+    SIGN_WRITING_DICTIONARIES_FILE_PATH
 } from './install-constants';
 
 const downloadFile = async (url: string, dir: string) => {
@@ -86,6 +87,8 @@ const getSignWritingAlphabet = (dictionary, totalAlphabets) => {
 };
 
 const signWritingDictionaries = await getSignWritingDictionaries();
+fs.writeFileSync(SIGN_WRITING_DICTIONARIES_FILE_PATH, JSON.stringify(signWritingDictionaries));
+
 console.log(`=> Fetching ${signWritingDictionaries.length} SignWriting alphabets...`);
 const signWritingAlphabets = await Promise.all(
     signWritingDictionaries.map(dictionary => getSignWritingAlphabet(dictionary, signWritingDictionaries.length))

@@ -1,7 +1,9 @@
 import * as fs from 'fs';
 import { recreateDirectory } from './utils';
 import {
+    DATA_DIR,
     INSTALLED_RESOURCES_DIR,
+    SIGN_WRITING_DICTIONARIES_FILE_PATH,
     UNZIPPED_PBASE_FILES_DIR
 } from './install-constants';
 import { Database } from '../src/db/database';
@@ -166,6 +168,10 @@ spokenDialectData.forEach(row => {
 db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenPhonemeRows);
 
 // SIGN DIALECTS
+const getJsonFromFile = (filePath: string) =>
+    JSON.parse(fs.readFileSync(filePath).toString());
+
+const signDialectData: string[] = getJsonFromFile(SIGN_WRITING_DICTIONARIES_FILE_PATH);
 
 // SignWriting Symbols
 
@@ -176,34 +182,5 @@ db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenPhonemeRows);
 // Location & Expression Symbols
 
 // The Phonemes of Sign Dialects
-
-/*
-const insertRowsFromJsonFile = async (tableName, filePath) => {
-    const {columns, rows} = JSON.parse(fs.readFileSync(filePath).toString());
-    await insertRows(tableName, columns, rows);
-}
-
-// Insert data for ISO languages
-await insertRowsFromSeperatedValueFile(
-    "iso_languages",
-    `${DATA_DIR}/${ISO_LANGUAGES_FILE}`,
-    ["iso_code", null, null, null, null, null, "name", null],
-    {delimiter: "\t"}
-);
-
-// Insert data into spoken languages
-await insertRowsFromSeperatedValueFile(
-    "tmp_spoken_phonemes",
-    `${DATA_DIR}/${SPOKEN_PHONEMES_FILE}`,
-    ["language_id", null, "iso_code", "language_variety", "dialect_description", null, "phoneme"],
-    {},
-    (value, i) => {
-        // If dialect_description column is "NA"
-        if (value === "NA" && i === 3) {
-            return "NULL";
-        }
-        return false;
-    }
-);*/
 
 db.close();
