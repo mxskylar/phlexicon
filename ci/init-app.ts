@@ -13,9 +13,13 @@ import {
     LengthType
 } from '../src/db/column';
 import { ForeignKey } from '../src/db/foreign-key';
-import { DIALECTS_TABLE } from '../src/db/tables';
-import { getSeperatedValueRows } from './data-utils'
-import { DialectType } from '../src/db/dialect-type';
+import {
+    DIALECTS_TABLE,
+    EXTRA_IPA_SYMBOLS_TABLE,
+    IPA_PHONEMES_TABLE
+} from '../src/db/tables';
+import { getSeperatedValueData } from './data-utils'
+import { DialectType } from '../src/db/column-enums';
 
 // BUILD DIRECTORY
 const BUILD_DIR = "build";
@@ -33,13 +37,13 @@ console.log(`Creating database: ${DATABASE_FILE_PATH}`);
 const db = new Database(DATABASE_FILE_PATH);
 
 // DIALECTS
-db.createTable(DIALECTS_TABLE);
-
-const spokenDialectData = await getSeperatedValueRows(
+const spokenDialectData = await getSeperatedValueData(
     `${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`,
     true,
     {delimiter: "\t"}
 );
+
+db.createTable(DIALECTS_TABLE);
 const spokenDialectRows = spokenDialectData.map(row => [row[0], DialectType.SPOKEN]);
 db.insertRows(DIALECTS_TABLE, spokenDialectRows);
 
@@ -59,6 +63,33 @@ const signDialects = new Table(
 db.createTable(signDialects);
 
 // IPA SYMBOLS
+const rawIpaSymbolData = await getSeperatedValueData(
+    `${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`,
+    true,
+    {relax_column_count: true}
+);
+// Correct invalid row in CSV that has an additonal blank column
+const INVALID_IPA_SYMBOL_INDEX = 1781;
+const invalidIpaSymbolRow = rawIpaSymbolData[INVALID_IPA_SYMBOL_INDEX];
+const correctedIpaSymbolRow = invalidIpaSymbolRow.slice(0, 2)
+    .concat(invalidIpaSymbolRow.slice(3));
+const ipaSymbolData = rawIpaSymbolData.slice(0, INVALID_IPA_SYMBOL_INDEX)
+    .concat([correctedIpaSymbolRow])
+    .concat(rawIpaSymbolData.slice(INVALID_IPA_SYMBOL_INDEX + 1));
+
+const SPOKEN_PHONEME_TYPES = ["vowel", "consonant"];
+
+db.createTable(IPA_PHONEMES_TABLE);
+const ipaPhonemeValues = ipaSymbolData.filter(row => SPOKEN_PHONEME_TYPES.includes(row[2]))
+    .map(row => row[1])
+const uniqueIpaPhonemeRows = [...new Set(ipaPhonemeValues)]
+    .map(value => [value]);
+db.insertRows(IPA_PHONEMES_TABLE, uniqueIpaPhonemeRows);
+
+db.createTable(EXTRA_IPA_SYMBOLS_TABLE);
+const extraIpaSymbolRows = ipaSymbolData.filter(row => !SPOKEN_PHONEME_TYPES.includes(row[2]))
+    .map(row => [row[1]]);
+db.insertRows(EXTRA_IPA_SYMBOLS_TABLE, extraIpaSymbolRows);
 
 // SIGN WRITING SYMBOLS
 
@@ -80,81 +111,10 @@ spokenDialectData.forEach(row => {
     db.exec(queries);
 };
 
-const insertRows = (
-    tableName,
-    columnNames,
-    records,
-    customValueParser = (value, i) => false
-) => {
-    const columns = columnNames.map(column => "`" + column + "`");
-    const queries = ["BEGIN TRANSACTION;"]
-    const rows = records.map(
-        row => row.map((value, i) => {
-            const customValue = customValueParser(value, i);
-            if (customValue) {
-                return customValue;
-            }
-            if (typeof value === 'string') {
-                return `"${value.split('"').join(" || '\"' || ")}"`;
-            }
-            if (value === null) {
-                return "NULL"
-            }
-            return value;
-        })
-    );
-    rows.forEach(values => {
-        queries.push(`INSERT INTO \`${tableName}\` (${columns.join(", ")}) VALUES (${values.join(", ")});`);
-    });
-    queries.push("COMMIT;");
-    console.log(`Inserting ${rows.length} rows into ${tableName}`);
-    db.exec(queries.join(os.EOL));
-}
-
-const insertRowsFromSeperatedValueFile = async (
-    tableName,
-    filePath,
-    columnOverrides = null,
-    parserOptions = {},
-    customValueParser = (value, i) => false
-) => {
-    const records = [];
-    const parser = fs
-        .createReadStream(filePath)
-        .pipe(csvParse.parse(parserOptions));
-    for await (const record of parser) {
-        const row = columnOverrides
-            ? record.filter((_, i) => typeof columnOverrides[i] !== "undefined"  && columnOverrides[i])
-            : record;
-        records.push(row);
-    }
-    insertRows(
-        tableName,
-        columnOverrides ? columnOverrides.filter(c => c) : records[0],
-        records.slice(1),
-        customValueParser
-    );
-};
-
 const insertRowsFromJsonFile = async (tableName, filePath) => {
     const {columns, rows} = JSON.parse(fs.readFileSync(filePath).toString());
     await insertRows(tableName, columns, rows);
 }
-
-const DATABASE_FILE = `${DATA_DIR}/phlexicon.db`;
-// Delete existing data and start fresh
-if (fs.existsSync(DATABASE_FILE)) {
-    console.log(`Deleting database: ${DATABASE_FILE}`);
-    fs.rmSync(DATABASE_FILE);
-}
-// Create database
-if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR);
-}
-const db = new sqlite3.Database(DATABASE_FILE);
-
-// Create tables & views
-runQueriesFromFile(`${DB_DIR}/create-tables-views.sql`);
 
 // Insert data for ISO languages
 await insertRowsFromSeperatedValueFile(

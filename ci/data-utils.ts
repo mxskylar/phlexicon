@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as csvParse from 'csv-parse';
 
-export const getSeperatedValueRows = async (
+export const getSeperatedValueData = async (
     dataFilePath: string,
     hasHeaders: boolean = false,
     parserOptions: object = {}
