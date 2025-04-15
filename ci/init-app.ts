@@ -82,9 +82,8 @@ const SPOKEN_PHONEME_TYPES = ["vowel", "consonant"];
 db.createTable(IPA_PHONEMES_TABLE);
 const ipaPhonemeValues = ipaSymbolData.filter(row => SPOKEN_PHONEME_TYPES.includes(row[2]))
     .map(row => row[1])
-const uniqueIpaPhonemeRows = [...new Set(ipaPhonemeValues)]
-    .map(value => [value]);
-db.insertRows(IPA_PHONEMES_TABLE, uniqueIpaPhonemeRows);
+const uniqueIpaPhonemes = [...new Set(ipaPhonemeValues)];
+db.insertRows(IPA_PHONEMES_TABLE, uniqueIpaPhonemes.map(value => [value]));
 
 db.createTable(EXTRA_IPA_SYMBOLS_TABLE);
 const extraIpaSymbolRows = ipaSymbolData.filter(row => !SPOKEN_PHONEME_TYPES.includes(row[2]))
