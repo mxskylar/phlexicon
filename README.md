@@ -24,6 +24,5 @@ npm start
 Alternatively, you may run individual steps within `npm start` one at a time:
 ```bash
 npm install # Installs Node, web dependencies, & raw data for database
-npm run init-db # Creates & populates database tables
-npm run app # Compiles Typescript, bundles application, then launches Electron app
+npm run app # Initializes database, compiles Typescript, bundles application, then launches Electron app
 ```
