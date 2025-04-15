@@ -87,7 +87,8 @@ spokenDialectData.forEach(row => {
     const phonemes = row[4].split(",")
         .concat(row[5].split(","))
         .filter(phoneme => phoneme !== "");
-    phonemes.forEach(phoneme => {
+    const uniquePhonemes = [...new Set(phonemes)];
+    uniquePhonemes.forEach(phoneme => {
         spokenPhonemeRows.push([dialect, phoneme]);
     });
 });
