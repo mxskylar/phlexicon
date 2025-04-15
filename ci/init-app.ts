@@ -108,15 +108,17 @@ const vowelRows = ipaSymbolData.filter(row => row[2] === IpaPhonemeTypes.VOWEL)
         .concat(getIpaAttributes(row[4], VOWEL_X_AXIS_ATTRIBUTES))
         .concat(getIpaAttributes(row[3], VOWEL_Y_AXIS_ATTRIBUTES))
     );
+console.log(vowelRows);
 //db.insertRows(VOWELS_TABLE, vowelRows);
 
 // Consonants
 db.createTable(CONSONANTS_TABLE);
-const consonantRows= ipaSymbolData.filter(row => row[2] === IpaPhonemeTypes.CONSONANT)
+const consonantRows = ipaSymbolData.filter(row => row[2] === IpaPhonemeTypes.CONSONANT)
     .map(row => [row[1]]
         .concat(getIpaAttributes(row[4], CONSONANT_PLACE_ATTRIBUTES))
         .concat(getIpaAttributes(row[3], CONSONANT_MANNER_ATTRIBUTES, SPECIFIC_CONSONANT_MANNER_ATTRIBUTES))
     );
+console.log(consonantRows);
 //db.insertRows(CONSONANTS_TABLE, consonantRows);
 
 // The Phonemes of Spoken Dialects
