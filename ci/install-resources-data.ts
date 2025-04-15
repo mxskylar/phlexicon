@@ -46,8 +46,6 @@ await downloadFile("https://phon.chass.ncsu.edu/pbase/pbasefiles.zip", DATA_DIR)
 const pbaseZipFile = await new StreamZip.async({file: `${DATA_DIR}/pbasefiles.zip`});
 await pbaseZipFile.extract(null, DATA_DIR);
 await pbaseZipFile.close();
-export const UNZIPPED_PBASE_FILES_DIR = "pbase";
-
 
 // SignPuddle API for SignWriting
 // API: https://signpuddle.com/client/api/

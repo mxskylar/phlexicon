@@ -1,11 +1,23 @@
 import * as fs from 'fs';
-import * as csvParse from "csv-parse";
-import sqlite3 from "sqlite3";
 import {recreateDirectory} from './utils';
 import {
-    INSTALLED_RESOURCES_DIR
+    INSTALLED_RESOURCES_DIR,
+    UNZIPPED_PBASE_FILES_DIR
 } from './install-constants';
+import { Database } from '../src/db/database';
+import { Table } from '../src/db/table';
+import {
+    BasicColumn,
+    BasicType,
+    LengthColumn,
+    LengthType
+} from '../src/db/column';
+import { ForeignKey } from '../src/db/foreign-key';
+import { DIALECTS_TABLE } from '../src/db/tables';
+import { getSeperatedValueRows } from './data-utils'
+import { DialectType } from '../src/db/dialect-type';
 
+// BUILD DIRECTORY
 const BUILD_DIR = "build";
 recreateDirectory(BUILD_DIR);
 
@@ -17,12 +29,50 @@ console.log(`Copying contents of ${CUSTOM_RESOURCES_DIR} to ${BUILD_DIR}`);
 fs.cpSync(CUSTOM_RESOURCES_DIR, BUILD_DIR, {recursive: true});
 
 const DATABASE_FILE_PATH = `${BUILD_DIR}/phlexicon.db`;
-if (fs.existsSync(DATABASE_FILE_PATH)) {
-    console.log(`Deleting existing database: ${DATABASE_FILE_PATH}`);
-    fs.rmSync(DATABASE_FILE_PATH);
-}
 console.log(`Creating database: ${DATABASE_FILE_PATH}`);
-const db = new sqlite3.Database(DATABASE_FILE_PATH);
+const db = new Database(DATABASE_FILE_PATH);
+
+// DIALECTS
+db.createTable(DIALECTS_TABLE);
+
+const spokenDialectData = await getSeperatedValueRows(
+    `${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`,
+    true,
+    {delimiter: "\t"}
+);
+const spokenDialectRows = spokenDialectData.map(row => [row[0], DialectType.SPOKEN]);
+db.insertRows(DIALECTS_TABLE, spokenDialectRows);
+
+const isoCode = new LengthColumn("code", LengthType.CHAR, 3, true, true);
+const isoLanguages = new Table(
+    "iso_languages",
+    isoCode,
+    new LengthColumn("name", LengthType.VARCHAR, 75, true)
+);
+db.createTable(isoLanguages);
+
+const signDialects = new Table(
+    "sign_dialects",
+    new LengthColumn("iso_code", LengthType.CHAR, 3, true, true, new ForeignKey(isoLanguages, isoCode)),
+    new BasicColumn("region", BasicType.STRING, true, true)
+);
+db.createTable(signDialects);
+
+// IPA SYMBOLS
+
+// SIGN WRITING SYMBOLS
+
+// PHONEMES
+const spokenPhonemeRows: Array<Array<string>> = [];
+spokenDialectData.forEach(row => {
+    const dialect = row[0];
+    const phonemes = row[4].split(",")
+        .concat(row[5].split(","))
+        .filter(phoneme => phoneme !== "");
+    phonemes.forEach(phoneme => {
+        spokenPhonemeRows.push([dialect, phoneme]);
+    });
+});
 
 /*aconst runQueriesFromFile = filePath => {
     const queries = fs.readFileSync(filePath).toString();
