@@ -7,16 +7,14 @@ import {
 import { Database } from '../src/db/database';
 import { Table } from '../src/db/table';
 import {
-    BasicColumn,
-    BasicType,
     LengthColumn,
     LengthType
 } from '../src/db/column';
-import { ForeignKey } from '../src/db/foreign-key';
 import {
-    DIALECTS_TABLE,
-    EXTRA_IPA_SYMBOLS_TABLE,
-    IPA_PHONEMES_TABLE
+    SPOKEN_DIALECTS_TABLE,
+    OTHER_IPA_SYMBOLS_TABLE,
+    IPA_PHONEME_SYMBOLS_TABLE,
+    SPOKEN_DIALECT_PHONEMES_TABLE
 } from '../src/db/tables';
 import { getSeperatedValueData } from './data-utils'
 import { DialectType } from '../src/db/column-enums';
@@ -36,38 +34,24 @@ const DATABASE_FILE_PATH = `${BUILD_DIR}/phlexicon.db`;
 console.log(`Creating database: ${DATABASE_FILE_PATH}`);
 const db = new Database(DATABASE_FILE_PATH);
 
-// DIALECTS
+// SPOKEN DIALECTS
 const spokenDialectData = await getSeperatedValueData(
     `${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`,
     true,
     {delimiter: "\t"}
 );
 
-db.createTable(DIALECTS_TABLE);
+db.createTable(SPOKEN_DIALECTS_TABLE);
 const spokenDialectRows = spokenDialectData.map(row => [row[0], DialectType.SPOKEN]);
-db.insertRows(DIALECTS_TABLE, spokenDialectRows);
+db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectRows);
 
-const isoCode = new LengthColumn("code", LengthType.CHAR, 3, true, true);
-const isoLanguages = new Table(
-    "iso_languages",
-    isoCode,
-    new LengthColumn("name", LengthType.VARCHAR, 75, true)
-);
-db.createTable(isoLanguages);
-
-const signDialects = new Table(
-    "sign_dialects",
-    new LengthColumn("iso_code", LengthType.CHAR, 3, true, true, new ForeignKey(isoLanguages, isoCode)),
-    new BasicColumn("region", BasicType.STRING, true, true)
-);
-db.createTable(signDialects);
-
-// IPA SYMBOLS
+// IPA Symbols
 const rawIpaSymbolData = await getSeperatedValueData(
     `${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`,
     true,
     {relax_column_count: true}
 );
+
 // Correct invalid row in CSV that has an additonal blank column
 const INVALID_IPA_SYMBOL_INDEX = 1781;
 const invalidIpaSymbolRow = rawIpaSymbolData[INVALID_IPA_SYMBOL_INDEX];
@@ -77,22 +61,26 @@ const ipaSymbolData = rawIpaSymbolData.slice(0, INVALID_IPA_SYMBOL_INDEX)
     .concat([correctedIpaSymbolRow])
     .concat(rawIpaSymbolData.slice(INVALID_IPA_SYMBOL_INDEX + 1));
 
+// IPA phoneme symbols
 const SPOKEN_PHONEME_TYPES = ["vowel", "consonant"];
+db.createTable(IPA_PHONEME_SYMBOLS_TABLE);
+const ipaPhonemeSymbolValues = ipaSymbolData.filter(row => SPOKEN_PHONEME_TYPES.includes(row[2]))
+    .map(row => row[1]);
+const uniqueIpaPhonemeSymbols = [...new Set(ipaPhonemeSymbolValues)];
+db.insertRows(IPA_PHONEME_SYMBOLS_TABLE, uniqueIpaPhonemeSymbols.map(value => [value]));
 
-db.createTable(IPA_PHONEMES_TABLE);
-const ipaPhonemeValues = ipaSymbolData.filter(row => SPOKEN_PHONEME_TYPES.includes(row[2]))
-    .map(row => row[1])
-const uniqueIpaPhonemes = [...new Set(ipaPhonemeValues)];
-db.insertRows(IPA_PHONEMES_TABLE, uniqueIpaPhonemes.map(value => [value]));
-
-db.createTable(EXTRA_IPA_SYMBOLS_TABLE);
-const extraIpaSymbolRows = ipaSymbolData.filter(row => !SPOKEN_PHONEME_TYPES.includes(row[2]))
+// Other IPA symbols
+db.createTable(OTHER_IPA_SYMBOLS_TABLE);
+const otherIpaSymbolRows = ipaSymbolData.filter(row => !SPOKEN_PHONEME_TYPES.includes(row[2]))
     .map(row => [row[1]]);
-db.insertRows(EXTRA_IPA_SYMBOLS_TABLE, extraIpaSymbolRows);
+db.insertRows(OTHER_IPA_SYMBOLS_TABLE, otherIpaSymbolRows);
 
-// SIGN WRITING SYMBOLS
+// Vowels
 
-// PHONEMES
+// Consonants
+
+// The Phonemes of Spoken Dialects
+db.createTable(SPOKEN_DIALECT_PHONEMES_TABLE);
 const spokenPhonemeRows: Array<Array<string>> = [];
 spokenDialectData.forEach(row => {
     const dialect = row[0];
@@ -103,13 +91,21 @@ spokenDialectData.forEach(row => {
         spokenPhonemeRows.push([dialect, phoneme]);
     });
 });
+db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenPhonemeRows);
 
-/*aconst runQueriesFromFile = filePath => {
-    const queries = fs.readFileSync(filePath).toString();
-    console.log(`Running queries in ${filePath}`);
-    db.exec(queries);
-};
+// SIGN DIALECTS
 
+// SignWriting Symbols
+
+// Oriented Handshape Symbols
+
+// Movement Symbols
+
+// Location & Expression Symbols
+
+// The Phonemes of Sign Dialects
+
+/*
 const insertRowsFromJsonFile = async (tableName, filePath) => {
     const {columns, rows} = JSON.parse(fs.readFileSync(filePath).toString());
     await insertRows(tableName, columns, rows);
@@ -136,12 +132,6 @@ await insertRowsFromSeperatedValueFile(
         }
         return false;
     }
-);
-
-// Insert data for sign languages
-await insertRowsFromJsonFile("sign_dialects", SIGN_LANGUAGES_FILE_PATH);
-
-// Create tables built from custom queries and drop tables that do not need to be bundled with applicatino
-runQueriesFromFile(`${DB_DIR}/etl.sql`);*/
+);*/
 
 db.close();
