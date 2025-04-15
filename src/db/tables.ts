@@ -37,7 +37,7 @@ export const SPOKEN_DIALECT_PHONEMES_TABLE = new Table(
         .primaryKey(),
     getColumnWithForeignKey("symbol", new ForeignKey(IPA_PHONEME_SYMBOLS_TABLE, ipaPhonemeSymbol))
         .primaryKey()
-)
+);
 
 // SIGN DIALECTS
 
