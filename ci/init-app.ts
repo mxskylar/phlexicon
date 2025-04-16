@@ -1,7 +1,9 @@
 import * as fs from 'fs';
 import { recreateDirectory } from './utils';
 import {
+    DATA_DIR,
     INSTALLED_RESOURCES_DIR,
+    ISO_FILE,
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
     UNZIPPED_PBASE_FILES_DIR
 } from './install-constants';
@@ -42,7 +44,7 @@ const db = new Database(DATABASE_FILE_PATH);
 
 // SPOKEN DIALECTS
 const spokenDialectData = await getSeperatedValueData(
-    `${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`,
+    `${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`,
     true,
     {delimiter: "\t"}
 );
@@ -53,7 +55,7 @@ db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectRows);
 
 // IPA Symbols
 const rawIpaSymbolData = await getSeperatedValueData(
-    `${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`,
+    `${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`,
     true,
     {relax_column_count: true}
 );
@@ -182,14 +184,24 @@ const getSignDialectRegion = (dictionaryName: string) =>
     dictionaryName.split("-")[1];
 
 db.createTable(SIGN_DIALECTS_TABLE);
-const signDialects = getJsonFromFile(SIGN_WRITING_DICTIONARIES_FILE_PATH)
-    .map(dictionary => {
-        return {
-            isoCode: getSignDialectIsoCode(dictionary),
-            region: getSignDialectRegion(dictionary)
+const isoLanguagesData = await getSeperatedValueData(`${DATA_DIR}/${ISO_FILE}`, true, {delimiter: "\t"});
+const getIsoLanguageName = (code: string) => {
+    for (const i in isoLanguagesData) {
+        const row = isoLanguagesData[i];
+        if (row[0] === code) {
+            return row[6];
         }
+    }
+    throw new Error(`Unknown ISO language code: ${code}`);
+};
+const signDialectRows = getJsonFromFile(SIGN_WRITING_DICTIONARIES_FILE_PATH)
+    .map(dictionary => {
+        const isoCode = getSignDialectIsoCode(dictionary);
+        const languageName = getIsoLanguageName(isoCode);
+        const region = getSignDialectRegion(dictionary);
+        return [`${isoCode}-${region}`, languageName];
     });
-console.log(signDialects);
+db.insertRows(SIGN_DIALECTS_TABLE, signDialectRows);
 
 // SignWriting Symbols
 

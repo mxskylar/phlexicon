@@ -89,7 +89,7 @@ export const SPOKEN_DIALECT_PHONEMES_TABLE = new Table(
 );
 
 // SIGN DIALECTS
-const signDialectId = new LengthColumn("id", LengthType.CHAR, 3).primaryKey();
+const signDialectId = new LengthColumn("id", LengthType.CHAR, 6).primaryKey();
 export const SIGN_DIALECTS_TABLE = new Table(
     "sign_dialects",
     signDialectId,

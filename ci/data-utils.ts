@@ -2,12 +2,12 @@ import * as fs from 'fs';
 import * as csvParse from 'csv-parse';
 
 export const getSeperatedValueData = async (
-    dataFilePath: string,
+    fileName: string,
     hasHeaders: boolean = false,
     parserOptions: object = {}
 ): Promise<any[]> => {
     const rows: any[] = [];
-    const parser = fs.createReadStream(`data/${dataFilePath}`)
+    const parser = fs.createReadStream(fileName)
         .pipe(csvParse.parse(parserOptions));
     for await (const row of parser) {
         rows.push(row);
