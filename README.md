@@ -14,7 +14,7 @@ The [user guide](https://mxskylar.github.io/phlexicon/) will be updated when Phl
 
 ## Development
 
-Phlexicon is an [Electron](https://www.electronjs.org/) app built with [node](https://nodejs.org/) `v23.10.0`.
+Phlexicon is an [Electron](https://www.electronjs.org/) app built with [Node](https://nodejs.org/) `v23.10.0`.
 
 Use the following commands to build and debug the application. See the [package.json](package.json) for more development scripts.
 
