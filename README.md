@@ -23,6 +23,20 @@ npm start
 
 Alternatively, you may run individual steps within `npm start` one at a time:
 ```bash
-npm install # Installs Node, web dependencies, & raw data for database
+npm install # Installs Node packages, web dependencies, & raw data for database
 npm run app # Initializes database, compiles Typescript, bundles application, then launches Electron app
+```
+
+The `npm install` command will install Node packages listed in the `package.json`,
+then it will trigger a `postinstall` script that downloads web dependencies
+(JavaScript frameworks, CSS themes, and fonts) and raw data (CSV and tab-seperated files)
+that will be inserted into the database by the `npm run app` command.
+
+The `postinstall` command may take a few minutes to finish and may timeout
+due to the limitations of external API's. It also deletes previously installed dependencies
+before re-installing them. If you simply wish to re-install Node packages listed in the `package.json`,
+it will be quicker and less error-prone to skip the `postinstall` script by running:
+
+```bash
+npm install --ignore-scripts
 ```
