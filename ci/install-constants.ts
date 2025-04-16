@@ -1,5 +1,5 @@
 export const INSTALLED_RESOURCES_DIR = "installed-resources";
-export const SIGNWRITING_FONT_FILE = "SuttonSignWritingLine.ttf";
+export const SIGNWRITING_FONT_FILE = "SuttonSignWritingOneD.ttf";
 
 export const DATA_DIR = "data";
 export const ISO_FILE = "iso-639-3.tab";
