@@ -8,6 +8,7 @@ Phlexicon would be nothing without the open source data and frameworks it depend
 - [Bootstrap](https://getbootstrap.com/): UI framework
 - [Bootswatch](https://bootswatch.com/): Theme for Bootstrap
 - [React](https://react.dev/): Framework for web development
+- [Webpack](https://webpack.js.org/): JavaScript bundler
 - [Electron](https://www.electronjs.org/): Framework to distribute web apps as desktop apps
 - [Node.js](https://nodejs.org/): JavaScript development tool
 
