@@ -20,7 +20,7 @@ Use the following commands to build and debug the application. See the [package.
 
 ### Commands
 
-Build then launch the app from scratch.
+Builds then launches the app from scratch.
 
 ```bash
 npm start
