@@ -32,7 +32,6 @@ import {
 } from './data-utils'
 
 // BUILD DIRECTORY
-
 recreateDirectory(BUILD_DIR);
 
 console.log(`Copying contents of ${INSTALLED_RESOURCES_DIR} to ${BUILD_DIR}`);
