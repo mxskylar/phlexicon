@@ -27,6 +27,8 @@ npm install # Installs Node packages, web dependencies, & raw data for database
 npm run app # Initializes database, compiles Typescript, bundles application, then launches Electron app
 ```
 
+### Installing Dependencies
+
 The `npm install` command will install Node packages listed in the `package.json`,
 then it will trigger a `postinstall` script that downloads web dependencies
 (JavaScript frameworks, CSS themes, and fonts) and raw data (CSV and tab-seperated files)
@@ -40,3 +42,19 @@ it will be quicker and less error-prone to skip the `postinstall` script by runn
 ```bash
 npm install --ignore-scripts
 ```
+
+### Launching the App
+
+The `npm run app` bundles the Electron app. It deletes the previous application bundle, if it exists.
+The command will re-copy web resources (JavaScript frameworks, CSS styling, & fonts) into the bundle directory,
+re-initialize the database by parsing raw data downloaded in the `postinstall` script triggered by `npm install`,
+compile TypeScript into JavaScript, then launch the Electron app.
+
+If you want to launch the Electron app without re-bundling the application, simply run:
+
+```bash
+npm run electron
+```
+
+See the [package.json](package.json) to view other npm scripts that can trigger
+each individual step in the `npm run app` command.
