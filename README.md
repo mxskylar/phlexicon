@@ -16,45 +16,12 @@ The [user guide](https://mxskylar.github.io/phlexicon/) will be updated when Phl
 
 Phlexicon is an [Electron](https://www.electronjs.org/) app built with [node](https://nodejs.org/) `v23.10.0`.
 
-To build and launch the app from scratch:
-```bash
-npm start
-```
+Use the following commands to build and debug the application. See the [package.json](package.json) for more development scripts.
 
-Alternatively, you may run individual steps within `npm start` one at a time:
-```bash
-npm install # Installs Node packages, web dependencies, & raw data for database
-npm run app # Initializes database, compiles Typescript, bundles application, then launches Electron app
-```
-
-### Installing Dependencies
-
-The `npm install` command will install Node packages listed in the `package.json`,
-then it will trigger a `postinstall` script that downloads web dependencies
-(JavaScript frameworks, CSS themes, and fonts) and raw data (CSV and tab-seperated files)
-that will be inserted into the database by the `npm run app` command.
-
-The `postinstall` command may take a few minutes to finish and may timeout
-due to the limitations of external API's. It also deletes previously installed dependencies
-before re-installing them. If you simply wish to re-install Node packages listed in the `package.json`,
-it will be quicker and less error-prone to skip the `postinstall` script by running:
-
-```bash
-npm install --ignore-scripts
-```
-
-### Launching the App
-
-The `npm run app` bundles the Electron app. It deletes the previous application bundle, if it exists.
-The command will re-copy web resources (JavaScript frameworks, CSS styling, & fonts) into the bundle directory,
-re-initialize the database by parsing raw data downloaded in the `postinstall` script triggered by `npm install`,
-compile TypeScript into JavaScript, then launch the Electron app.
-
-If you want to launch the Electron app without re-bundling the application, simply run:
-
-```bash
-npm run electron
-```
-
-See the [package.json](package.json) to view other npm scripts that can trigger
-each individual step in the `npm run app` command.
+| Command | Description | Deletes Cache? |
+|---|---|---|
+| `npm start` | Build then launch the app from scratch. | **Yes**, web resources & raw data previously downloaded by `postinstall` script are deleted then re-installed. If it exists, the previous version of the application bundled by `npm run app` are deleted then re-created. |
+| `npm install` | Installs Node packages listed in the `package.json`, web resources (JavaScript UI frameworks, CSS style themes, & fonts), and raw data that will be inserted into the database by the `npm run app` command. | **Yes**, web resources & raw data previously previously downloaded by the command are deleted, then re-installed. This does *not* apply to Node packages listed in the `package.json`, which are only re-installed if they do not exist in the cache. |
+| `npm install --ignore-scripts` | Only installs Node packages listed in the `package.json`. Skips the `postinstall` script that installs all other dependencies. | **No**, only installs Node packages that are not already in the cache. Preserves all other dependency caches that may contain web resources, raw data, etc. |
+| `npm run app` | Bundles then launches the app. Copies web resources (JavaScript UI frameworks, CSS style themes, & fonts) into the bundle directory, parses and raw data into the database, compiles TypeScript into JavaScript, bundles React with Webpack, then launches the app. | **Yes**, the bundle for the previous version of the app, if it exists, then re-creates it. |
+| `npm run electron` | Launches the application. | **No**, launches the app using its existing bundle. |
