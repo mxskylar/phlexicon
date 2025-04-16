@@ -26,9 +26,7 @@ Build then launch the app from scratch.
 npm start
 ```
 
-*Deletes cache?*
-
-**Yes**, web resources & raw data previously downloaded by `postinstall` script are deleted then re-installed. If it exists, the previous version of the application bundled by `npm run app` are deleted then re-created.
+*Deletes cache?* **Yes**, web resources & raw data previously downloaded by `postinstall` script are deleted then re-installed. If it exists, the previous version of the application bundled by `npm run app` are deleted then re-created.
 
 ---
 
@@ -38,9 +36,7 @@ Installs Node packages listed in the `package.json`, web resources (JavaScript U
 npm install
 ```
 
-*Deletes cache?*
-
-**Yes**, web resources & raw data previously previously downloaded by the command are deleted, then re-installed. This does *not* apply to Node packages listed in the `package.json`, which are only re-installed if they do not exist in the cache.
+*Deletes cache?* **Yes**, web resources & raw data previously previously downloaded by the command are deleted, then re-installed. This does *not* apply to Node packages listed in the `package.json`, which are only re-installed if they do not exist in the cache.
 
 ---
 
@@ -50,9 +46,7 @@ Only installs Node packages listed in the `package.json`. Skips the `postinstall
 npm install --ignore-scripts
 ```
 
-*Deletes cache?*
-
-**No**, only installs Node packages that are not already in the cache. Preserves all other dependency caches that may contain web resources, raw data, etc.
+*Deletes cache?* **No**, only installs Node packages that are not already in the cache. Preserves all other dependency caches that may contain web resources, raw data, etc.
 
 ---
 
@@ -62,9 +56,7 @@ Bundles then launches the app.
 npm run app
 ```
 
-*Deletes cache?*
-
-**Yes**, deletes the bundle for the previous version of the app, if it exists, then re-creates it.
+*Deletes cache?* **Yes**, deletes the bundle for the previous version of the app, if it exists, then re-creates it.
 
 ---
 
@@ -77,9 +69,7 @@ and bundling React with [Webpack](https://webpack.js.org/).
 npm run init-app
 ```
 
-*Deletes cache?*
-
-**Yes**, deletes the bundle for the previous version of the app, if it exists, then re-creates it.
+*Deletes cache?* **Yes**, deletes the bundle for the previous version of the app, if it exists, then re-creates it.
 
 ---
 
@@ -89,9 +79,7 @@ Compiles [TypeScript](https://www.typescriptlang.org/) into JavaScript.
 npm run compile-typescript
 ```
 
-*Deletes cache?*
-
-**Partially**, replaces JavaScript files in application bundle, if they exist, with newly compiled files.
+*Deletes cache?* **Partially**, replaces JavaScript files in application bundle, if they exist, with newly compiled files.
 
 ---
 
@@ -101,9 +89,7 @@ Bundles [React](https://react.dev/) JavaScript framework with [Webpack](https://
 npm run compile-react
 ```
 
-*Deletes cache?*
-
-**Partially**, replaces JavaScript files in application bundle, if they exist, with newly compiled files.
+*Deletes cache?* **Partially**, replaces JavaScript files in application bundle, if they exist, with newly compiled files.
 
 ---
 
@@ -113,6 +99,4 @@ Launches the Electron application.
 npm run electron
 ```
 
-*Deletes cache?*
-
-**No**, launches the app using its existing bundle.
+*Deletes cache?* **No**, launches the app using its existing bundle.
