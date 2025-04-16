@@ -1,12 +1,16 @@
 import * as fs from 'fs';
+import opentype from 'opentype.js';
+import {convert} from '@sutton-signwriting/core';
 import { recreateDirectory } from './utils';
 import {
     DATA_DIR,
     INSTALLED_RESOURCES_DIR,
     ISO_FILE,
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
+    SIGNWRITING_FONT_FILE,
     UNZIPPED_PBASE_FILES_DIR
 } from './install-constants';
+import { BUILD_DIR, DATABASE_FILE_PATH } from '../src/build-constants';
 import { Database } from '../src/db/database';
 import {
     SPOKEN_DIALECTS_TABLE,
@@ -28,7 +32,7 @@ import {
 } from './data-utils'
 
 // BUILD DIRECTORY
-const BUILD_DIR = "build";
+
 recreateDirectory(BUILD_DIR);
 
 console.log(`Copying contents of ${INSTALLED_RESOURCES_DIR} to ${BUILD_DIR}`);
@@ -38,12 +42,11 @@ const CUSTOM_RESOURCES_DIR = "custom-resources";
 console.log(`Copying contents of ${CUSTOM_RESOURCES_DIR} to ${BUILD_DIR}`);
 fs.cpSync(CUSTOM_RESOURCES_DIR, BUILD_DIR, {recursive: true});
 
-const DATABASE_FILE_PATH = `${BUILD_DIR}/phlexicon.db`;
 console.log(`Creating database: ${DATABASE_FILE_PATH}`);
 const db = new Database(DATABASE_FILE_PATH);
 
 // SPOKEN DIALECTS
-const spokenDialectData = await getSeperatedValueData(
+/*const spokenDialectData = await getSeperatedValueData(
     `${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`,
     true,
     {delimiter: "\t"}
@@ -201,9 +204,20 @@ const signDialectRows = getJsonFromFile(SIGN_WRITING_DICTIONARIES_FILE_PATH)
         const region = getSignDialectRegion(dictionary);
         return [`${isoCode}-${region}`, languageName];
     });
-db.insertRows(SIGN_DIALECTS_TABLE, signDialectRows);
+db.insertRows(SIGN_DIALECTS_TABLE, signDialectRows);*/
 
 // SignWriting Symbols
+const signWritingFontBuffer = fs.readFileSync(`${INSTALLED_RESOURCES_DIR}/${SIGNWRITING_FONT_FILE}`);
+const toArrayBuffer = (buffer: Buffer) => {
+    const arrayBuffer = new ArrayBuffer(buffer.length);
+    const view = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < buffer.length; i++) {
+        view[i] = buffer[i];
+    }
+    return arrayBuffer;
+};
+const signWritingFont = opentype.parse(toArrayBuffer(signWritingFontBuffer));
+console.log(signWritingFont.glyphs.glyphs);
 
 // Oriented Handshape Symbols
 
