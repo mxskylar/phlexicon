@@ -3,3 +3,4 @@ node_modules
 build
 installed-resources
 data
+.DS_Store
