@@ -18,6 +18,8 @@ Phlexicon is an [Electron](https://www.electronjs.org/) app built with [Node](ht
 
 Use the following commands to build and debug the application. See the [package.json](package.json) to understand how they are configured.
 
+### Commands
+
 Build then launch the app from scratch.
 
 ```bash
