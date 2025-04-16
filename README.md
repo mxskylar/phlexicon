@@ -18,8 +18,6 @@ Phlexicon is an [Electron](https://www.electronjs.org/) app built with [Node](ht
 
 Use the following commands to build and debug the application. See the [package.json](package.json) to understand how they are configured.
 
----
-
 Build then launch the app from scratch.
 
 ```bash
@@ -89,6 +87,8 @@ Compiles [TypeScript](https://www.typescriptlang.org/) into JavaScript.
 npm run compile-typescript
 ```
 
+*Deletes cache?*
+
 **Partially**, replaces JavaScript files in application bundle, if they exist, with newly compiled files.
 
 ---
@@ -98,6 +98,8 @@ Bundles [React](https://react.dev/) JavaScript framework with [Webpack](https://
 ```bash
 npm run compile-react
 ```
+
+*Deletes cache?*
 
 **Partially**, replaces JavaScript files in application bundle, if they exist, with newly compiled files.
 
