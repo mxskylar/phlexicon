@@ -229,6 +229,13 @@ const signWritingCharacters = Object.values(signWritingFont.glyphs.glyphs)
         }
     })
     .filter(character => character);
+// POC: Gets glyph by name found in hierarchy spec
+// https://www.signbank.org/iswa/100/100_bs.html
+console.log(
+    Object.values(signWritingFont.glyphs.glyphs)
+        .filter(glyph => (glyph as opentype.Glyph).name === "S1000d")
+        .map(glyph => String.fromCodePoint((glyph as opentype.Glyph).unicode))
+);
 
 // Oriented Handshape Symbols
 
