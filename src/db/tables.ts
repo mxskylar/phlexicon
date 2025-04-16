@@ -36,6 +36,8 @@ export const VOWELS_TABLE = new Table(
     new BasicColumn("front", BasicType.BOOLEAN).required(),
     new BasicColumn("central", BasicType.BOOLEAN).required(),
     new BasicColumn("back", BasicType.BOOLEAN).required(),
+    // This attribute is not on either axis but included in the x-axis column of the raw data's CSV
+    new BasicColumn("rounded", BasicType.BOOLEAN).required(),
     // Y-Axis
     new BasicColumn("close", BasicType.BOOLEAN).required(),
     new BasicColumn("near_close", BasicType.BOOLEAN).required(),

@@ -26,6 +26,7 @@ import {
     getSeperatedValueData,
     IpaPhonemeTypes,
     SPECIFIC_CONSONANT_MANNER_ATTRIBUTES,
+    SPECIFIC_VOWEL_X_AXIS_ATTRIBUTES,
     VOWEL_X_AXIS_ATTRIBUTES,
     VOWEL_Y_AXIS_ATTRIBUTES
 } from './data-utils'
@@ -45,7 +46,7 @@ console.log(`Creating database: ${DATABASE_FILE_PATH}`);
 const db = new Database(DATABASE_FILE_PATH);
 
 // SPOKEN DIALECTS
-/*const spokenDialectData = await getSeperatedValueData(
+const spokenDialectData = await getSeperatedValueData(
     `${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`,
     true,
     {delimiter: "\t"}
@@ -148,7 +149,8 @@ db.createTable(VOWELS_TABLE);
 const vowelRows = getIpaTypeRows(
     IpaPhonemeTypes.VOWEL,
     VOWEL_X_AXIS_ATTRIBUTES,
-    VOWEL_Y_AXIS_ATTRIBUTES
+    VOWEL_Y_AXIS_ATTRIBUTES,
+    SPECIFIC_VOWEL_X_AXIS_ATTRIBUTES
 );
 db.insertRows(VOWELS_TABLE, vowelRows);
 
@@ -203,7 +205,7 @@ const signDialectRows = getJsonFromFile(SIGN_WRITING_DICTIONARIES_FILE_PATH)
         const region = getSignDialectRegion(dictionary);
         return [`${isoCode}-${region}`, languageName];
     });
-db.insertRows(SIGN_DIALECTS_TABLE, signDialectRows);*/
+db.insertRows(SIGN_DIALECTS_TABLE, signDialectRows);
 
 // SignWriting Symbols
 const signWritingFontBuffer = fs.readFileSync(`${INSTALLED_RESOURCES_DIR}/${SIGNWRITING_FONT_FILE}`);

@@ -20,11 +20,15 @@ export enum IpaPhonemeTypes {
     CONSONANT = "consonant"
 }
 
+export const SPECIFIC_VOWEL_X_AXIS_ATTRIBUTES = [
+    "rounded"
+]
+
 export const VOWEL_X_AXIS_ATTRIBUTES = [
     "front",
     "central",
     "back"
-];
+].concat(SPECIFIC_VOWEL_X_AXIS_ATTRIBUTES);
 
 export const VOWEL_Y_AXIS_ATTRIBUTES = [
     "close",
