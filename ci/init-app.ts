@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import opentype from 'opentype.js';
-import {convert} from '@sutton-signwriting/core';
+import { convert } from '@sutton-signwriting/core';
 import { recreateDirectory } from './utils';
 import {
     DATA_DIR,
@@ -217,7 +217,9 @@ const toArrayBuffer = (buffer: Buffer) => {
     return arrayBuffer;
 };
 const signWritingFont = opentype.parse(toArrayBuffer(signWritingFontBuffer));
-console.log(signWritingFont.glyphs.glyphs);
+const signWritingCharacters = Object.values(signWritingFont.glyphs.glyphs)
+    .map(glyph => convert.code2swu((glyph as opentype.Glyph).unicode));
+console.log(signWritingCharacters);
 
 // Oriented Handshape Symbols
 
