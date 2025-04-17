@@ -59,7 +59,7 @@ db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectRows);
 const rawIpaSymbolData = await getSeperatedValueData(
     `${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`,
     true,
-    {relax_column_count: true}
+    {relax_column_count: true} // This is necessary because an invalid row has an additional column
 );
 
 // Correct invalid row in CSV that has an additonal blank column
