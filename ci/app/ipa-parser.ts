@@ -155,7 +155,7 @@ export class IpaParser {
         );
 }
 
-    public getAttributes(type: AttributeType): {[index: string]: any}[] {
+    private getAttributes(type: AttributeType): {[index: string]: any}[] {
         const {name, xAxis, yAxis} = type;
         console.log(`Parsing ${name} attributes...`);
         const parsedData = this.rawData
