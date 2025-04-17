@@ -35,13 +35,16 @@ import { SpokenDialectParser } from './spoken-dialect-parser';
 // BUILD DIRECTORY
 recreateDirectory(BUILD_DIR);
 
+// Installed Resources
 console.log(`Copying contents of ${INSTALLED_RESOURCES_DIR} to ${BUILD_DIR}`);
 fs.cpSync(INSTALLED_RESOURCES_DIR, BUILD_DIR, {recursive: true});
 
+// Custom Resources
 const CUSTOM_RESOURCES_DIR = "custom-resources";
 console.log(`Copying contents of ${CUSTOM_RESOURCES_DIR} to ${BUILD_DIR}`);
 fs.cpSync(CUSTOM_RESOURCES_DIR, BUILD_DIR, {recursive: true});
 
+// Database
 console.log(`Creating database: ${DATABASE_FILE_PATH}`);
 const db = new Database(DATABASE_FILE_PATH);
 
