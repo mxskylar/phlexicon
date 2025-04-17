@@ -20,16 +20,6 @@ import {
     CONSONANTS_TABLE,
     SIGN_DIALECTS_TABLE
 } from '../../src/db/tables';
-import {
-    CONSONANT_MANNER_ATTRIBUTES,
-    CONSONANT_PLACE_ATTRIBUTES,
-    getSeperatedValueData,
-    IpaPhonemeTypes,
-    SPECIFIC_CONSONANT_MANNER_ATTRIBUTES,
-    SPECIFIC_VOWEL_X_AXIS_ATTRIBUTES,
-    VOWEL_X_AXIS_ATTRIBUTES,
-    VOWEL_Y_AXIS_ATTRIBUTES
-} from './parse-utils'
 import { SpokenDialectParser } from './spoken-dialect-parser';
 import { IpaParser } from './ipa-parser';
 
