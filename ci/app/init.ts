@@ -31,6 +31,7 @@ import {
     VOWEL_Y_AXIS_ATTRIBUTES
 } from './parse-utils'
 import { SpokenDialectParser } from './spoken-dialect-parser';
+import { IpaParser } from './ipa-parser';
 
 // BUILD DIRECTORY
 recreateDirectory(BUILD_DIR);
@@ -56,15 +57,11 @@ db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectParser.getDialects());
 db.createTable(SPOKEN_DIALECT_PHONEMES_TABLE);
 db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenDialectParser.getDialectPhonemes());
 
-/*
 // IPA Symbols
-const rawIpaSymbolData = await getSeperatedValueData(
-    `${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`,
-    true,
-    {relax_column_count: true} // This is necessary because an invalid row has an additional column
-);
+const ipaParser = new IpaParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`);
+ipaParser.getVowels();
 
-// Correct invalid row in CSV that has an additonal blank column
+/*// Correct invalid row in CSV that has an additonal blank column
 const INVALID_IPA_SYMBOL_INDEX = 1781;
 const invalidIpaSymbolRow = rawIpaSymbolData[INVALID_IPA_SYMBOL_INDEX];
 const correctedIpaSymbolRow = invalidIpaSymbolRow.slice(0, 2)

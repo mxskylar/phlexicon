@@ -1,4 +1,5 @@
 import { Table } from "../../src/db/table";
+import { SpokenDialect, SpokenDialectPhoneme } from "../../src/db/tables";
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
 
 export class SpokenDialectParser {
@@ -16,10 +17,8 @@ export class SpokenDialectParser {
         this.rawData = getSeperatedValueData(rawDataFilePath, {delimiter: "\t"});
     }
 
-    public getDialects(): {
-        id: string,
-        name: string
-    }[] {
+    public getDialects(): SpokenDialect[] {
+        console.log("Parsing spoken dialects");
         return this.rawData.map(dialect => {
             return {
                 id: dialect.langcode,
@@ -28,11 +27,9 @@ export class SpokenDialectParser {
         });
     }
 
-    public getDialectPhonemes(): {
-        dialect_id: string,
-        symbol: string
-    }[] {
-        const dialectPhonemes: {dialect_id: string, symbol: string}[] = [];
+    public getDialectPhonemes(): SpokenDialectPhoneme[] {
+        console.log("Parsing spoken dialect phonemes");
+        const dialectPhonemes: SpokenDialectPhoneme[] = [];
         this.rawData.forEach(row => {
             const phonemes = row['core inventory'].split(",")
                 .concat(row['marginal inventory'].split(","))

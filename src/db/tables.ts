@@ -9,6 +9,10 @@ import { Table } from "./table.ts";
 import { ForeignKey } from "./foreign-key.ts";
 
 // SPOKEN DIALECTS
+export type SpokenDialect = {
+    id: string,
+    name: string
+};
 const spokenDialectId = new LengthColumn("id", LengthType.CHAR, 4).primaryKey();
 export const SPOKEN_DIALECTS_TABLE = new Table(
     "spoken_dialects",
@@ -27,25 +31,47 @@ export const OTHER_IPA_SYMBOLS_TABLE = new Table(
 );
 
 // Vowels
+export type Vowel = {
+    front: boolean,
+    central: boolean,
+    back: boolean,
+    rounded: boolean,
+    close: boolean,
+    near_close: boolean,
+    close_mid: boolean,
+    mid: boolean,
+    open_mid: boolean,
+    near_open: boolean,
+    open: boolean
+};
+export enum VowelAttribute {
+    // Color
+    ROUNDED = "rounded",
+    PALATAL = "palatal",
+    LABIOVELAR = "labiovelar",
+    // Position in IPA vowel chart: https://en.wikipedia.org/wiki/IPA_vowel_chart_with_audio
+    // X-Axis
+    FRONT = "front",
+    CENTRAL = "central",
+    BACK = "back",
+    // Y-Axis
+    CLOSE = "close",
+    NEAR_CLOSE = "near_close",
+    CLOSE_MID = "close_mid",
+    MID = "mid",
+    OPEN_MID = "open_mid",
+    NEAR_OPEN = "near_open",
+    OPEN = "open",
+    // Moves up or down the Y-Axis:
+    GLIDE = "glide"
+};
 export const VOWELS_TABLE = new Table(
     "vowels",
     getColumnWithForeignKey("symbol", new ForeignKey(IPA_PHONEME_SYMBOLS_TABLE, ipaPhonemeSymbol))
         .primaryKey(),
-    // Position in IPA vowel chart: https://en.wikipedia.org/wiki/IPA_vowel_chart_with_audio
-    // X-Axis
-    new BasicColumn("front", BasicType.BOOLEAN).required(),
-    new BasicColumn("central", BasicType.BOOLEAN).required(),
-    new BasicColumn("back", BasicType.BOOLEAN).required(),
-    // This attribute is not on either axis but included in the x-axis column of the raw data's CSV
-    new BasicColumn("rounded", BasicType.BOOLEAN).required(),
-    // Y-Axis
-    new BasicColumn("close", BasicType.BOOLEAN).required(),
-    new BasicColumn("near_close", BasicType.BOOLEAN).required(),
-    new BasicColumn("close_mid", BasicType.BOOLEAN).required(),
-    new BasicColumn("mid", BasicType.BOOLEAN).required(),
-    new BasicColumn("open_mid", BasicType.BOOLEAN).required(),
-    new BasicColumn("near_open", BasicType.BOOLEAN).required(),
-    new BasicColumn("open", BasicType.BOOLEAN).required()
+    ...Object.values(VowelAttribute).map(columnName =>
+        new BasicColumn(columnName, BasicType.BOOLEAN).required()
+    )
 );
 
 // Consonants
@@ -82,6 +108,10 @@ export const CONSONANTS_TABLE = new Table(
 );
 
 // The Phonemes of Spoken Dialects
+export type SpokenDialectPhoneme = {
+    dialect_id: string,
+    symbol: string
+};
 export const SPOKEN_DIALECT_PHONEMES_TABLE = new Table(
     "spoken_dialect_phonemes",
     getColumnWithForeignKey("dialect_id", new ForeignKey(SPOKEN_DIALECTS_TABLE, spokenDialectId))

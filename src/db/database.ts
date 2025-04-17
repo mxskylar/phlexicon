@@ -1,7 +1,6 @@
 import * as os from 'os';
 import sqlite3 from "sqlite3";
 import { Table } from "./table.ts";
-import { BasicType, LengthType } from './column.ts';
 
 export class Database {
     private db: sqlite3.Database;
