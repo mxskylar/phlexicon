@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import opentype from 'opentype.js';
-import { recreateDirectory } from './utils';
+import { recreateDirectory } from '../utils';
 import {
     DATA_DIR,
     INSTALLED_RESOURCES_DIR,
@@ -8,9 +8,9 @@ import {
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
     SIGNWRITING_FONT_FILE,
     UNZIPPED_PBASE_FILES_DIR
-} from './install-constants';
-import { BUILD_DIR, DATABASE_FILE_PATH } from '../src/build-constants';
-import { Database } from '../src/db/database';
+} from '../postinstall/constants';
+import { BUILD_DIR, DATABASE_FILE_PATH } from '../../src/build-constants';
+import { Database } from '../../src/db/database';
 import {
     SPOKEN_DIALECTS_TABLE,
     OTHER_IPA_SYMBOLS_TABLE,
@@ -19,7 +19,7 @@ import {
     VOWELS_TABLE,
     CONSONANTS_TABLE,
     SIGN_DIALECTS_TABLE
-} from '../src/db/tables';
+} from '../../src/db/tables';
 import {
     CONSONANT_MANNER_ATTRIBUTES,
     CONSONANT_PLACE_ATTRIBUTES,

@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import StreamZip from 'node-stream-zip';
-import {recreateDirectory} from './utils';
+import {recreateDirectory} from '../utils';
 import {
     INSTALLED_RESOURCES_DIR,
     SIGNWRITING_FONT_FILE,
@@ -8,7 +8,7 @@ import {
     ISO_FILE,
     SIGN_WRITING_ALPHABETS_FILE_PATH,
     SIGN_WRITING_DICTIONARIES_FILE_PATH
-} from './install-constants';
+} from './constants';
 
 const downloadFile = async (url: string, dir: string) => {
     const path = new URL(url).pathname.split("/");
