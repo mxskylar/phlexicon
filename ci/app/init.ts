@@ -59,16 +59,13 @@ db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenDialectParser.getDialectPhone
 
 // IPA Symbols
 const ipaParser = new IpaParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`);
+db.createTable(OTHER_IPA_SYMBOLS_TABLE);
+db.insertRows(OTHER_IPA_SYMBOLS_TABLE, ipaParser.getOtherSymbols());
+
 db.createTable(VOWELS_TABLE);
 db.insertRows(VOWELS_TABLE, ipaParser.getVowels());
 
 /*
-// Other IPA symbols
-db.createTable(OTHER_IPA_SYMBOLS_TABLE);
-const otherIpaSymbolRows = ipaSymbolData.filter(row => !SPOKEN_PHONEME_TYPES.includes(row[2]))
-    .map(row => [row[1]]);
-db.insertRows(OTHER_IPA_SYMBOLS_TABLE, otherIpaSymbolRows);
-
 // SIGN DIALECTS
 const getJsonFromFile = (filePath: string) =>
     JSON.parse(fs.readFileSync(filePath).toString());

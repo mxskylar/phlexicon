@@ -2,7 +2,6 @@ import * as os from 'os';
 import { Vowel, VOWEL_ATTRIBUTES, VowelAttribute } from "../../src/phonemes/spoken/vowel";
 import { Consonant } from "../../src/phonemes/spoken/consonant"
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
-import { PhonemeAttributes } from '../../src/phonemes/phoneme';
 
 enum PhonemeName {
     VOWEL = "vowel",
@@ -258,5 +257,13 @@ export class IpaParser {
 
     public getVowels(): Vowel[] {
         return this.getAttributes(VOWEL) as Vowel[];
+    }
+
+    public getOtherSymbols(): {[index: string]: string}[] {
+        return this.rawData.filter(rawRow => 
+            !Object.values(PhonemeName).map(name => name.valueOf()).includes(rawRow.chart)
+        ).map(rawRow => {
+            return {symbol: rawRow.ipa};
+        });
     }
 }

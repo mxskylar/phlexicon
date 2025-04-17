@@ -27,11 +27,6 @@ const ipaPhonemeSymbol = new LengthColumn("symbol", LengthType.VARCHAR, 5).prima
 export const IPA_PHONEME_SYMBOLS_TABLE = new Table("ipa_phoneme_symbols", ipaPhonemeSymbol);
 
 // Other IPA symbols
-export const OTHER_IPA_SYMBOLS_TABLE = new Table(
-    "other_ipa_symbols",
-    new LengthColumn("symbol", LengthType.CHAR, 1).primaryKey()
-);
-
 export const VOWELS_TABLE = new Table(
     "vowels",
     getColumnWithForeignKey(SYMBOL_COLUMN_NAME, new ForeignKey(IPA_PHONEME_SYMBOLS_TABLE, ipaPhonemeSymbol))
@@ -72,6 +67,11 @@ export const CONSONANTS_TABLE = new Table(
     new BasicColumn("click", BasicType.BOOLEAN).required(),
     new BasicColumn("lateral_approximant", BasicType.BOOLEAN).required(),
     new BasicColumn("lateral_stop", BasicType.BOOLEAN).required()
+);
+
+export const OTHER_IPA_SYMBOLS_TABLE = new Table(
+    "other_ipa_symbols",
+    new LengthColumn("symbol", LengthType.CHAR, 1).primaryKey()
 );
 
 // The Phonemes of Spoken Dialects
