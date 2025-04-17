@@ -53,7 +53,6 @@ const spokenDialectParser = new SpokenDialectParser(`${DATA_DIR}/${UNZIPPED_PBAS
 db.createTable(SPOKEN_DIALECTS_TABLE);
 db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectParser.getDialects());
 
-// The Phonemes of Spoken Dialects
 db.createTable(SPOKEN_DIALECT_PHONEMES_TABLE);
 db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenDialectParser.getDialectPhonemes());
 
