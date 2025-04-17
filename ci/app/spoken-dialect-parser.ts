@@ -1,5 +1,5 @@
 import { Table } from "../../src/db/table";
-import { getSeperatedValueData } from "./parse-utils";
+import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
 
 export class SpokenDialectParser {
     private rawData: {
@@ -26,5 +26,24 @@ export class SpokenDialectParser {
                 name: dialect.language
             }
         });
+    }
+
+    public getDialectPhonemes(): {
+        dialect_id: string,
+        symbol: string
+    }[] {
+        const dialectPhonemes: {dialect_id: string, symbol: string}[] = [];
+        this.rawData.forEach(row => {
+            const phonemes = row['core inventory'].split(",")
+                .concat(row['marginal inventory'].split(","))
+                .filter(phoneme => phoneme !== "");
+            getUniqueValues(phonemes).forEach(symbol => {
+                dialectPhonemes.push({
+                    dialect_id: row.langcode,
+                    symbol
+                });
+            });
+        });
+        return dialectPhonemes;
     }
 }

@@ -50,6 +50,10 @@ const spokenDialectParser = new SpokenDialectParser(`${DATA_DIR}/${UNZIPPED_PBAS
 db.createTable(SPOKEN_DIALECTS_TABLE);
 db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectParser.getDialects());
 
+// The Phonemes of Spoken Dialects
+db.createTable(SPOKEN_DIALECT_PHONEMES_TABLE);
+db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenDialectParser.getDialectPhonemes());
+
 /*
 // IPA Symbols
 const rawIpaSymbolData = await getSeperatedValueData(
@@ -159,20 +163,6 @@ const consonantRows = getIpaTypeRows(
     SPECIFIC_CONSONANT_MANNER_ATTRIBUTES
 );
 db.insertRows(CONSONANTS_TABLE, consonantRows);
-
-// The Phonemes of Spoken Dialects
-db.createTable(SPOKEN_DIALECT_PHONEMES_TABLE);
-const spokenPhonemeRows: Array<Array<string>> = [];
-spokenDialectData.forEach(row => {
-    const phonemes = row[4].split(",")
-        .concat(row[5].split(","))
-        .filter(phoneme => phoneme !== "");
-    const uniquePhonemes = [...new Set(phonemes)];
-    uniquePhonemes.forEach(phoneme => {
-        spokenPhonemeRows.push([row[1], phoneme]);
-    });
-});
-db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenPhonemeRows);
 
 // SIGN DIALECTS
 const getJsonFromFile = (filePath: string) =>

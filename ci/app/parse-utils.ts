@@ -14,6 +14,10 @@ export const getSeperatedValueData = (
     });
 };
 
+export const getUniqueValues = (values: any[]) => {
+    return [... new Set(values)];
+}
+
 export enum IpaPhonemeTypes {
     VOWEL = "vowel",
     CONSONANT = "consonant"
