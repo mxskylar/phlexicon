@@ -44,6 +44,7 @@ const VOWEL: PhonemeType = {
             "centralized-central": [VowelAttribute.CENTRAL],
             "retracted-central": [VowelAttribute.CENTRAL],
             "centralized-back": [VowelAttribute.CENTRAL, VowelAttribute.BACK],
+            "advanced-back": [VowelAttribute.BACK],
             back: [VowelAttribute.BACK],
             "retracted-back": [VowelAttribute.BACK]
         },
@@ -52,7 +53,7 @@ const VOWEL: PhonemeType = {
             palatal: [VowelAttribute.PALATAL],
             labiovelar: [VowelAttribute.LABIOVELAR]
         },
-        ignored: ["unrounded"],
+        ignored: ["unrounded", "to", "advanced"],
         attributes: VOWEL_ATTRIBUTES.xAxis.attributes,
         otherAttributes: VOWEL_ATTRIBUTES.xAxis.otherAttributes
     },
@@ -84,7 +85,7 @@ const VOWEL: PhonemeType = {
             lower: [VowelAttribute.OPEN]
         },
         otherColumnMapping: {glide: [VowelAttribute.GLIDE]},
-        ignored: [],
+        ignored: ["to", "raised"],
         attributes: VOWEL_ATTRIBUTES.yAxis.attributes,
         otherAttributes: VOWEL_ATTRIBUTES.yAxis.otherAttributes
     }
