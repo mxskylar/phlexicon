@@ -1,6 +1,7 @@
 import * as os from 'os';
 import { Vowel, VowelAttribute } from "../../src/db/tables";
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
+import { COLOR_COLUMN_MAP, HEIGHT_COLUMN_MAP } from './vowel-constants';
 
 export class IpaParser {
     private rawData: {
@@ -87,50 +88,8 @@ export class IpaParser {
                     height: this.parseAttributes(row["height/manner"])
                 }
             });
-        const colorColumnMap = {
-            rounded: [VowelAttribute.ROUNDED],
-            palatal: [VowelAttribute.PALATAL],
-            labiovelar: [VowelAttribute.LABIOVELAR],
-            "advanced-front": [VowelAttribute.FRONT],
-            front: [VowelAttribute.FRONT],
-            "retracted-front": [VowelAttribute.FRONT],
-            "centralized-front": [VowelAttribute.FRONT, VowelAttribute.CENTRAL],
-            "advanced-central": [VowelAttribute.CENTRAL],
-            central: [VowelAttribute.CENTRAL],
-            "centralized-central": [VowelAttribute.CENTRAL],
-            "retracted-central": [VowelAttribute.CENTRAL],
-            "centralized-back": [VowelAttribute.CENTRAL, VowelAttribute.BACK],
-            back: [VowelAttribute.BACK],
-            "retracted-back": [VowelAttribute.BACK]
-        };
-        this.logAttributeAccuracy("color", parsedData, colorColumnMap, ["unrounded"]);
-        const heightColumnMap = {
-            glide: [VowelAttribute.GLIDE],
-            higher: [VowelAttribute.CLOSE],
-            "raised-high": [VowelAttribute.CLOSE],
-            high: [VowelAttribute.CLOSE],
-            "lowered-lower-high": [VowelAttribute.NEAR_CLOSE],
-            "lower-high": [VowelAttribute.NEAR_CLOSE],
-            "lowered-high": [VowelAttribute.NEAR_CLOSE],
-            "raised-lower-high": [VowelAttribute.NEAR_CLOSE],
-            "raised-higher-mid": [VowelAttribute.CLOSE_MID],
-            "higher-mid": [VowelAttribute.CLOSE_MID],
-            "lowered-higher-mid": [VowelAttribute.CLOSE_MID],
-            "raised-mid": [VowelAttribute.MID],
-            mid: [VowelAttribute.MID],
-            "raised-lower-mid": [VowelAttribute.OPEN_MID],
-            "lower-mid": [VowelAttribute.OPEN_MID],
-            "lowered-mid": [VowelAttribute.OPEN_MID],
-            "lowered-lower-mid": [VowelAttribute.OPEN_MID],
-            "raised-higher-low": [VowelAttribute.OPEN_MID],
-            "higher-low": [VowelAttribute.NEAR_OPEN],
-            "lowered-higher-low": [VowelAttribute.NEAR_OPEN],
-            "raised-low": [VowelAttribute.OPEN],
-            "low": [VowelAttribute.OPEN],
-            "lowered-low": [VowelAttribute.OPEN],
-            lower: [VowelAttribute.OPEN]
-        };
-        this.logAttributeAccuracy("height", parsedData, heightColumnMap);
+        this.logAttributeAccuracy("color", parsedData, COLOR_COLUMN_MAP, ["unrounded"]);
+        this.logAttributeAccuracy("height", parsedData, HEIGHT_COLUMN_MAP);
         // TODO: Set column flag to true for all attributes maped to string value,
         // As well as all column flags within a rang of attributes both set to true
         // Concat the lists pulled from the maps above to the parsed attributes,
