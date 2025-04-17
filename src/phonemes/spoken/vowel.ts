@@ -10,7 +10,8 @@
  *  - Y-Axis: How the vowel may move up or down the axis, e.g. how it may glide
  */
 
-import { SpokenPhoneme, SpokenPhonemeAttributes } from "./phoneme.ts";
+import { SYMBOL_COLUMN_NAME } from "../phoneme.ts";
+import { SpokenPhonemeAttributes } from "./spoken-phoneme.ts";
 
 export enum VowelAttribute {
     // X-AXIS
@@ -33,7 +34,8 @@ export enum VowelAttribute {
     GLIDE = "glide"
 };
 
-export type Vowel = SpokenPhoneme & {
+export type Vowel = {
+    [SYMBOL_COLUMN_NAME]: string,
     // X-Axis
     [VowelAttribute.FRONT]: boolean,
     [VowelAttribute.CENTRAL]: boolean,

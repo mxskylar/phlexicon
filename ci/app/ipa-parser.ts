@@ -1,7 +1,8 @@
 import * as os from 'os';
-import { Vowel, VOWEL_ATTRIBUTES, VowelAttribute } from "../../src/spoken/vowel";
+import { Vowel, VOWEL_ATTRIBUTES, VowelAttribute } from "../../src/phonemes/spoken/vowel";
+import { Consonant } from "../../src/phonemes/spoken/consonant"
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
-import { SpokenPhoneme } from '../../src/spoken/phoneme';
+import { PhonemeAttributes } from '../../src/phonemes/phoneme';
 
 enum PhonemeType {
     VOWEL = "vowel",
@@ -86,16 +87,18 @@ const VOWEL: AttributeType = {
     }
 };
 
+type RawData = {
+    non_ipa: string,
+    ipa: string,
+    chart: string,
+    "height/manner": string,
+    "place/color": string,
+    misc1: string,
+    misc2: string
+};
+
 export class IpaParser {
-    private rawData: {
-        non_ipa: string,
-        ipa: string,
-        chart: string,
-        "height/manner": string,
-        "place/color": string,
-        misc1: string,
-        misc2: string
-    }[];
+    private rawData: RawData[];
 
     constructor(rawDataFilePath: string){
         const rawData = getSeperatedValueData(
@@ -156,7 +159,15 @@ export class IpaParser {
         );
     }
 
-    private getAttributes(type: AttributeType): SpokenPhoneme[] {
+    private parseAxis(
+        rawData: RawData[],
+        rawColumnName: string
+    ): PhonemeAttributes[] {
+        const attributes = rawData.map(row => this.parseAttributes(row[rawColumnName]));
+        return [];
+    }
+
+    private getAttributes(type: AttributeType): Vowel[] | Consonant[] {
         const {name, xAxis, yAxis} = type;
         console.log(`Parsing ${name} attributes...`);
         const parsedData = this.rawData

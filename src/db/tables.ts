@@ -7,7 +7,8 @@ import {
 } from "./column.ts";
 import { Table } from "./table.ts";
 import { ForeignKey } from "./foreign-key.ts";
-import { VowelAttribute } from "../spoken/vowel.ts";
+import { VowelAttribute } from "../phonemes/spoken/vowel.ts";
+import { SYMBOL_COLUMN_NAME } from "../phonemes/phoneme.ts";
 
 // SPOKEN DIALECTS
 export type SpokenDialect = {
@@ -33,7 +34,7 @@ export const OTHER_IPA_SYMBOLS_TABLE = new Table(
 
 export const VOWELS_TABLE = new Table(
     "vowels",
-    getColumnWithForeignKey("symbol", new ForeignKey(IPA_PHONEME_SYMBOLS_TABLE, ipaPhonemeSymbol))
+    getColumnWithForeignKey(SYMBOL_COLUMN_NAME, new ForeignKey(IPA_PHONEME_SYMBOLS_TABLE, ipaPhonemeSymbol))
         .primaryKey(),
     ...Object.values(VowelAttribute).map(columnName =>
         new BasicColumn(columnName, BasicType.BOOLEAN).required()

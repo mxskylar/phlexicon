@@ -1,17 +1,18 @@
-import { Table } from "../../src/db/table";
 import { SpokenDialect, SpokenDialectPhoneme } from "../../src/db/tables";
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
 
+type RawData = {
+    language: string,
+    langcode: string,
+    family: string,
+    location: string,
+    'core inventory': string,
+    'marginal inventory': string,
+    reference: string
+};
+
 export class SpokenDialectParser {
-    private rawData: {
-        language: string,
-        langcode: string,
-        family: string,
-        location: string,
-        'core inventory': string,
-        'marginal inventory': string,
-        reference: string
-    }[]
+    private rawData: RawData[]
 
     constructor(rawDataFilePath: string) {
         this.rawData = getSeperatedValueData(rawDataFilePath, {delimiter: "\t"});
