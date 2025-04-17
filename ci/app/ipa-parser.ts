@@ -159,7 +159,7 @@ export class IpaParser {
         const {name, xAxis, yAxis} = type;
         console.log(`Parsing ${name} attributes...`);
         const parsedData = this.rawData
-            .filter(row => row.chart === PhonemeType.VOWEL)
+            .filter(row => row.chart === type.name)
             .map(row => {
                 return {
                     symbol: row.ipa,
