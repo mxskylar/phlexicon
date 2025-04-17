@@ -20,7 +20,9 @@ type RawDataAxis = {
     // the presece of the value "rounded"
     ignored: string[],
     // Ordered list of the attributes on the axis
-    positions: string[]
+    attributes: string[],
+    // Attributes associated with axis but not directly on the axis
+    otherAttributes: string[]
 };
 
 type AttributeType = {
@@ -52,7 +54,8 @@ const VOWEL: AttributeType = {
             labiovelar: [VowelAttribute.LABIOVELAR]
         },
         ignored: ["unrounded"],
-        positions: VOWEL_ATTRIBUTES.xAxis.attributes
+        attributes: VOWEL_ATTRIBUTES.xAxis.attributes,
+        otherAttributes: VOWEL_ATTRIBUTES.xAxis.otherAttributes
     },
     yAxis: {
         category: "height",
@@ -83,7 +86,8 @@ const VOWEL: AttributeType = {
         },
         otherColumnMapping: {glide: [VowelAttribute.GLIDE]},
         ignored: [],
-        positions: VOWEL_ATTRIBUTES.yAxis.attributes
+        attributes: VOWEL_ATTRIBUTES.yAxis.attributes,
+        otherAttributes: VOWEL_ATTRIBUTES.yAxis.otherAttributes
     }
 };
 
@@ -135,9 +139,8 @@ export class IpaParser {
     }
 
     private verifyAttributeParsing(axis: RawDataAxis, data: string[][]): void {
-        const attributesAccountedFor =
-            Object.keys({...axis.otherColumnMapping, ...axis.columnMapping})
-                .concat(axis.ignored);
+        const attributesAccountedFor = Object.keys({...axis.otherColumnMapping, ...axis.columnMapping})
+            .concat(axis.ignored);
         let allAttributes: string[] = [];
         data.forEach(row => {
             allAttributes = allAttributes.concat(row);
@@ -159,33 +162,67 @@ export class IpaParser {
         );
     }
 
-    private parseAxis(
-        rawData: RawData[],
-        rawColumnName: string
-    ): PhonemeAttributes[] {
-        const attributes = rawData.map(row => this.parseAttributes(row[rawColumnName]));
-        return [];
+    private getAttributeRows(
+        rawRows: string[][],
+        columnMapping: {[index: string]: string[]},
+        columnNames: string[],
+        isRange: boolean = false
+    ): {[index: string]: boolean}[] {
+        const flagRows = rawRows
+            .map(rawRow => rawRow.filter(
+                rawValue => columnMapping.hasOwnProperty(rawValue)
+            ))
+            .map(rawRow => {
+                let flags: string[] = [];
+                rawRow.forEach(rawValue => {
+                    flags = flags.concat(columnMapping[rawValue]);
+                });
+                return flags;
+            });
+        if (isRange) {
+            return flagRows.map(flags => {
+                const positions = flags.map(flag => columnNames.indexOf(flag));
+                const start = Math.min(...positions);
+                const end = Math.max(...positions);
+                const row = {};
+                columnNames.forEach((columnName, i) => {
+                    row[columnName] = i >= start || i <= end;
+                });
+                return row;
+            })
+        }
+        return flagRows.map(flags => {
+            const row = {};
+            columnNames.forEach(columnName => {
+                row[columnName] = flags.includes[columnName]
+            });
+            return row;
+        });
+    }
+
+    private parseAxis(rawColumnName: string, axis: RawDataAxis): PhonemeAttributes[][] {
+        const rawRows = this.rawData.map(row => this.parseAttributes(row[rawColumnName]));
+        this.verifyAttributeParsing(axis, rawRows);
+        return this.getAttributeRows(rawRows, axis.columnMapping, axis.attributes, true)
+            .map(axisAttributes => {
+                return {
+                    ...axisAttributes,
+                    ...this.getAttributeRows(rawRows, axis.otherColumnMapping, axis.otherAttributes)
+                };
+            });
     }
 
     private getAttributes(type: AttributeType): Vowel[] | Consonant[] {
         const {name, xAxis, yAxis} = type;
         console.log(`Parsing ${name} attributes...`);
-        const parsedData = this.rawData
-            .filter(row => row.chart === type.name)
-            .map(row => {
+        return this.parseAxis("place/color", xAxis)
+            .map(xAxisRows => {
                 return {
-                    symbol: row.ipa,
-                    xAxis: this.parseAttributes(row["place/color"]),
-                    yAxis: this.parseAttributes(row["height/manner"])
+                    name,
+                    ...xAxisRows,
+                    ...this.parseAxis("height/manner", yAxis)
                 }
             });
-        this.verifyAttributeParsing(xAxis, parsedData.map(row => row.xAxis));
-        this.verifyAttributeParsing(yAxis, parsedData.map(row => row.yAxis));
-        // TODO: Set column flag to true for all attributes maped to string value,
-        // As well as all column flags within a rang of attributes both set to true
-        // Concat the lists pulled from the maps above to the parsed attributes,
-        // Then get the range by pulling the max & min of the resulting list
-        return [];
     }
 
     public getVowels(): Vowel[] {
