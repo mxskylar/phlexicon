@@ -62,107 +62,12 @@ const ipaParser = new IpaParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_con
 db.createTable(VOWELS_TABLE);
 db.insertRows(VOWELS_TABLE, ipaParser.getVowels());
 
-/*// Correct invalid row in CSV that has an additonal blank column
-const INVALID_IPA_SYMBOL_INDEX = 1781;
-const invalidIpaSymbolRow = rawIpaSymbolData[INVALID_IPA_SYMBOL_INDEX];
-const correctedIpaSymbolRow = invalidIpaSymbolRow.slice(0, 2)
-    .concat(invalidIpaSymbolRow.slice(3));
-const ipaSymbolData = rawIpaSymbolData.slice(0, INVALID_IPA_SYMBOL_INDEX)
-    .concat([correctedIpaSymbolRow])
-    .concat(rawIpaSymbolData.slice(INVALID_IPA_SYMBOL_INDEX + 1));
-
-// IPA phoneme symbols
-const SPOKEN_PHONEME_TYPES = Object.values(IpaPhonemeTypes).map(val => val.valueOf());
-db.createTable(IPA_PHONEME_SYMBOLS_TABLE);
-const ipaPhonemeSymbolValues = ipaSymbolData.filter(row => SPOKEN_PHONEME_TYPES.includes(row[2]))
-    .map(row => row[1]);
-const uniqueIpaPhonemeSymbols = [...new Set(ipaPhonemeSymbolValues)];
-db.insertRows(IPA_PHONEME_SYMBOLS_TABLE, uniqueIpaPhonemeSymbols.map(value => [value]));
-
+/*
 // Other IPA symbols
 db.createTable(OTHER_IPA_SYMBOLS_TABLE);
 const otherIpaSymbolRows = ipaSymbolData.filter(row => !SPOKEN_PHONEME_TYPES.includes(row[2]))
     .map(row => [row[1]]);
 db.insertRows(OTHER_IPA_SYMBOLS_TABLE, otherIpaSymbolRows);
-
-// Vowels & Consonants
-const isSubType = (attribute: string, definedAttributes: string[]) => {
-    for (const i in definedAttributes) {
-        const definedAttribute = definedAttributes[i];
-        if (attribute.includes(definedAttribute)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-const getIpaAttributes = (
-    attributeString: string,
-    definedAttributes: string[],
-    specificAttributes: string[] = []
-): any[] => {
-    let attributes: string[] = [];
-    attributeString.split("_")
-        .map(str => str.split("-to-"))
-        .forEach(a => {
-            attributes = attributes.concat(a);
-        });
-    return definedAttributes.map(attribute => {
-        return attributes.includes(attribute) || (
-            !specificAttributes.includes(attribute) && isSubType(attribute, definedAttributes)
-        );
-    });
-}
-
-const getIpaTypeRows = (
-    ipaType: IpaPhonemeTypes,
-    horizontalAttributes: string[],
-    verticalAttributes: string[],
-    specificHorizontalAttributes: string[] = [],
-    specificVerticalAttributes: string[] = [],
-): string[][] => {
-    const rowsWithDuplicates = ipaSymbolData.filter(row => row[2] === ipaType)
-        .map(row => [row[1]]
-            .concat(getIpaAttributes(row[4], horizontalAttributes, specificHorizontalAttributes))
-            .concat(getIpaAttributes(row[3], verticalAttributes, specificVerticalAttributes))
-        );
-    const uniqueRowMap = {};
-    rowsWithDuplicates.forEach(row => {
-        const symbol = row[0];
-        if (uniqueRowMap.hasOwnProperty(symbol)) {
-            for (let i = 1; i < row.length; i++) {
-                const rowToMerge = uniqueRowMap[symbol];
-                if (!rowToMerge[i]) {
-                    rowToMerge[i] = row[i]
-                }
-            }
-        } else {
-            uniqueRowMap[symbol] = row;
-        }
-    });
-    return Object.values(uniqueRowMap);
-};
-
-// Vowels
-db.createTable(VOWELS_TABLE);
-const vowelRows = getIpaTypeRows(
-    IpaPhonemeTypes.VOWEL,
-    VOWEL_X_AXIS_ATTRIBUTES,
-    VOWEL_Y_AXIS_ATTRIBUTES,
-    SPECIFIC_VOWEL_X_AXIS_ATTRIBUTES
-);
-db.insertRows(VOWELS_TABLE, vowelRows);
-
-// Consonants
-db.createTable(CONSONANTS_TABLE);
-const consonantRows = getIpaTypeRows(
-    IpaPhonemeTypes.CONSONANT,
-    CONSONANT_PLACE_ATTRIBUTES,
-    CONSONANT_MANNER_ATTRIBUTES,
-    [],
-    SPECIFIC_CONSONANT_MANNER_ATTRIBUTES
-);
-db.insertRows(CONSONANTS_TABLE, consonantRows);
 
 // SIGN DIALECTS
 const getJsonFromFile = (filePath: string) =>
