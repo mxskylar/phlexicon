@@ -29,7 +29,8 @@ import {
     SPECIFIC_VOWEL_X_AXIS_ATTRIBUTES,
     VOWEL_X_AXIS_ATTRIBUTES,
     VOWEL_Y_AXIS_ATTRIBUTES
-} from './data-utils'
+} from './parse-utils'
+import { SpokenDialectParser } from './spoken-dialect-parser';
 
 // BUILD DIRECTORY
 recreateDirectory(BUILD_DIR);
@@ -45,13 +46,11 @@ console.log(`Creating database: ${DATABASE_FILE_PATH}`);
 const db = new Database(DATABASE_FILE_PATH);
 
 // SPOKEN DIALECTS
-const spokenDialectData = await getSeperatedValueData(
-    `${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`,
-    true,
-    {delimiter: "\t"}
-);
-
+const spokenDialectParser = new SpokenDialectParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`);
 db.createTable(SPOKEN_DIALECTS_TABLE);
+db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectParser.getDialects());
+
+/*db.createTable(SPOKEN_DIALECTS_TABLE);
 const spokenDialectRows = spokenDialectData.map(row => [row[1], row[0]]);
 db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectRows);
 
@@ -235,7 +234,7 @@ console.log(
     Object.values(signWritingFont.glyphs.glyphs)
         .filter(glyph => (glyph as opentype.Glyph).name === "S1000d")
         .map(glyph => String.fromCodePoint((glyph as opentype.Glyph).unicode))
-);
+);*/
 
 // Oriented Handshape Symbols
 

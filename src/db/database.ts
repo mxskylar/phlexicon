@@ -21,31 +21,40 @@ export class Database {
         this.exec(query);
     }
 
-    private getInsertRowQuery(table: Table, values: any[]): string {
-        const columnNames = table.columns.map(column => column.name);
-        const escapedValues = values.map((value, i) => {
-            const type = table.columns[i].type;
-            if ([BasicType.STRING, LengthType.CHAR, LengthType.VARCHAR].includes(type)) {
+    private getInsertRowQuery(
+        table: Table,
+        row: {[index: string]: string | boolean | number}
+    ): string {
+        const getEscapedValue = (value: string | boolean | number) => {
+            if (typeof value === "string") {
                 return `"${value}"`;
             }
-            if (type === BasicType.BOOLEAN) {
+            if (typeof value === "boolean") {
                 return value ? "TRUE" : "FALSE";
             }
             return value;
-        });
-        return `INSERT INTO \`${table.name}\` (${columnNames.join(", ")}) VALUES (${escapedValues.join(", ")});`;
+        }
+        const columnNames = Object.keys(row);
+        const values = columnNames.map(key => getEscapedValue(row[key]));
+        return `INSERT INTO \`${table.name}\` (${columnNames.join(", ")}) VALUES (${values.join(", ")});`;
     }
 
-    public insertRow(table: Table, values: any[]) {
-        const query = this.getInsertRowQuery(table, values);
+    public insertRow(
+        table: Table,
+        row: {[index: string]: string | boolean | number}
+    ) {
+        const query = this.getInsertRowQuery(table, row);
         console.log(query);
         this.exec(query);
     }
 
-    public insertRows(table: Table, rows: Array<Array<any>>): void {
+    public insertRows(
+        table: Table,
+        rows: {[index: string]: string | boolean | number}[]
+    ): void {
         const queries: string[] = ["BEGIN TRANSACTION;"];
-        rows.forEach(values => {
-            queries.push(this.getInsertRowQuery(table, values));
+        rows.forEach(row => {
+            queries.push(this.getInsertRowQuery(table, row));
         });
         queries.push("COMMIT;");
         console.log(`Inserting ${rows.length} rows into table: ${table.name}`);

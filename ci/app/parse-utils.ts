@@ -1,18 +1,17 @@
 import * as fs from 'fs';
-import * as csvParse from 'csv-parse';
+import * as csvParse from 'csv-parse/sync';
 
-export const getSeperatedValueData = async (
+export const getSeperatedValueData = (
     fileName: string,
-    hasHeaders: boolean = false,
     parserOptions: object = {}
-): Promise<any[]> => {
+) => {
     const rows: any[] = [];
-    const parser = fs.createReadStream(fileName)
-        .pipe(csvParse.parse(parserOptions));
-    for await (const row of parser) {
-        rows.push(row);
-    }
-    return hasHeaders ? rows.slice(1) : rows;
+    const fileBuffer = fs.readFileSync(fileName)
+    return csvParse.parse(fileBuffer, {
+        columns: true,
+        skip_empty_lines: true,
+        ...parserOptions
+    });
 };
 
 export enum IpaPhonemeTypes {
