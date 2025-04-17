@@ -149,14 +149,14 @@ export class IpaParser {
             .filter(attribute => !uniqueAttributeValues.includes(attribute));
         console.log(
             invalidAttributes.length > 0
-                ? `=> Invalid ${axis.category} attributes were defined: ${os.EOL}- ${invalidAttributes.join(`${os.EOL}- `)}`
+                ? `=> WARNING: Invalid ${axis.category} attributes were defined: ${os.EOL}- ${invalidAttributes.join(`${os.EOL}- `)}`
                 : `=> All defined ${axis.category} attributes were valid!`
         );
         const ignoredAttributes = uniqueAttributeValues
             .filter(attribute => !attributesAccountedFor.includes(attribute));
         console.log(
             ignoredAttributes.length > 0
-                ? `=> Ignoring unrecognized ${axis.category} attributes: ${os.EOL}- ${ignoredAttributes.join(`${os.EOL}- `)}`
+                ? `=> WARNING: Ignoring unrecognized ${axis.category} attributes: ${os.EOL}- ${ignoredAttributes.join(`${os.EOL}- `)}`
                 : `=> All ${axis.category} attributes recognized!`
         );
 }
