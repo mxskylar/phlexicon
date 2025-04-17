@@ -1,6 +1,7 @@
 import * as os from 'os';
 import { Vowel, VOWEL_ATTRIBUTES, VowelAttribute } from "../../src/spoken/vowel";
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
+import { SpokenPhoneme } from '../../src/spoken/phoneme';
 
 enum PhonemeType {
     VOWEL = "vowel",
@@ -155,7 +156,7 @@ export class IpaParser {
         );
 }
 
-    private getAttributes(type: AttributeType): {[index: string]: any}[] {
+    private getAttributes(type: AttributeType): SpokenPhoneme[] {
         const {name, xAxis, yAxis} = type;
         console.log(`Parsing ${name} attributes...`);
         const parsedData = this.rawData
