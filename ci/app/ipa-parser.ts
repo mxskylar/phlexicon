@@ -2,73 +2,94 @@ import * as os from 'os';
 import { Vowel, VowelAttribute } from "../../src/db/tables";
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
 
-// VOWELS
-// Color
-const COLOR_COLUMN_MAP = {
-    rounded: [VowelAttribute.ROUNDED],
-    palatal: [VowelAttribute.PALATAL],
-    labiovelar: [VowelAttribute.LABIOVELAR],
-    "advanced-front": [VowelAttribute.FRONT],
-    front: [VowelAttribute.FRONT],
-    "retracted-front": [VowelAttribute.FRONT],
-    "centralized-front": [VowelAttribute.FRONT, VowelAttribute.CENTRAL],
-    "advanced-central": [VowelAttribute.CENTRAL],
-    central: [VowelAttribute.CENTRAL],
-    "centralized-central": [VowelAttribute.CENTRAL],
-    "retracted-central": [VowelAttribute.CENTRAL],
-    "centralized-back": [VowelAttribute.CENTRAL, VowelAttribute.BACK],
-    back: [VowelAttribute.BACK],
-    "retracted-back": [VowelAttribute.BACK]
+enum PhonemeType {
+    VOWEL = "vowel",
+    CONSONANT = "consonant"
+}
+
+type Axis = {
+    category: string,
+    axisColumnMapping: {[index: string]: string[]},
+    otherColumnMapping: {[index: string]: string[]},
+    ignored: string[],
+    positions: string[]
 };
 
-const HORIZONTAL_VOWEL_POSITIONS = [
-    VowelAttribute.FRONT,
-    VowelAttribute.CENTRAL,
-    VowelAttribute.BACK
-];
-
-// Height
-const HEIGHT_COLUMN_MAP = {
-    glide: [VowelAttribute.GLIDE],
-    higher: [VowelAttribute.CLOSE],
-    "raised-high": [VowelAttribute.CLOSE],
-    high: [VowelAttribute.CLOSE],
-    "lowered-lower-high": [VowelAttribute.NEAR_CLOSE],
-    "lower-high": [VowelAttribute.NEAR_CLOSE],
-    "lowered-high": [VowelAttribute.NEAR_CLOSE],
-    "raised-lower-high": [VowelAttribute.NEAR_CLOSE],
-    "raised-higher-mid": [VowelAttribute.CLOSE_MID],
-    "higher-mid": [VowelAttribute.CLOSE_MID],
-    "lowered-higher-mid": [VowelAttribute.CLOSE_MID],
-    "raised-mid": [VowelAttribute.MID],
-    mid: [VowelAttribute.MID],
-    "raised-lower-mid": [VowelAttribute.OPEN_MID],
-    "lower-mid": [VowelAttribute.OPEN_MID],
-    "lowered-mid": [VowelAttribute.OPEN_MID],
-    "lowered-lower-mid": [VowelAttribute.OPEN_MID],
-    "raised-higher-low": [VowelAttribute.OPEN_MID],
-    "higher-low": [VowelAttribute.NEAR_OPEN],
-    "lowered-higher-low": [VowelAttribute.NEAR_OPEN],
-    "raised-low": [VowelAttribute.OPEN],
-    "low": [VowelAttribute.OPEN],
-    "lowered-low": [VowelAttribute.OPEN],
-    lower: [VowelAttribute.OPEN]
+type AttributeType = {
+    name: string,
+    xAxis: Axis,
+    yAxis: Axis
 };
 
-const VERTICAL_VOWEL_POSITIONS = [
-    VowelAttribute.CLOSE,
-    VowelAttribute.NEAR_CLOSE,
-    VowelAttribute.CLOSE_MID,
-    VowelAttribute.MID,
-    VowelAttribute.OPEN_MID,
-    VowelAttribute.NEAR_OPEN,
-    VowelAttribute.OPEN
-];
-
-// CONSONANTS
-// Place
-
-// Manner
+const VOWEL: AttributeType = {
+    name: PhonemeType.VOWEL,
+    xAxis: {
+        category: "color",
+        axisColumnMapping: {
+            "advanced-front": [VowelAttribute.FRONT],
+            front: [VowelAttribute.FRONT],
+            "retracted-front": [VowelAttribute.FRONT],
+            "centralized-front": [VowelAttribute.FRONT, VowelAttribute.CENTRAL],
+            "advanced-central": [VowelAttribute.CENTRAL],
+            central: [VowelAttribute.CENTRAL],
+            "centralized-central": [VowelAttribute.CENTRAL],
+            "retracted-central": [VowelAttribute.CENTRAL],
+            "centralized-back": [VowelAttribute.CENTRAL, VowelAttribute.BACK],
+            back: [VowelAttribute.BACK],
+            "retracted-back": [VowelAttribute.BACK]
+        },
+        otherColumnMapping: {
+            rounded: [VowelAttribute.ROUNDED],
+            palatal: [VowelAttribute.PALATAL],
+            labiovelar: [VowelAttribute.LABIOVELAR]
+        },
+        ignored: ["unrounded"],
+        positions: [
+            VowelAttribute.FRONT,
+            VowelAttribute.CENTRAL,
+            VowelAttribute.BACK
+        ]
+    },
+    yAxis: {
+        category: "height",
+        axisColumnMapping: {
+            higher: [VowelAttribute.CLOSE],
+            "raised-high": [VowelAttribute.CLOSE],
+            high: [VowelAttribute.CLOSE],
+            "lowered-lower-high": [VowelAttribute.NEAR_CLOSE],
+            "lower-high": [VowelAttribute.NEAR_CLOSE],
+            "lowered-high": [VowelAttribute.NEAR_CLOSE],
+            "raised-lower-high": [VowelAttribute.NEAR_CLOSE],
+            "raised-higher-mid": [VowelAttribute.CLOSE_MID],
+            "higher-mid": [VowelAttribute.CLOSE_MID],
+            "lowered-higher-mid": [VowelAttribute.CLOSE_MID],
+            "raised-mid": [VowelAttribute.MID],
+            mid: [VowelAttribute.MID],
+            "raised-lower-mid": [VowelAttribute.OPEN_MID],
+            "lower-mid": [VowelAttribute.OPEN_MID],
+            "lowered-mid": [VowelAttribute.OPEN_MID],
+            "lowered-lower-mid": [VowelAttribute.OPEN_MID],
+            "raised-higher-low": [VowelAttribute.OPEN_MID],
+            "higher-low": [VowelAttribute.NEAR_OPEN],
+            "lowered-higher-low": [VowelAttribute.NEAR_OPEN],
+            "raised-low": [VowelAttribute.OPEN],
+            "low": [VowelAttribute.OPEN],
+            "lowered-low": [VowelAttribute.OPEN],
+            lower: [VowelAttribute.OPEN]
+        },
+        otherColumnMapping: {glide: [VowelAttribute.GLIDE]},
+        ignored: [],
+        positions: [
+            VowelAttribute.CLOSE,
+            VowelAttribute.NEAR_CLOSE,
+            VowelAttribute.CLOSE_MID,
+            VowelAttribute.MID,
+            VowelAttribute.OPEN_MID,
+            VowelAttribute.NEAR_OPEN,
+            VowelAttribute.OPEN
+        ]
+    }
+};
 
 export class IpaParser {
     private rawData: {
@@ -115,16 +136,12 @@ export class IpaParser {
         return attributes;
     }
 
-    private logAttributeAccuracy(
-        attributeName: string,
-        data: {[index: string]: string | string[]}[], // attributeName must be a key to a string[] value
-        valueColumnMap: {[index: string]: string[]},
-        otherAttributesAccountedFor: string[] = []
-    ): void {
-        const attributesAccountedFor = Object.keys(valueColumnMap)
-            .concat(otherAttributesAccountedFor);
+    private verifyAttributeParsing(axis: Axis, data: string[][]): void {
+        const attributesAccountedFor =
+            Object.keys({...axis.otherColumnMapping, ...axis.axisColumnMapping})
+                .concat(axis.ignored);
         let allAttributes: string[] = [];
-        data.map(row => row[attributeName]).forEach(row => {
+        data.forEach(row => {
             allAttributes = allAttributes.concat(row);
         });
         const uniqueAttributeValues = getUniqueValues(allAttributes);
@@ -132,35 +149,40 @@ export class IpaParser {
             .filter(attribute => !uniqueAttributeValues.includes(attribute));
         console.log(
             invalidAttributes.length > 0
-                ? `=> Invalid ${attributeName} attributes were defined: ${os.EOL}- ${invalidAttributes.join(`${os.EOL}- `)}`
-                : `=> All defined ${attributeName} attributes were valid!`
+                ? `=> Invalid ${axis.category} attributes were defined: ${os.EOL}- ${invalidAttributes.join(`${os.EOL}- `)}`
+                : `=> All defined ${axis.category} attributes were valid!`
         );
         const ignoredAttributes = uniqueAttributeValues
             .filter(attribute => !attributesAccountedFor.includes(attribute));
         console.log(
             ignoredAttributes.length > 0
-                ? `=> Ignoring unrecognized ${attributeName} attributes: ${os.EOL}- ${ignoredAttributes.join(`${os.EOL}- `)}`
-                : `=> All ${attributeName} attributes recognized!`
+                ? `=> Ignoring unrecognized ${axis.category} attributes: ${os.EOL}- ${ignoredAttributes.join(`${os.EOL}- `)}`
+                : `=> All ${axis.category} attributes recognized!`
         );
 }
 
-    public getVowels(): Vowel[] {
-        console.log("Parsing vowels...");
+    public getAttributes(type: AttributeType): {[index: string]: any}[] {
+        const {name, xAxis, yAxis} = type;
+        console.log(`Parsing ${name} attributes...`);
         const parsedData = this.rawData
             .filter(row => row.chart === "vowel")
             .map(row => {
                 return {
                     symbol: row.ipa,
-                    color: this.parseAttributes(row["place/color"]),
-                    height: this.parseAttributes(row["height/manner"])
+                    xAxis: this.parseAttributes(row["place/color"]),
+                    yAxis: this.parseAttributes(row["height/manner"])
                 }
             });
-        this.logAttributeAccuracy("color", parsedData, COLOR_COLUMN_MAP, ["unrounded"]);
-        this.logAttributeAccuracy("height", parsedData, HEIGHT_COLUMN_MAP);
+        this.verifyAttributeParsing(xAxis, parsedData.map(row => row.xAxis));
+        this.verifyAttributeParsing(yAxis, parsedData.map(row => row.yAxis));
         // TODO: Set column flag to true for all attributes maped to string value,
         // As well as all column flags within a rang of attributes both set to true
         // Concat the lists pulled from the maps above to the parsed attributes,
         // Then get the range by pulling the max & min of the resulting list
         return [];
+    }
+
+    public getVowels(): Vowel[] {
+        return this.getAttributes(VOWEL) as Vowel[];
     }
 }
