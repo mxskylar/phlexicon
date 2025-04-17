@@ -59,7 +59,8 @@ db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenDialectParser.getDialectPhone
 
 // IPA Symbols
 const ipaParser = new IpaParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`);
-ipaParser.getVowels();
+db.createTable(VOWELS_TABLE);
+db.insertRows(VOWELS_TABLE, ipaParser.getVowels());
 
 /*// Correct invalid row in CSV that has an additonal blank column
 const INVALID_IPA_SYMBOL_INDEX = 1781;

@@ -4,7 +4,7 @@ import { Consonant } from "../../src/phonemes/spoken/consonant"
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
 import { PhonemeAttributes } from '../../src/phonemes/phoneme';
 
-enum PhonemeType {
+enum PhonemeName {
     VOWEL = "vowel",
     CONSONANT = "consonant"
 }
@@ -25,14 +25,14 @@ type RawDataAxis = {
     otherAttributes: string[]
 };
 
-type AttributeType = {
-    name: PhonemeType,
+type PhonemeType = {
+    name: PhonemeName,
     xAxis: RawDataAxis,
     yAxis: RawDataAxis
 };
 
-const VOWEL: AttributeType = {
-    name: PhonemeType.VOWEL,
+const VOWEL: PhonemeType = {
+    name: PhonemeName.VOWEL,
     xAxis: {
         category: "color",
         columnMapping: {
@@ -150,15 +150,15 @@ export class IpaParser {
             .filter(attribute => !uniqueAttributeValues.includes(attribute));
         console.log(
             invalidAttributes.length > 0
-                ? `=> WARNING: Invalid ${axis.category} attributes were defined: ${os.EOL}- ${invalidAttributes.join(`${os.EOL}- `)}`
-                : `=> All defined ${axis.category} attributes were valid!`
+                ? `==> WARNING: Invalid ${axis.category} attributes were defined: ${os.EOL}- ${invalidAttributes.join(`${os.EOL}- `)}`
+                : `==> All defined ${axis.category} attributes were valid!`
         );
         const ignoredAttributes = uniqueAttributeValues
             .filter(attribute => !attributesAccountedFor.includes(attribute));
         console.log(
             ignoredAttributes.length > 0
-                ? `=> WARNING: Ignoring unrecognized ${axis.category} attributes: ${os.EOL}- ${ignoredAttributes.join(`${os.EOL}- `)}`
-                : `=> All ${axis.category} attributes recognized!`
+                ? `==> WARNING: Ignoring unrecognized ${axis.category} attributes: ${os.EOL}- ${ignoredAttributes.join(`${os.EOL}- `)}`
+                : `==> All ${axis.category} attributes recognized!`
         );
     }
 
@@ -167,7 +167,7 @@ export class IpaParser {
         columnMapping: {[index: string]: string[]},
         columnNames: string[],
         isRange: boolean = false
-    ): {[index: string]: boolean}[] {
+    ): {[index: string]: string}[] {
         const flagRows = rawRows
             .map(rawRow => rawRow.filter(
                 rawValue => columnMapping.hasOwnProperty(rawValue)
@@ -194,35 +194,66 @@ export class IpaParser {
         return flagRows.map(flags => {
             const row = {};
             columnNames.forEach(columnName => {
-                row[columnName] = flags.includes[columnName]
+                row[columnName] = flags.includes(columnName);
             });
             return row;
         });
     }
 
-    private parseAxis(rawColumnName: string, axis: RawDataAxis): PhonemeAttributes[][] {
-        const rawRows = this.rawData.map(row => this.parseAttributes(row[rawColumnName]));
-        this.verifyAttributeParsing(axis, rawRows);
-        return this.getAttributeRows(rawRows, axis.columnMapping, axis.attributes, true)
-            .map(axisAttributes => {
-                return {
-                    ...axisAttributes,
-                    ...this.getAttributeRows(rawRows, axis.otherColumnMapping, axis.otherAttributes)
-                };
-            });
+    private mergeObjectArrays(arr1: {}[], arr2: {}[]): {[index: string]: string}[] {
+        return arr1.map((obj1, i) => {
+            return {...obj1, ...arr2[i]}
+        });
     }
 
-    private getAttributes(type: AttributeType): Vowel[] | Consonant[] {
-        const {name, xAxis, yAxis} = type;
+    private parseAxis(
+        rawData: RawData[],
+        rawColumnName: string,
+        axis: RawDataAxis
+    ): {[index: string]: string}[] {
+        console.log(`=> Parsing ${axis.category} rows...`);
+        const rawRows = rawData.map(row => this.parseAttributes(row[rawColumnName]));
+        this.verifyAttributeParsing(axis, rawRows);
+        return this.mergeObjectArrays(
+            this.getAttributeRows(rawRows, axis.columnMapping, axis.attributes, true),
+            this.getAttributeRows(rawRows, axis.otherColumnMapping, axis.otherAttributes)
+        );
+    }
+
+    private getAttributes(phonemeType: PhonemeType): Vowel[] | Consonant[] {
+        const {name: name, xAxis, yAxis} = phonemeType;
         console.log(`Parsing ${name} attributes...`);
-        return this.parseAxis("place/color", xAxis)
-            .map(xAxisRows => {
-                return {
-                    name,
-                    ...xAxisRows,
-                    ...this.parseAxis("height/manner", yAxis)
+        const data: RawData[] = this.rawData.filter(rawRow => rawRow.chart === name);
+        const attributeRows = this.mergeObjectArrays(
+            this.parseAxis(data, "place/color", xAxis),
+            this.parseAxis(data, "height/manner", yAxis)
+        );
+        const nonUniqueRows = this.mergeObjectArrays(
+            data.map(rawRow => {
+                return {symbol: rawRow.ipa}
+            }),
+            attributeRows
+        );
+        // De-duplicate rows
+        const symbolAttributes = {}
+        nonUniqueRows.forEach(row => {
+            symbolAttributes[row.symbol] = {};
+        });
+        nonUniqueRows.forEach(row => {
+            const {symbol} = row;
+            const attributes = symbolAttributes[symbol]
+            Object.keys(row).forEach(attribute => {
+                if (!attributes.hasOwnProperty(attribute) || !attribute[attribute]) {
+                    attributes[attribute] = row[attribute];
                 }
             });
+        });
+        return Object.keys(symbolAttributes).map(symbol => {
+            return {
+                symbol,
+                ...symbolAttributes[symbol]
+            }
+        })
     }
 
     public getVowels(): Vowel[] {
