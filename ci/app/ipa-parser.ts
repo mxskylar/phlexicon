@@ -2,6 +2,8 @@ import * as os from 'os';
 import { Vowel, VowelAttribute } from "../../src/db/tables";
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
 
+// VOWELS
+// Color
 const COLOR_COLUMN_MAP = {
     rounded: [VowelAttribute.ROUNDED],
     palatal: [VowelAttribute.PALATAL],
@@ -18,21 +20,14 @@ const COLOR_COLUMN_MAP = {
     back: [VowelAttribute.BACK],
     "retracted-back": [VowelAttribute.BACK]
 };
+
 const HORIZONTAL_VOWEL_POSITIONS = [
     VowelAttribute.FRONT,
     VowelAttribute.CENTRAL,
     VowelAttribute.BACK
 ];
-const VERTICAL_VOWEL_POSITIONS = [
-    VowelAttribute.CLOSE,
-    VowelAttribute.NEAR_CLOSE,
-    VowelAttribute.CLOSE_MID,
-    VowelAttribute.MID,
-    VowelAttribute.OPEN_MID,
-    VowelAttribute.NEAR_OPEN,
-    VowelAttribute.OPEN
-];
 
+// Height
 const HEIGHT_COLUMN_MAP = {
     glide: [VowelAttribute.GLIDE],
     higher: [VowelAttribute.CLOSE],
@@ -59,6 +54,21 @@ const HEIGHT_COLUMN_MAP = {
     "lowered-low": [VowelAttribute.OPEN],
     lower: [VowelAttribute.OPEN]
 };
+
+const VERTICAL_VOWEL_POSITIONS = [
+    VowelAttribute.CLOSE,
+    VowelAttribute.NEAR_CLOSE,
+    VowelAttribute.CLOSE_MID,
+    VowelAttribute.MID,
+    VowelAttribute.OPEN_MID,
+    VowelAttribute.NEAR_OPEN,
+    VowelAttribute.OPEN
+];
+
+// CONSONANTS
+// Place
+
+// Manner
 
 export class IpaParser {
     private rawData: {
