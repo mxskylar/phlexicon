@@ -1,5 +1,5 @@
 import * as os from 'os';
-import { Vowel, VowelAttribute } from "../../src/db/tables";
+import { Vowel, VOWEL_ATTRIBUTES, VowelAttribute } from "../../src/spoken/vowel";
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
 
 enum PhonemeType {
@@ -7,25 +7,31 @@ enum PhonemeType {
     CONSONANT = "consonant"
 }
 
-type Axis = {
+type RawDataAxis = {
+    // Name the raw data gives for the attributes on or associated with the axis
     category: string,
-    axisColumnMapping: {[index: string]: string[]},
-    otherColumnMapping: {[index: string]: string[]},
+    // Map values in raw data to columns in table
+    columnMapping: {[index: string]: string[]}, // Mappings for attributes along axis
+    otherColumnMapping: {[index: string]: string[]}, // Mappings for attributes associated with axis
+    // Values in raw data that are accounted for by checking for another key
+    // e.g. "unrounded" is ignored for vowels because the parser only checks for
+    // the presece of the value "rounded"
     ignored: string[],
+    // Ordered list of the attributes on the axis
     positions: string[]
 };
 
 type AttributeType = {
-    name: string,
-    xAxis: Axis,
-    yAxis: Axis
+    name: PhonemeType,
+    xAxis: RawDataAxis,
+    yAxis: RawDataAxis
 };
 
 const VOWEL: AttributeType = {
     name: PhonemeType.VOWEL,
     xAxis: {
         category: "color",
-        axisColumnMapping: {
+        columnMapping: {
             "advanced-front": [VowelAttribute.FRONT],
             front: [VowelAttribute.FRONT],
             "retracted-front": [VowelAttribute.FRONT],
@@ -44,15 +50,11 @@ const VOWEL: AttributeType = {
             labiovelar: [VowelAttribute.LABIOVELAR]
         },
         ignored: ["unrounded"],
-        positions: [
-            VowelAttribute.FRONT,
-            VowelAttribute.CENTRAL,
-            VowelAttribute.BACK
-        ]
+        positions: VOWEL_ATTRIBUTES.xAxis.attributes
     },
     yAxis: {
         category: "height",
-        axisColumnMapping: {
+        columnMapping: {
             higher: [VowelAttribute.CLOSE],
             "raised-high": [VowelAttribute.CLOSE],
             high: [VowelAttribute.CLOSE],
@@ -79,15 +81,7 @@ const VOWEL: AttributeType = {
         },
         otherColumnMapping: {glide: [VowelAttribute.GLIDE]},
         ignored: [],
-        positions: [
-            VowelAttribute.CLOSE,
-            VowelAttribute.NEAR_CLOSE,
-            VowelAttribute.CLOSE_MID,
-            VowelAttribute.MID,
-            VowelAttribute.OPEN_MID,
-            VowelAttribute.NEAR_OPEN,
-            VowelAttribute.OPEN
-        ]
+        positions: VOWEL_ATTRIBUTES.yAxis.attributes
     }
 };
 
@@ -136,9 +130,9 @@ export class IpaParser {
         return attributes;
     }
 
-    private verifyAttributeParsing(axis: Axis, data: string[][]): void {
+    private verifyAttributeParsing(axis: RawDataAxis, data: string[][]): void {
         const attributesAccountedFor =
-            Object.keys({...axis.otherColumnMapping, ...axis.axisColumnMapping})
+            Object.keys({...axis.otherColumnMapping, ...axis.columnMapping})
                 .concat(axis.ignored);
         let allAttributes: string[] = [];
         data.forEach(row => {

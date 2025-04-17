@@ -7,6 +7,7 @@ import {
 } from "./column.ts";
 import { Table } from "./table.ts";
 import { ForeignKey } from "./foreign-key.ts";
+import { VowelAttribute } from "../spoken/vowel.ts";
 
 // SPOKEN DIALECTS
 export type SpokenDialect = {
@@ -30,41 +31,6 @@ export const OTHER_IPA_SYMBOLS_TABLE = new Table(
     new LengthColumn("symbol", LengthType.CHAR, 1).primaryKey()
 );
 
-// Vowels
-export type Vowel = {
-    front: boolean,
-    central: boolean,
-    back: boolean,
-    rounded: boolean,
-    close: boolean,
-    near_close: boolean,
-    close_mid: boolean,
-    mid: boolean,
-    open_mid: boolean,
-    near_open: boolean,
-    open: boolean
-};
-export enum VowelAttribute {
-    // Color
-    ROUNDED = "rounded",
-    PALATAL = "palatal",
-    LABIOVELAR = "labiovelar",
-    // Position in IPA vowel chart: https://en.wikipedia.org/wiki/IPA_vowel_chart_with_audio
-    // Horizontal Vowel Position (X-Axis)
-    FRONT = "front",
-    CENTRAL = "central",
-    BACK = "back",
-    // Vertical Vowel Position (Y-Axis)
-    CLOSE = "close",
-    NEAR_CLOSE = "near_close",
-    CLOSE_MID = "close_mid",
-    MID = "mid",
-    OPEN_MID = "open_mid",
-    NEAR_OPEN = "near_open",
-    OPEN = "open",
-    // Moves up or down the vertical position:
-    GLIDE = "glide"
-};
 export const VOWELS_TABLE = new Table(
     "vowels",
     getColumnWithForeignKey("symbol", new ForeignKey(IPA_PHONEME_SYMBOLS_TABLE, ipaPhonemeSymbol))
