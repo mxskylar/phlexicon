@@ -50,10 +50,7 @@ const spokenDialectParser = new SpokenDialectParser(`${DATA_DIR}/${UNZIPPED_PBAS
 db.createTable(SPOKEN_DIALECTS_TABLE);
 db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectParser.getDialects());
 
-/*db.createTable(SPOKEN_DIALECTS_TABLE);
-const spokenDialectRows = spokenDialectData.map(row => [row[1], row[0]]);
-db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectRows);
-
+/*
 // IPA Symbols
 const rawIpaSymbolData = await getSeperatedValueData(
     `${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`,
