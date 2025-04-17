@@ -50,11 +50,11 @@ export enum VowelAttribute {
     PALATAL = "palatal",
     LABIOVELAR = "labiovelar",
     // Position in IPA vowel chart: https://en.wikipedia.org/wiki/IPA_vowel_chart_with_audio
-    // Horizontal Vowel Position
+    // Horizontal Vowel Position (X-Axis)
     FRONT = "front",
     CENTRAL = "central",
     BACK = "back",
-    // Vertical Vowel Position
+    // Vertical Vowel Position (Y-Axis)
     CLOSE = "close",
     NEAR_CLOSE = "near_close",
     CLOSE_MID = "close_mid",
