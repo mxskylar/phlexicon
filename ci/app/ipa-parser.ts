@@ -154,7 +154,7 @@ export class IpaParser {
                 ? `=> WARNING: Ignoring unrecognized ${axis.category} attributes: ${os.EOL}- ${ignoredAttributes.join(`${os.EOL}- `)}`
                 : `=> All ${axis.category} attributes recognized!`
         );
-}
+    }
 
     private getAttributes(type: AttributeType): SpokenPhoneme[] {
         const {name, xAxis, yAxis} = type;
