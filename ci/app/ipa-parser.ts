@@ -129,11 +129,11 @@ export class IpaParser {
     }
 
     private parseAttributes(rawString: string): string[] {
-        let attributes: string[] = [];
+        const attributes: string[] = [];
         rawString.split("_")
             .map(str => str.split("-to-"))
-            .forEach(a => {
-                attributes = attributes.concat(a);
+            .forEach(nestedAttributes => {
+                nestedAttributes.forEach(attribute => attributes.push(attribute));
             });
         return attributes;
     }
@@ -141,9 +141,9 @@ export class IpaParser {
     private verifyAttributeParsing(axis: RawDataAxis, data: string[][]): void {
         const attributesAccountedFor = Object.keys({...axis.otherColumnMapping, ...axis.columnMapping})
             .concat(axis.ignored);
-        let allAttributes: string[] = [];
+        const allAttributes: string[] = [];
         data.forEach(row => {
-            allAttributes = allAttributes.concat(row);
+            row.forEach(value => allAttributes.push(value));
         });
         const uniqueAttributeValues = getUniqueValues(allAttributes);
         const invalidAttributes = attributesAccountedFor
@@ -173,9 +173,9 @@ export class IpaParser {
                 rawValue => columnMapping.hasOwnProperty(rawValue)
             ))
             .map(rawRow => {
-                let flags: string[] = [];
+                const flags: string[] = [];
                 rawRow.forEach(rawValue => {
-                    flags = flags.concat(columnMapping[rawValue]);
+                    columnMapping[rawValue].forEach(flag => flags.push(flag));
                 });
                 return flags;
             });
