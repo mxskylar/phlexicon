@@ -18,6 +18,20 @@ const COLOR_COLUMN_MAP = {
     back: [VowelAttribute.BACK],
     "retracted-back": [VowelAttribute.BACK]
 };
+const HORIZONTAL_VOWEL_POSITIONS = [
+    VowelAttribute.FRONT,
+    VowelAttribute.CENTRAL,
+    VowelAttribute.BACK
+];
+const VERTICAL_VOWEL_POSITIONS = [
+    VowelAttribute.CLOSE,
+    VowelAttribute.NEAR_CLOSE,
+    VowelAttribute.CLOSE_MID,
+    VowelAttribute.MID,
+    VowelAttribute.OPEN_MID,
+    VowelAttribute.NEAR_OPEN,
+    VowelAttribute.OPEN
+];
 
 const HEIGHT_COLUMN_MAP = {
     glide: [VowelAttribute.GLIDE],

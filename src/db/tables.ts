@@ -50,11 +50,11 @@ export enum VowelAttribute {
     PALATAL = "palatal",
     LABIOVELAR = "labiovelar",
     // Position in IPA vowel chart: https://en.wikipedia.org/wiki/IPA_vowel_chart_with_audio
-    // X-Axis
+    // Horizontal Vowel Position
     FRONT = "front",
     CENTRAL = "central",
     BACK = "back",
-    // Y-Axis
+    // Vertical Vowel Position
     CLOSE = "close",
     NEAR_CLOSE = "near_close",
     CLOSE_MID = "close_mid",
@@ -62,7 +62,7 @@ export enum VowelAttribute {
     OPEN_MID = "open_mid",
     NEAR_OPEN = "near_open",
     OPEN = "open",
-    // Moves up or down the Y-Axis:
+    // Moves up or down the vertical position:
     GLIDE = "glide"
 };
 export const VOWELS_TABLE = new Table(
