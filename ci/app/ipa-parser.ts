@@ -413,15 +413,17 @@ export class IpaParser implements DataParser {
                 }
             }
         });
-        const allTruePercent = getPercent(numAllTrue);
-        console.log(`==> [${logPrefix}] ALL TRUE: ${numAllTrue}/${total} = ${allTruePercent}%`);
-        const MIN_ALL_TRUE_PERCENT = 90;
-        if (warnIfAllFalse && allTruePercent < MIN_ALL_TRUE_PERCENT) {
-            this.warnings.push({
-                dataName: tableName,
-                dataType: DataType.TABLE,
-                message: `Less than ${MIN_ALL_TRUE_PERCENT}% of ${logPrefix.toLowerCase()} rows are all true`
-            });
+        if (attributes.length > 1) {
+            const allTruePercent = getPercent(numAllTrue);
+            console.log(`==> [${logPrefix}] ALL TRUE: ${numAllTrue}/${total} = ${allTruePercent}%`);
+            const MIN_ALL_TRUE_PERCENT = 90;
+            if (warnIfAllFalse && allTruePercent < MIN_ALL_TRUE_PERCENT) {
+                this.warnings.push({
+                    dataName: tableName,
+                    dataType: DataType.TABLE,
+                    message: `Less than ${MIN_ALL_TRUE_PERCENT}% of ${logPrefix.toLowerCase()} rows are all true`
+                });
+            }
         }
     }
 
