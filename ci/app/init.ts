@@ -1,30 +1,30 @@
 import * as fs from 'fs';
-import { recreateDirectory } from '../utils';
+import { BUILD_DIR, DATABASE_FILE_PATH } from '../../src/build-constants';
+import { Database } from '../../src/db/database';
+import {
+    CONSONANTS_TABLE,
+    IPA_PHONEME_SYMBOLS_TABLE,
+    OTHER_IPA_SYMBOLS_TABLE,
+    SIGN_DIALECTS_TABLE,
+    SIGN_WRITING_SYMBOLS_TABLE,
+    SPOKEN_DIALECT_PHONEMES_TABLE,
+    SPOKEN_DIALECTS_TABLE,
+    VOWELS_TABLE
+} from '../../src/db/tables';
 import {
     DATA_DIR,
     INSTALLED_RESOURCES_DIR,
     ISO_FILE,
+    SIGN_WRITING_ALPHABETS_FILE_PATH,
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
     SIGN_WRITING_FONT_FILE,
     UNZIPPED_PBASE_FILES_DIR
 } from '../postinstall/constants';
-import { BUILD_DIR, DATABASE_FILE_PATH } from '../../src/build-constants';
-import { Database } from '../../src/db/database';
-import {
-    SPOKEN_DIALECTS_TABLE,
-    OTHER_IPA_SYMBOLS_TABLE,
-    IPA_PHONEME_SYMBOLS_TABLE,
-    SPOKEN_DIALECT_PHONEMES_TABLE,
-    VOWELS_TABLE,
-    CONSONANTS_TABLE,
-    SIGN_DIALECTS_TABLE,
-    SIGN_WRITING_SYMBOLS_TABLE
-} from '../../src/db/tables';
-import { SpokenDialectParser } from './spoken-dialect-parser';
-import { IpaParser } from './ipa-parser';
+import { recreateDirectory } from '../utils';
 import { DataWarning } from './data-parser';
+import { IpaParser } from './ipa-parser';
 import { SignDialectParser } from './sign-dialect-parser';
-import { SIGN_WRITING_ALPHABETS_FILE_PATH } from '../postinstall/constants';
+import { SpokenDialectParser } from './spoken-dialect-parser';
 
 // STEP 1: Prep the build directory
 recreateDirectory(BUILD_DIR);

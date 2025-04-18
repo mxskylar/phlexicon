@@ -1,10 +1,9 @@
 import * as fs from 'fs';
 import opentype from 'opentype.js';
+import { SIGN_WRITING_SYMBOLS_TABLE } from '../../src/db/tables';
+import { SignWritingSymbol } from "../../src/phonemes/sign/sign-writing-symbol";
 import { DataParser, DataType, DataWarning } from "./data-parser";
 import { getJsonData, getPercent } from "./parse-utils";
-import { SignWritingSymbol } from "../../src/phonemes/sign/sign-writing-symbol";
-import { symbolName } from 'typescript';
-import { SIGN_WRITING_SYMBOLS_TABLE } from '../../src/db/tables';
 
 type RawAlphabetData = {
     name: string,
