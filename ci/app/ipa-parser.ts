@@ -364,7 +364,7 @@ export class IpaParser implements DataParser {
         );
     }
 
-    private getAttributes(phonemeType: PhonemeType): Vowel[] | Consonant[] {
+    private getPhonemeTypeRows(phonemeType: PhonemeType): Vowel[] | Consonant[] {
         const {name: name, xAxis, yAxis} = phonemeType;
         console.log(`Parsing ${name} attributes...`);
         const data: RawData[] = this.rawData.filter(rawRow => rawRow.chart === name);
@@ -401,10 +401,10 @@ export class IpaParser implements DataParser {
     }
 
     public getVowels(): Vowel[] {
-        return this.getAttributes(VOWEL) as Vowel[];
+        return this.getPhonemeTypeRows(VOWEL) as Vowel[];
     }
 
     public getConsonants(): Consonant[] {
-        return this.getAttributes(CONSONANT) as Consonant[];
+        return this.getPhonemeTypeRows(CONSONANT) as Consonant[];
     }
 }
