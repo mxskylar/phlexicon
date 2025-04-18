@@ -367,8 +367,10 @@ export class IpaParser implements DataParser {
         attributes: string[],
         rows: Vowel[] | Consonant[],
         logPrefix: string,
-        tableName: string
+        tableName: string,
+        warnIfAllFalse: boolean = false
     ): void {
+        // Calculate percent true of each attribute
         const counts = {};
         attributes.forEach(attribute => counts[attribute] = 0);
         rows.forEach(row =>{
@@ -379,9 +381,10 @@ export class IpaParser implements DataParser {
             });
         });
         const total = rows.length;
+        const getPercent = (count: number) => Math.round((count / total) * 10000) / 100;
         Object.keys(counts).forEach(attribute => {
             const count = counts[attribute];
-            const percent = Math.round((count / total) * 10000) / 100;
+            const percent = getPercent(count);
             if (count <= 0) {
                 this.warnings.push({
                     dataName: tableName,
@@ -397,8 +400,29 @@ export class IpaParser implements DataParser {
                     message: `Column ${attribute} is true over ${MAX_PERCENT}% of the time`
                 });
             }
-            console.log(`==> [${logPrefix}] ${attribute}: ${percent}%`);
+            console.log(`==> [${logPrefix}] ${attribute}: ${count}/${total} = ${percent}%`);
         });
+
+        // Calculate percent where all attributes are true
+        let numAllTrue = 0;
+        rows.forEach(row =>{
+            for (const i in attributes) {
+                if (row[attributes[i]]) {
+                    numAllTrue++;
+                    break;
+                }
+            }
+        });
+        const allTruePercent = getPercent(numAllTrue);
+        console.log(`==> [${logPrefix}] ALL TRUE: ${numAllTrue}/${total} = ${allTruePercent}%`);
+        const MIN_ALL_TRUE_PERCENT = 90;
+        if (warnIfAllFalse && allTruePercent < MIN_ALL_TRUE_PERCENT) {
+            this.warnings.push({
+                dataName: tableName,
+                dataType: DataType.TABLE,
+                message: `Less than ${MIN_ALL_TRUE_PERCENT}% of ${logPrefix.toLowerCase()} rows are all true`
+            });
+        }
     }
 
     private validatePhonemeTypeRows(
@@ -406,10 +430,10 @@ export class IpaParser implements DataParser {
         rows: Vowel[] | Consonant[]
     ) {
         const {name, xAxis, yAxis, tableName} = phonemeType;
-        console.log(`=> Analyzing ${name} attribute frequency...`);
-        this.validateAttributeFrequency(xAxis.attributes, rows, `${name.toUpperCase()} X-AXIS`, tableName);
+        console.log(`=> Percentages ${name} attributes are true...`);
+        this.validateAttributeFrequency(xAxis.attributes, rows, `${name.toUpperCase()} X-AXIS`, tableName, true);
         this.validateAttributeFrequency(xAxis.otherAttributes, rows, `${name.toUpperCase()} X-AXIS QUALITY`, tableName);
-        this.validateAttributeFrequency(yAxis.attributes, rows, `${name.toUpperCase()} Y-AXIS`, tableName);
+        this.validateAttributeFrequency(yAxis.attributes, rows, `${name.toUpperCase()} Y-AXIS`, tableName, true);
         this.validateAttributeFrequency(yAxis.otherAttributes, rows, `${name.toUpperCase()} Y-AXIS QUALITY`, tableName);
     }
 
