@@ -1,9 +1,9 @@
 import * as os from 'os';
-import { Consonant } from "../../src/phonemes/spoken/consonant";
+import { Consonant, CONSONANT_ATTRIBUTES, ConsonantAttribute } from "../../src/phonemes/spoken/consonant";
 import { Vowel, VOWEL_ATTRIBUTES, VowelAttribute } from "../../src/phonemes/spoken/vowel";
 import { DataParser, DataType, DataWarning } from './data-parser';
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
-import { VOWELS_TABLE } from '../../src/db/tables';
+import { CONSONANTS_TABLE, VOWELS_TABLE } from '../../src/db/tables';
 
 enum PhonemeName {
     VOWEL = "vowel",
@@ -33,6 +33,11 @@ type PhonemeType = {
     yAxis: RawDataAxis
 };
 
+type Attributes = {
+    isRange: boolean,
+    values: string[]
+};
+
 const VOWEL: PhonemeType = {
     name: PhonemeName.VOWEL,
     tableName: VOWELS_TABLE.name,
@@ -57,7 +62,7 @@ const VOWEL: PhonemeType = {
             palatal: [VowelAttribute.PALATAL],
             labiovelar: [VowelAttribute.LABIOVELAR]
         },
-        ignored: ["unrounded", "to", "advanced"],
+        ignored: ["unrounded", "advanced"],
         attributes: VOWEL_ATTRIBUTES.xAxis.attributes,
         otherAttributes: VOWEL_ATTRIBUTES.xAxis.otherAttributes
     },
@@ -89,9 +94,83 @@ const VOWEL: PhonemeType = {
             lower: [VowelAttribute.OPEN]
         },
         otherColumnMapping: {glide: [VowelAttribute.GLIDE]},
-        ignored: ["to", "raised"],
+        ignored: ["raised"],
         attributes: VOWEL_ATTRIBUTES.yAxis.attributes,
         otherAttributes: VOWEL_ATTRIBUTES.yAxis.otherAttributes
+    }
+};
+
+const CONSONANT = {
+    name: PhonemeName.CONSONANT,
+    tableName: CONSONANTS_TABLE.name,
+    xAxis: {
+        category: "place",
+        columnMapping: {
+            bilabial: [ConsonantAttribute.BILABIAL],
+            labiodental: [ConsonantAttribute.LABIODENTAL],
+            dental: [ConsonantAttribute.DENTAL],
+            interdental: [ConsonantAttribute.DENTAL],
+            prevelar: [ConsonantAttribute.ALVEOLAR],
+            labiovelar: [ConsonantAttribute.ALVEOLAR],
+            alveolar: [ConsonantAttribute.ALVEOLAR],
+            "laminal-alveolar": [ConsonantAttribute.ALVEOLAR],
+            alveolopalatal: [ConsonantAttribute.ALVEOLAR, ConsonantAttribute.PALATAL],
+            palatoalveolar: [ConsonantAttribute.ALVEOLAR, ConsonantAttribute.PALATAL],
+            "advanced-alveolar": [ConsonantAttribute.ALVEOLAR],
+            postalveolar: [ConsonantAttribute.POSTALVEOLAR],
+            postvelar: [ConsonantAttribute.POSTALVEOLAR],
+            "laminal-postalveolar": [ConsonantAttribute.POSTALVEOLAR],
+            retroflex: [ConsonantAttribute.RETROFLEX],
+            palatal: [ConsonantAttribute.PALATAL],
+            labiopalatal: [ConsonantAttribute.PALATAL],
+            velar: [ConsonantAttribute.VELAR],
+            uvular: [ConsonantAttribute.UVULAR],
+            pharyngeal: [ConsonantAttribute.PHARYNGEAL],
+            epiglottal: [ConsonantAttribute.EPIGLOTTAL],
+            glottal: [ConsonantAttribute.GLOTTAL]
+        },
+        otherColumnMapping: {},
+        ignored: [
+            "lateral",
+            "retroflex-lateral",
+            "laminal-lateral",
+            "advanced-lateral",
+            "central",
+            "placeless",
+            "retracted",
+            "unrounded",
+            "central"
+        ],
+        attributes: CONSONANT_ATTRIBUTES.xAxis.attributes,
+        otherAttributes: CONSONANT_ATTRIBUTES.xAxis.otherAttributes
+    },
+    yAxis: {
+        category: "manner",
+        columnMapping: {
+            nasal: [ConsonantAttribute.NASAL],
+            affricate: [ConsonantAttribute.AFFRICATE],
+            "implosive-affricate": [ConsonantAttribute.AFFRICATE],
+            fricative: [ConsonantAttribute.FRICATIVE],
+            approximant: [ConsonantAttribute.APPROXIMANT],
+            "lax-approximant": [ConsonantAttribute.APPROXIMANT],
+            "low-approximant": [ConsonantAttribute.APPROXIMANT],
+            "mid-approximant": [ConsonantAttribute.APPROXIMANT],
+            "lateral-approximant": [ConsonantAttribute.LATERAL_APPROXIMANT],
+            flap: [ConsonantAttribute.FLAP],
+            trill: [ConsonantAttribute.TRILL],
+            implosive: [ConsonantAttribute.IMPLOSIVE],
+            stop: [ConsonantAttribute.STOP],
+            "lateral-stop": [ConsonantAttribute.LATERAL_STOP],
+            click: [ConsonantAttribute.CLICK]
+        },
+        otherColumnMapping: {glide: [ConsonantAttribute.GLIDE]},
+        ignored: [
+            "high",
+            "ejective",
+            "nasal-spirant"
+        ],
+        attributes: CONSONANT_ATTRIBUTES.yAxis.attributes,
+        otherAttributes: CONSONANT_ATTRIBUTES.yAxis.otherAttributes
     }
 };
 
@@ -162,14 +241,22 @@ export class IpaParser implements DataParser {
         });
     }
 
-    private parseAttributes(rawString: string): string[] {
-        const attributes: string[] = [];
+    private parseAttributes(rawString: string): Attributes {
+        const values: string[] = [];
+        const attribute = {
+            values,
+            isRange: false
+        };
         rawString.split("_")
-            .map(str => str.split("-to-"))
-            .forEach(nestedAttributes => {
-                nestedAttributes.forEach(attribute => attributes.push(attribute));
+            .map(str => {
+                const nestedValues = str.split("-to-");
+                attribute.isRange = nestedValues.length > 1;
+                return nestedValues;
+            })
+            .forEach(nestedValues => {
+                nestedValues.forEach(value => attribute.values.push(value));
             });
-        return attributes;
+        return attribute;
     }
 
     private verifyAttributeParsing(
@@ -186,63 +273,74 @@ export class IpaParser implements DataParser {
         const uniqueAttributeValues = getUniqueValues(allAttributes);
         const invalidAttributes = attributesAccountedFor
             .filter(attribute => !uniqueAttributeValues.includes(attribute));
-        const getWarningMessage = (attributes: string[]) => {
-            return `Invalid ${axis.category} attributes were defined: ${os.EOL}- ${attributes.join(`${os.EOL}- `)}`;
+        const getWarningMessage = (prefix: string, attributes: string[]) => {
+            return `${prefix}: ${os.EOL}- ${attributes.join(`${os.EOL}- `)}`;
         }
         if (invalidAttributes.length > 0) {
             this.warnings.push({
                 dataName: tableName,
                 dataType: DataType.TABLE,
-                message: getWarningMessage(invalidAttributes)
+                message: getWarningMessage(
+                    `Invalid ${axis.category} attributes were defined`,
+                    invalidAttributes
+                )
             });
         }
         const ignoredAttributes = uniqueAttributeValues
-            .filter(attribute => !attributesAccountedFor.includes(attribute));
+            .filter(attribute =>
+                !attributesAccountedFor.includes(attribute) && attribute !== "" && attribute !== "to"
+            );
         if (ignoredAttributes.length > 0) {
             this.warnings.push({
                 dataName: tableName,
                 dataType: DataType.TABLE,
-                message: getWarningMessage(ignoredAttributes)
+                message: getWarningMessage(
+                    `These ${axis.category} attribute were ignored in the raw data`,
+                    ignoredAttributes
+                )
             });
         }
     }
 
     private getAttributeRows(
-        rawRows: string[][],
+        rawRows: Attributes[],
         columnMapping: {[index: string]: string[]},
-        columnNames: string[],
-        isRange: boolean = false
+        columnNames: string[]
     ): {[index: string]: string}[] {
-        const flagRows = rawRows
-            .map(rawRow => rawRow.filter(
-                rawValue => columnMapping.hasOwnProperty(rawValue)
-            ))
-            .map(rawRow => {
+        return rawRows
+            .map(attributes => {
+                return {
+                    isRange: attributes.isRange,
+                    values: attributes.values.filter(value => columnMapping.hasOwnProperty(value))
+                }
+            })
+            .map(attributes => {
                 const flags: string[] = [];
-                rawRow.forEach(rawValue => {
-                    columnMapping[rawValue].forEach(flag => flags.push(flag));
+                attributes.values.forEach(value => {
+                    columnMapping[value].forEach(flag => flags.push(flag));
                 });
-                return flags;
-            });
-        if (isRange) {
-            return flagRows.map(flags => {
-                const positions = flags.map(flag => columnNames.indexOf(flag));
-                const start = Math.min(...positions);
-                const end = Math.max(...positions);
+                return {
+                    isRange: attributes.isRange,
+                    values: flags
+                };
+            })
+            .map(attributes => {
+                if (attributes.isRange) {
+                    const positions = attributes.values.map(flag => columnNames.indexOf(flag));
+                    const start = Math.min(...positions);
+                    const end = Math.max(...positions);
+                    const row = {};
+                    columnNames.forEach((columnName, i) => {
+                        row[columnName] = i >= start || i <= end;
+                    });
+                    return row;
+                }
                 const row = {};
-                columnNames.forEach((columnName, i) => {
-                    row[columnName] = i >= start || i <= end;
+                columnNames.forEach(columnName => {
+                    row[columnName] = attributes.values.includes(columnName);
                 });
                 return row;
-            })
-        }
-        return flagRows.map(flags => {
-            const row = {};
-            columnNames.forEach(columnName => {
-                row[columnName] = flags.includes(columnName);
             });
-            return row;
-        });
     }
 
     private mergeObjectArrays(arr1: {}[], arr2: {}[]): {[index: string]: string}[] {
@@ -259,9 +357,9 @@ export class IpaParser implements DataParser {
     ): {[index: string]: string}[] {
         console.log(`=> Parsing ${axis.category} rows...`);
         const rawRows = rawData.map(row => this.parseAttributes(row[rawColumnName]));
-        this.verifyAttributeParsing(axis, rawRows, tableName);
+        this.verifyAttributeParsing(axis, rawRows.map(rawRow => rawRow.values), tableName);
         return this.mergeObjectArrays(
-            this.getAttributeRows(rawRows, axis.columnMapping, axis.attributes, true),
+            this.getAttributeRows(rawRows, axis.columnMapping, axis.attributes),
             this.getAttributeRows(rawRows, axis.otherColumnMapping, axis.otherAttributes)
         );
     }
@@ -304,5 +402,9 @@ export class IpaParser implements DataParser {
 
     public getVowels(): Vowel[] {
         return this.getAttributes(VOWEL) as Vowel[];
+    }
+
+    public getConsonants(): Consonant[] {
+        return this.getAttributes(CONSONANT) as Consonant[];
     }
 }

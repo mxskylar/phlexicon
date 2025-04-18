@@ -67,6 +67,9 @@ db.insertRows(OTHER_IPA_SYMBOLS_TABLE, ipaParser.getOtherSymbols());
 db.createTable(VOWELS_TABLE);
 db.insertRows(VOWELS_TABLE, ipaParser.getVowels());
 
+db.createTable(CONSONANTS_TABLE);
+db.insertRows(CONSONANTS_TABLE, ipaParser.getConsonants());
+
 saveWarnings(ipaParser.warnings);
 
 /*
