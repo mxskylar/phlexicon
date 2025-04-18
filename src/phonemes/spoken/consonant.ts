@@ -99,6 +99,8 @@ export const CONSONANT_ATTRIBUTES: SpokenPhonemeAttributes = {
             ConsonantAttribute.LATERAL_STOP,
             ConsonantAttribute.CLICK
         ],
-        otherAttributes: []
+        otherAttributes: [
+            ConsonantAttribute.GLIDE
+        ]
     }
 };
