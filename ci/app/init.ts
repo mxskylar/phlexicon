@@ -135,6 +135,7 @@ console.log(
 // The Phonemes of Sign Dialects
 
 // STEP 3: Close the database and check for warnings
+console.log("Data inserted! Closing the database...")
 db.close();
 
 // Fail the pipeline if warnings were found while parsing data.
@@ -143,7 +144,7 @@ db.close();
 // These warnings indicate that assumptions made by parsing logic
 // were not met by the raw data, which may have changed.
 if (dataWarnings.length > 0) {
-    console.log("Warnings for the following data...");
+    console.log("Warnings found for the following data...");
     dataWarnings.forEach(warning => {
         console.log(`=> ${warning.dataType.valueOf()}: ${warning.dataName}`);
         console.log(`==> ${warning.message}`);
