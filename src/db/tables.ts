@@ -60,13 +60,13 @@ export const CONSONANTS_TABLE = new Table(
     new BasicColumn("affricate", BasicType.BOOLEAN).required(),
     new BasicColumn("fricative", BasicType.BOOLEAN).required(),
     new BasicColumn("approximant", BasicType.BOOLEAN).required(),
+    new BasicColumn("lateral_approximant", BasicType.BOOLEAN).required(),
     new BasicColumn("flap", BasicType.BOOLEAN).required(),
     new BasicColumn("trill", BasicType.BOOLEAN).required(),
     new BasicColumn("implosive", BasicType.BOOLEAN).required(),
     new BasicColumn("stop", BasicType.BOOLEAN).required(),
-    new BasicColumn("click", BasicType.BOOLEAN).required(),
-    new BasicColumn("lateral_approximant", BasicType.BOOLEAN).required(),
-    new BasicColumn("lateral_stop", BasicType.BOOLEAN).required()
+    new BasicColumn("lateral_stop", BasicType.BOOLEAN).required(),
+    new BasicColumn("click", BasicType.BOOLEAN).required()
 );
 
 export const OTHER_IPA_SYMBOLS_TABLE = new Table(
@@ -75,10 +75,6 @@ export const OTHER_IPA_SYMBOLS_TABLE = new Table(
 );
 
 // The Phonemes of Spoken Dialects
-export type SpokenDialectPhoneme = {
-    dialect_id: string,
-    symbol: string
-};
 export const SPOKEN_DIALECT_PHONEMES_TABLE = new Table(
     "spoken_dialect_phonemes",
     getColumnWithForeignKey("dialect_id", new ForeignKey(SPOKEN_DIALECTS_TABLE, spokenDialectId))

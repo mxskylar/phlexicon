@@ -1,4 +1,5 @@
-import { SpokenDialect, SpokenDialectPhoneme } from "../../src/db/tables";
+import { SpokenDialect } from "../../src/db/tables";
+import { SpokenDialectPhoneme } from "../../src/phonemes/spoken/spoken-phoneme";
 import { DataParser, DataWarning } from "./data-parser";
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
 

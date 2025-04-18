@@ -6,4 +6,9 @@ export type SpokenPhonemeAxis = {
 export type SpokenPhonemeAttributes = {
     xAxis: SpokenPhonemeAxis,
     yAxis: SpokenPhonemeAxis
-}
+};
+
+export type SpokenDialectPhoneme = {
+    dialect_id: string,
+    symbol: string
+};
