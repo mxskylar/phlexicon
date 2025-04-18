@@ -22,8 +22,9 @@ import {
 } from '../../src/db/tables';
 import { SpokenDialectParser } from './spoken-dialect-parser';
 import { IpaParser } from './ipa-parser';
+import { DataWarning } from './data-parser';
 
-// BUILD DIRECTORY
+// STEP 1: Prep the build directory
 recreateDirectory(BUILD_DIR);
 
 // Installed Resources
@@ -39,6 +40,12 @@ fs.cpSync(CUSTOM_RESOURCES_DIR, BUILD_DIR, {recursive: true});
 console.log(`Creating database: ${DATABASE_FILE_PATH}`);
 const db = new Database(DATABASE_FILE_PATH);
 
+// STEP 2: Insert data into the database
+const dataWarnings: DataWarning[] = [];
+const saveWarnings = (warnings: DataWarning[]) => {
+    warnings.forEach(warning => dataWarnings.push(warning));
+}
+
 // SPOKEN DIALECTS
 const spokenDialectParser = new SpokenDialectParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`);
 db.createTable(SPOKEN_DIALECTS_TABLE);
@@ -47,6 +54,8 @@ db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectParser.getDialects());
 db.createTable(SPOKEN_DIALECT_PHONEMES_TABLE);
 db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenDialectParser.getDialectPhonemes());
 
+saveWarnings(spokenDialectParser.warnings);
+
 // IPA Symbols
 const ipaParser = new IpaParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`);
 db.createTable(OTHER_IPA_SYMBOLS_TABLE);
@@ -54,6 +63,8 @@ db.insertRows(OTHER_IPA_SYMBOLS_TABLE, ipaParser.getOtherSymbols());
 
 db.createTable(VOWELS_TABLE);
 db.insertRows(VOWELS_TABLE, ipaParser.getVowels());
+
+saveWarnings(ipaParser.warnings);
 
 /*
 // SIGN DIALECTS
@@ -123,4 +134,22 @@ console.log(
 
 // The Phonemes of Sign Dialects
 
+// STEP 3: Close the database and check for warnings
 db.close();
+
+// Fail the pipeline if warnings were found while parsing data.
+// The parsed data was still inserted into the database
+// where it may be queried when debugging the warnings.
+// These warnings indicate that assumptions made by parsing logic
+// were not met by the raw data, which may have changed.
+if (dataWarnings.length > 0) {
+    console.log("Warnings for data inserted into the following tables...");
+    dataWarnings.forEach(warning => {
+        console.log(`=> table: ${warning.dataName}`);
+        console.log(`==> ${warning.message}`);
+    });
+    throw new Error(
+        `${dataWarnings.length} warning${dataWarnings.length > 1 ? "s" : ""} `
+        + "found for data inserted into the database!"
+    );
+}

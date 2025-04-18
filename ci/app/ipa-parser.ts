@@ -1,7 +1,9 @@
 import * as os from 'os';
+import { Consonant } from "../../src/phonemes/spoken/consonant";
 import { Vowel, VOWEL_ATTRIBUTES, VowelAttribute } from "../../src/phonemes/spoken/vowel";
-import { Consonant } from "../../src/phonemes/spoken/consonant"
+import { DataParser, DataType, DataWarning } from './data-parser';
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
+import { VOWELS_TABLE } from '../../src/db/tables';
 
 enum PhonemeName {
     VOWEL = "vowel",
@@ -26,12 +28,14 @@ type RawDataAxis = {
 
 type PhonemeType = {
     name: PhonemeName,
+    tableName: string,
     xAxis: RawDataAxis,
     yAxis: RawDataAxis
 };
 
 const VOWEL: PhonemeType = {
     name: PhonemeName.VOWEL,
+    tableName: VOWELS_TABLE.name,
     xAxis: {
         category: "color",
         columnMapping: {
@@ -101,30 +105,42 @@ type RawData = {
     misc2: string
 };
 
-export class IpaParser {
+export class IpaParser implements DataParser {
+    warnings: DataWarning[] = [];
     private rawData: RawData[];
 
-    constructor(rawDataFilePath: string){
+    constructor(filePath: string){
         const rawData = getSeperatedValueData(
-            rawDataFilePath,
+            filePath,
             // This is necessary because an invalid row has an additional column
             {relax_column_count: true}
         );
         // Correct invalid row with an additional column
         const INVALID_INDEX = 1781;
         const invalidRow = rawData[INVALID_INDEX];
-        rawData[INVALID_INDEX] = {
-            non_ipa: invalidRow.non_ipa,
-            ipa: invalidRow.ipa,
-            chart: invalidRow["height/manner"],
-            "height/manner": invalidRow["place/color"],
-            "place/color": invalidRow.misc1,
-            misc1: invalidRow.misc2,
-            // These happen to be the same value
-            // That said, the CSV parser ignores the additional column
-            // when options.columns is true
-            misc2: invalidRow.misc2
-        };
+        if (invalidRow.chart === "") {
+            rawData[INVALID_INDEX] = {
+                non_ipa: invalidRow.non_ipa,
+                ipa: invalidRow.ipa,
+                chart: invalidRow["height/manner"],
+                "height/manner": invalidRow["place/color"],
+                "place/color": invalidRow.misc1,
+                misc1: invalidRow.misc2,
+                // These happen to be the same value
+                // That said, the CSV parser ignores the additional column
+                // when options.columns is true
+                misc2: invalidRow.misc2
+            };
+        } else {
+            this.warnings.push({
+                dataName: filePath,
+                dataType: DataType.FILE,
+                message: `Data in CSV row ${INVALID_INDEX + 1} different than expected. `
+                    + "The format of this row was previously invalid because it contained an extra column, "
+                    + "which made the 'chart' column blank. This is no longer the case. "
+                    + "Verify if the row's format still requires a hardcoded fix."
+            });
+        }
         this.rawData = rawData;
     }
 
@@ -138,7 +154,11 @@ export class IpaParser {
         return attributes;
     }
 
-    private verifyAttributeParsing(axis: RawDataAxis, data: string[][]): void {
+    private verifyAttributeParsing(
+        axis: RawDataAxis,
+        data: string[][],
+        tableName: string
+    ): void {
         const attributesAccountedFor = Object.keys({...axis.otherColumnMapping, ...axis.columnMapping})
             .concat(axis.ignored);
         const allAttributes: string[] = [];
@@ -148,18 +168,25 @@ export class IpaParser {
         const uniqueAttributeValues = getUniqueValues(allAttributes);
         const invalidAttributes = attributesAccountedFor
             .filter(attribute => !uniqueAttributeValues.includes(attribute));
-        console.log(
-            invalidAttributes.length > 0
-                ? `==> WARNING: Invalid ${axis.category} attributes were defined: ${os.EOL}- ${invalidAttributes.join(`${os.EOL}- `)}`
-                : `==> All defined ${axis.category} attributes were valid!`
-        );
+        const getWarningMessage = (attributes: string[]) => {
+            return `Invalid ${axis.category} attributes were defined: ${os.EOL}- ${attributes.join(`${os.EOL}- `)}`;
+        }
+        if (invalidAttributes.length > 0) {
+            this.warnings.push({
+                dataName: tableName,
+                dataType: DataType.TABLE,
+                message: getWarningMessage(invalidAttributes)
+            });
+        }
         const ignoredAttributes = uniqueAttributeValues
             .filter(attribute => !attributesAccountedFor.includes(attribute));
-        console.log(
-            ignoredAttributes.length > 0
-                ? `==> WARNING: Ignoring unrecognized ${axis.category} attributes: ${os.EOL}- ${ignoredAttributes.join(`${os.EOL}- `)}`
-                : `==> All ${axis.category} attributes recognized!`
-        );
+        if (ignoredAttributes.length > 0) {
+            this.warnings.push({
+                dataName: tableName,
+                dataType: DataType.TABLE,
+                message: getWarningMessage(ignoredAttributes)
+            });
+        }
     }
 
     private getAttributeRows(
@@ -209,11 +236,12 @@ export class IpaParser {
     private parseAxis(
         rawData: RawData[],
         rawColumnName: string,
-        axis: RawDataAxis
+        axis: RawDataAxis,
+        tableName: string
     ): {[index: string]: string}[] {
         console.log(`=> Parsing ${axis.category} rows...`);
         const rawRows = rawData.map(row => this.parseAttributes(row[rawColumnName]));
-        this.verifyAttributeParsing(axis, rawRows);
+        this.verifyAttributeParsing(axis, rawRows, tableName);
         return this.mergeObjectArrays(
             this.getAttributeRows(rawRows, axis.columnMapping, axis.attributes, true),
             this.getAttributeRows(rawRows, axis.otherColumnMapping, axis.otherAttributes)
@@ -225,8 +253,8 @@ export class IpaParser {
         console.log(`Parsing ${name} attributes...`);
         const data: RawData[] = this.rawData.filter(rawRow => rawRow.chart === name);
         const attributeRows = this.mergeObjectArrays(
-            this.parseAxis(data, "place/color", xAxis),
-            this.parseAxis(data, "height/manner", yAxis)
+            this.parseAxis(data, "place/color", xAxis, phonemeType.tableName),
+            this.parseAxis(data, "height/manner", yAxis, phonemeType.tableName)
         );
         const nonUniqueRows = this.mergeObjectArrays(
             data.map(rawRow => {

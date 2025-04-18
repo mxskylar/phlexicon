@@ -1,4 +1,5 @@
 import { SpokenDialect, SpokenDialectPhoneme } from "../../src/db/tables";
+import { DataParser, DataWarning } from "./data-parser";
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
 
 type RawData = {
@@ -11,11 +12,12 @@ type RawData = {
     reference: string
 };
 
-export class SpokenDialectParser {
+export class SpokenDialectParser implements DataParser {
+    warnings: DataWarning[] = [];
     private rawData: RawData[]
 
-    constructor(rawDataFilePath: string) {
-        this.rawData = getSeperatedValueData(rawDataFilePath, {delimiter: "\t"});
+    constructor(filePath: string) {
+        this.rawData = getSeperatedValueData(filePath, {delimiter: "\t"});
     }
 
     public getDialects(): SpokenDialect[] {
