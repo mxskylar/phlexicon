@@ -3,7 +3,7 @@ import StreamZip from 'node-stream-zip';
 import {recreateDirectory} from '../utils';
 import {
     INSTALLED_RESOURCES_DIR,
-    SIGNWRITING_FONT_FILE,
+    SIGN_WRITING_FONT_FILE,
     DATA_DIR,
     ISO_FILE,
     SIGN_WRITING_ALPHABETS_FILE_PATH,
@@ -34,7 +34,7 @@ await downloadFile("https://bootswatch.com/5/cerulean/bootstrap.min.css", INSTAL
 await downloadFile("https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js", INSTALLED_RESOURCES_DIR);
 
 // SignWriting Fonts: https://www.sutton-signwriting.io/#fonts
-await downloadFile(`https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/${SIGNWRITING_FONT_FILE}`, INSTALLED_RESOURCES_DIR);
+await downloadFile(`https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/${SIGN_WRITING_FONT_FILE}`, INSTALLED_RESOURCES_DIR);
 
 // RAW DB DATA
 recreateDirectory(DATA_DIR);

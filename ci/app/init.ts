@@ -1,12 +1,11 @@
 import * as fs from 'fs';
-import opentype from 'opentype.js';
 import { recreateDirectory } from '../utils';
 import {
     DATA_DIR,
     INSTALLED_RESOURCES_DIR,
     ISO_FILE,
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
-    SIGNWRITING_FONT_FILE,
+    SIGN_WRITING_FONT_FILE,
     UNZIPPED_PBASE_FILES_DIR
 } from '../postinstall/constants';
 import { BUILD_DIR, DATABASE_FILE_PATH } from '../../src/build-constants';
@@ -18,11 +17,14 @@ import {
     SPOKEN_DIALECT_PHONEMES_TABLE,
     VOWELS_TABLE,
     CONSONANTS_TABLE,
-    SIGN_DIALECTS_TABLE
+    SIGN_DIALECTS_TABLE,
+    SIGN_WRITING_SYMBOLS_TABLE
 } from '../../src/db/tables';
 import { SpokenDialectParser } from './spoken-dialect-parser';
 import { IpaParser } from './ipa-parser';
 import { DataWarning } from './data-parser';
+import { SignDialectParser } from './sign-dialect-parser';
+import { SIGN_WRITING_ALPHABETS_FILE_PATH } from '../postinstall/constants';
 
 // STEP 1: Prep the build directory
 recreateDirectory(BUILD_DIR);
@@ -73,74 +75,25 @@ db.insertRows(CONSONANTS_TABLE, ipaParser.getConsonants());
 saveWarnings(ipaParser.warnings);
 
 // SIGN DIALECTS
-
+const signDialectParser = new SignDialectParser(
+    SIGN_WRITING_DICTIONARIES_FILE_PATH,
+    `${DATA_DIR}/${ISO_FILE}`
+);
 db.createTable(SIGN_DIALECTS_TABLE);
+db.insertRows(SIGN_DIALECTS_TABLE, signDialectParser.getDialects());
 
-/*
-// SIGN DIALECTS
-const getSignDialectIsoCode = (dictionaryName: string) =>
-    dictionaryName.split("-")[0];
-const getSignDialectRegion = (dictionaryName: string) =>
-    dictionaryName.split("-")[1];
+const signWritingFontParser = signDialectParser.getSignWritingFontParser(
+    SIGN_WRITING_ALPHABETS_FILE_PATH,
+    `${INSTALLED_RESOURCES_DIR}/${SIGN_WRITING_FONT_FILE}`
+);
+db.createTable(SIGN_WRITING_SYMBOLS_TABLE);
+db.insertRows(SIGN_WRITING_SYMBOLS_TABLE, signWritingFontParser.getSymbols());
 
-db.createTable(SIGN_DIALECTS_TABLE);
-const isoLanguagesData = await getSeperatedValueData(`${DATA_DIR}/${ISO_FILE}`, true, {delimiter: "\t"});
-const getIsoLanguageName = (code: string) => {
-    for (const i in isoLanguagesData) {
-        const row = isoLanguagesData[i];
-        if (row[0] === code) {
-            return row[6];
-        }
-    }
-    throw new Error(`Unknown ISO language code: ${code}`);
-};
-const signDialectRows = getJsonFromFile(SIGN_WRITING_DICTIONARIES_FILE_PATH)
-    .map(dictionary => {
-        const isoCode = getSignDialectIsoCode(dictionary);
-        const languageName = getIsoLanguageName(isoCode);
-        const region = getSignDialectRegion(dictionary);
-        return [`${isoCode}-${region}`, languageName];
-    });
-db.insertRows(SIGN_DIALECTS_TABLE, signDialectRows);
-
-// SignWriting Symbols
-const signWritingFontBuffer = fs.readFileSync(`${INSTALLED_RESOURCES_DIR}/${SIGNWRITING_FONT_FILE}`);
-const toArrayBuffer = (buffer: Buffer) => {
-    const arrayBuffer = new ArrayBuffer(buffer.length);
-    const view = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < buffer.length; i++) {
-        view[i] = buffer[i];
-    }
-    return arrayBuffer;
-};
-const signWritingFont = opentype.parse(toArrayBuffer(signWritingFontBuffer));
-const signWritingCharacters = Object.values(signWritingFont.glyphs.glyphs)
-    .map(glyph => {
-        let character: string | null = null;
-        try {
-            character = String.fromCodePoint((glyph as opentype.Glyph).unicode);
-        } catch (e) {
-            console.log(e);
-        } finally {
-            return character;
-        }
-    })
-    .filter(character => character);
-// POC: Gets glyph by name found in hierarchy spec
-// https://www.signbank.org/iswa/100/100_bs.html
-console.log(
-    Object.values(signWritingFont.glyphs.glyphs)
-        .filter(glyph => (glyph as opentype.Glyph).name === "S1000d")
-        .map(glyph => String.fromCodePoint((glyph as opentype.Glyph).unicode))
-);*/
-
-// Oriented Handshape Symbols
-
-// Movement Symbols
-
-// Location & Expression Symbols
-
-// The Phonemes of Sign Dialects
+// TODO: Initialize these tables
+// - Oriented Handshape Symbols
+// - Movement Symbols
+// - Location & Expression Symbols
+// - The Phonemes of Sign Dialects
 
 // STEP 3: Close the database and check for warnings
 console.log("Data inserted! Closing the database...")

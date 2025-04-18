@@ -20,3 +20,6 @@ export const getJsonData = (filePath: string) =>
 export const getUniqueValues = (values: any[]) => {
     return [... new Set(values)];
 };
+
+export const getPercent = (count: number, total: number) =>
+    Math.round((count / total) * 10000) / 100;

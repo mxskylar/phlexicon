@@ -22,7 +22,7 @@ export class SpokenDialectParser implements DataParser {
     }
 
     public getDialects(): SpokenDialect[] {
-        console.log("Parsing spoken dialects");
+        console.log("Parsing spoken dialects...");
         return this.rawData.map(dialect => {
             return {
                 id: dialect.langcode,
@@ -32,7 +32,7 @@ export class SpokenDialectParser implements DataParser {
     }
 
     public getDialectPhonemes(): SpokenDialectPhoneme[] {
-        console.log("Parsing spoken dialect phonemes");
+        console.log("Parsing spoken dialect phonemes...");
         const dialectPhonemes: SpokenDialectPhoneme[] = [];
         this.rawData.forEach(row => {
             const phonemes = row['core inventory'].split(",")

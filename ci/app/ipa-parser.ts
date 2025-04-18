@@ -2,7 +2,7 @@ import * as os from 'os';
 import { Consonant, CONSONANT_ATTRIBUTES, ConsonantAttribute } from "../../src/phonemes/spoken/consonant";
 import { Vowel, VOWEL_ATTRIBUTES, VowelAttribute } from "../../src/phonemes/spoken/vowel";
 import { DataParser, DataType, DataWarning } from './data-parser';
-import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
+import { getSeperatedValueData, getUniqueValues, getPercent } from "./parse-utils";
 import { CONSONANTS_TABLE, VOWELS_TABLE } from '../../src/db/tables';
 import { IpaSymbol } from "../../src/phonemes/spoken/ipa-symbol"
 
@@ -225,6 +225,7 @@ export class IpaParser implements DataParser {
     }
 
     public getPhonemeSymbols(): IpaSymbol[] {
+        console.log("Parsing IPA phoneme symbols...");
         const symbols = this.rawData
             .filter(rawRow => Object.values(PhonemeName).map(name => name.valueOf()).includes(rawRow.chart))
             .map(rawRow => rawRow.ipa);
@@ -235,6 +236,7 @@ export class IpaParser implements DataParser {
     }
 
     public getOtherSymbols(): IpaSymbol[] {
+        console.log("Parsing other IPA symbols...")
         return this.rawData.filter(rawRow => 
             !Object.values(PhonemeName).map(name => name.valueOf()).includes(rawRow.chart)
         ).map(rawRow => {
@@ -382,10 +384,9 @@ export class IpaParser implements DataParser {
             });
         });
         const total = rows.length;
-        const getPercent = (count: number) => Math.round((count / total) * 10000) / 100;
         Object.keys(counts).forEach(attribute => {
             const count = counts[attribute];
-            const percent = getPercent(count);
+            const percent = getPercent(count, total);
             if (count <= 0) {
                 this.warnings.push({
                     dataName: tableName,
@@ -415,7 +416,7 @@ export class IpaParser implements DataParser {
             }
         });
         if (attributes.length > 1) {
-            const allTruePercent = getPercent(numAllTrue);
+            const allTruePercent = getPercent(numAllTrue, total);
             console.log(`==> [${logPrefix}] ALL TRUE: ${numAllTrue}/${total} = ${allTruePercent}%`);
             const MIN_ALL_TRUE_PERCENT = 90;
             if (warnIfAllTrueIsLow && allTruePercent < MIN_ALL_TRUE_PERCENT) {
@@ -442,7 +443,7 @@ export class IpaParser implements DataParser {
 
     private getPhonemeTypeRows(phonemeType: PhonemeType): Vowel[] | Consonant[] {
         const {name, xAxis, yAxis} = phonemeType;
-        console.log(`=> Parsing ${name} rows...`);
+        console.log(`Parsing ${name} in IPA...`);
         const data: RawData[] = this.rawData.filter(rawRow => rawRow.chart === name);
         const attributeRows = this.mergeObjectArrays(
             this.parseAxis(data, "place/color", xAxis, phonemeType.tableName),

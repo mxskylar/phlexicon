@@ -46,7 +46,6 @@ export const CONSONANTS_TABLE = new Table(
     )
 );
 
-// Phonemes
 export const SPOKEN_DIALECT_PHONEMES_TABLE = new Table(
     "spoken_dialect_phonemes",
     getColumnWithForeignKey("dialect_id", new ForeignKey(SPOKEN_DIALECTS_TABLE, spokenDialectId))
@@ -64,11 +63,11 @@ export const SIGN_DIALECTS_TABLE = new Table(
 );
 
 // SignWriting Symbols
+const signWritingSymbol = new LengthColumn("symbol", LengthType.CHAR, 1).primaryKey()
+export const SIGN_WRITING_SYMBOLS_TABLE = new Table("sign_writing_symbols", signWritingSymbol);
 
-// Oriented Handshape Symbols
-
-// Movement Symbols
-
-// Location & Expression Symbols
-
-// The Phonemes of Sign Dialects
+// TODO: Create these tables
+// - Oriented Handshape Symbols
+// - Movement Symbols
+// - Location & Expression Symbols
+// - The Phonemes of Sign Dialects
