@@ -58,6 +58,9 @@ saveWarnings(spokenDialectParser.warnings);
 
 // IPA Symbols
 const ipaParser = new IpaParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`);
+db.createTable(IPA_PHONEME_SYMBOLS_TABLE);
+db.insertRows(IPA_PHONEME_SYMBOLS_TABLE, ipaParser.getPhonemeSymbols());
+
 db.createTable(OTHER_IPA_SYMBOLS_TABLE);
 db.insertRows(OTHER_IPA_SYMBOLS_TABLE, ipaParser.getOtherSymbols());
 

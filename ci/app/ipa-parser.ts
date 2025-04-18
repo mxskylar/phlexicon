@@ -144,6 +144,24 @@ export class IpaParser implements DataParser {
         this.rawData = rawData;
     }
 
+    public getPhonemeSymbols(): {[index: string]: string}[] {
+        const symbols = this.rawData
+            .filter(rawRow => Object.values(PhonemeName).map(name => name.valueOf()).includes(rawRow.chart))
+            .map(rawRow => rawRow.ipa);
+        return getUniqueValues(symbols)
+            .map(symbol => {
+                return {symbol};
+            });
+    }
+
+    public getOtherSymbols(): {[index: string]: string}[] {
+        return this.rawData.filter(rawRow => 
+            !Object.values(PhonemeName).map(name => name.valueOf()).includes(rawRow.chart)
+        ).map(rawRow => {
+            return {symbol: rawRow.ipa};
+        });
+    }
+
     private parseAttributes(rawString: string): string[] {
         const attributes: string[] = [];
         rawString.split("_")
@@ -286,13 +304,5 @@ export class IpaParser implements DataParser {
 
     public getVowels(): Vowel[] {
         return this.getAttributes(VOWEL) as Vowel[];
-    }
-
-    public getOtherSymbols(): {[index: string]: string}[] {
-        return this.rawData.filter(rawRow => 
-            !Object.values(PhonemeName).map(name => name.valueOf()).includes(rawRow.chart)
-        ).map(rawRow => {
-            return {symbol: rawRow.ipa};
-        });
     }
 }
