@@ -44,7 +44,7 @@ const db = new Database(DATABASE_FILE_PATH);
 const dataWarnings: DataWarning[] = [];
 const saveWarnings = (warnings: DataWarning[]) => {
     warnings.forEach(warning => dataWarnings.push(warning));
-}
+};
 
 // SPOKEN DIALECTS
 const spokenDialectParser = new SpokenDialectParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`);
