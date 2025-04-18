@@ -51,7 +51,7 @@ export class SignWritingFontParser implements DataParser {
         try {
            return String.fromCodePoint(glyph.unicode);
         } catch (ex) {
-            console.log(`=> Unable to get unicode character for glyph ${glyph.name} due to exception:`);
+            console.log(`=> WARNING: Unable to get unicode character for glyph ${glyph.name} due to exception:`);
             console.log(ex);
         }
         return null;
