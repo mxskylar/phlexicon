@@ -1,6 +1,6 @@
 export enum DataType {
-    TABLE = "table",
-    FILE = "file"
+    TABLE = "TABLE",
+    FILE = "FILE"
 } 
 
 export type DataWarning = {

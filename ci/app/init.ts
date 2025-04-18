@@ -152,8 +152,7 @@ db.close();
 if (dataWarnings.length > 0) {
     console.log("Warnings found for the following data...");
     dataWarnings.forEach(warning => {
-        console.log(`=> ${warning.dataType.valueOf()}: ${warning.dataName}`);
-        console.log(`==> ${warning.message}`);
+        console.log(`=> [${warning.dataType} ${warning.dataName}] ${warning.message}`);
     });
     throw new Error(
         `${dataWarnings.length} warning${dataWarnings.length > 1 ? "s" : ""} `

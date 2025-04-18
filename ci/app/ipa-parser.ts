@@ -355,7 +355,6 @@ export class IpaParser implements DataParser {
         axis: RawDataAxis,
         tableName: string
     ): {[index: string]: string}[] {
-        console.log(`=> Parsing ${axis.category} rows...`);
         const rawRows = rawData.map(row => this.parseAttributes(row[rawColumnName]));
         this.verifyAttributeParsing(axis, rawRows.map(rawRow => rawRow.values), tableName);
         return this.mergeObjectArrays(
@@ -364,9 +363,59 @@ export class IpaParser implements DataParser {
         );
     }
 
+    private validateAttributeFrequency(
+        attributes: string[],
+        rows: Vowel[] | Consonant[],
+        logPrefix: string,
+        tableName: string
+    ): void {
+        const counts = {};
+        attributes.forEach(attribute => counts[attribute] = 0);
+        rows.forEach(row =>{
+            attributes.forEach(attribute => {
+                if (row[attribute]) {
+                    counts[attribute] = counts[attribute] + 1;
+                }
+            });
+        });
+        const total = rows.length;
+        Object.keys(counts).forEach(attribute => {
+            const count = counts[attribute];
+            const percent = Math.round((count / total) * 10000) / 100;
+            if (count <= 0) {
+                this.warnings.push({
+                    dataName: tableName,
+                    dataType: DataType.TABLE,
+                    message: `No rows where column ${attribute} is true`
+                });
+            }
+            const MAX_PERCENT = 50;
+            if (percent > MAX_PERCENT) {
+                this.warnings.push({
+                    dataName: tableName,
+                    dataType: DataType.TABLE,
+                    message: `Column ${attribute} is true over ${MAX_PERCENT}% of the time`
+                });
+            }
+            console.log(`==> [${logPrefix}] ${attribute}: ${percent}%`);
+        });
+    }
+
+    private validatePhonemeTypeRows(
+        phonemeType: PhonemeType,
+        rows: Vowel[] | Consonant[]
+    ) {
+        const {name, xAxis, yAxis, tableName} = phonemeType;
+        console.log(`=> Analyzing ${name} attribute frequency...`);
+        this.validateAttributeFrequency(xAxis.attributes, rows, `${name.toUpperCase()} X-AXIS`, tableName);
+        this.validateAttributeFrequency(xAxis.otherAttributes, rows, `${name.toUpperCase()} X-AXIS QUALITY`, tableName);
+        this.validateAttributeFrequency(yAxis.attributes, rows, `${name.toUpperCase()} Y-AXIS`, tableName);
+        this.validateAttributeFrequency(yAxis.otherAttributes, rows, `${name.toUpperCase()} Y-AXIS QUALITY`, tableName);
+    }
+
     private getPhonemeTypeRows(phonemeType: PhonemeType): Vowel[] | Consonant[] {
-        const {name: name, xAxis, yAxis} = phonemeType;
-        console.log(`Parsing ${name} attributes...`);
+        const {name, xAxis, yAxis} = phonemeType;
+        console.log(`=> Parsing ${name} rows...`);
         const data: RawData[] = this.rawData.filter(rawRow => rawRow.chart === name);
         const attributeRows = this.mergeObjectArrays(
             this.parseAxis(data, "place/color", xAxis, phonemeType.tableName),
@@ -392,12 +441,15 @@ export class IpaParser implements DataParser {
                 }
             });
         });
-        return Object.keys(symbolAttributes).map(symbol => {
+        const rows = Object.keys(symbolAttributes).map(symbol => {
             return {
                 symbol,
                 ...symbolAttributes[symbol]
             }
-        })
+        });
+        // Validate a reaonsable percentage of each attribute is true
+        this.validatePhonemeTypeRows(phonemeType, rows);
+        return rows;
     }
 
     public getVowels(): Vowel[] {
