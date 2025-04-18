@@ -81,12 +81,13 @@ const signDialectParser = new SignDialectParser(
 );
 db.createTable(SIGN_DIALECTS_TABLE);
 db.insertRows(SIGN_DIALECTS_TABLE, signDialectParser.getDialects());
-saveWarnings(signDialectParser.warnings);
 
 const signWritingFontParser = signDialectParser.getSignWritingFontParser(
     SIGN_WRITING_ALPHABETS_FILE_PATH,
     `${INSTALLED_RESOURCES_DIR}/${SIGN_WRITING_FONT_FILE}`
 );
+saveWarnings(signDialectParser.warnings);
+
 db.createTable(SIGN_WRITING_SYMBOLS_TABLE);
 db.insertRows(SIGN_WRITING_SYMBOLS_TABLE, signWritingFontParser.getSymbols());
 saveWarnings(signWritingFontParser.warnings);
