@@ -43,11 +43,6 @@ console.log(`Creating database: ${DATABASE_FILE_PATH}`);
 const db = new Database(DATABASE_FILE_PATH);
 
 // STEP 2: Insert data into the database
-const dataWarnings: DataWarning[] = [];
-const saveWarnings = (warnings: DataWarning[]) => {
-    warnings.forEach(warning => dataWarnings.push(warning));
-};
-
 // SPOKEN DIALECTS
 const spokenDialectParser = new SpokenDialectParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`);
 db.createTable(SPOKEN_DIALECTS_TABLE);
@@ -55,8 +50,6 @@ db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectParser.getDialects());
 
 db.createTable(SPOKEN_DIALECT_PHONEMES_TABLE);
 db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenDialectParser.getDialectPhonemes());
-
-saveWarnings(spokenDialectParser.warnings);
 
 // IPA Symbols
 const ipaParser = new IpaParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`);
@@ -72,8 +65,6 @@ db.insertRows(VOWELS_TABLE, ipaParser.getVowels());
 db.createTable(CONSONANTS_TABLE);
 db.insertRows(CONSONANTS_TABLE, ipaParser.getConsonants());
 
-saveWarnings(ipaParser.warnings);
-
 // SIGN DIALECTS
 const signDialectParser = new SignDialectParser(
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
@@ -86,11 +77,8 @@ const signWritingFontParser = signDialectParser.getSignWritingFontParser(
     SIGN_WRITING_ALPHABETS_FILE_PATH,
     `${INSTALLED_RESOURCES_DIR}/${SIGN_WRITING_FONT_FILE}`
 );
-saveWarnings(signDialectParser.warnings);
-
 db.createTable(SIGN_WRITING_SYMBOLS_TABLE);
 db.insertRows(SIGN_WRITING_SYMBOLS_TABLE, signWritingFontParser.getSymbols());
-saveWarnings(signWritingFontParser.warnings);
 
 // TODO: Initialize these tables
 // - Oriented Handshape Symbols
@@ -107,6 +95,12 @@ db.close();
 // where it may be queried when debugging the warnings.
 // These warnings indicate that assumptions made by parsing logic
 // were not met by the raw data, which may have changed.
+const dataWarnings: DataWarning[] = [
+    ...spokenDialectParser.warnings,
+    ...ipaParser.warnings,
+    ...signDialectParser.warnings,
+    ...signWritingFontParser.warnings
+];
 if (dataWarnings.length > 0) {
     console.log("Warnings found for the following data...");
     dataWarnings.forEach(warning => {
