@@ -190,6 +190,7 @@ export class IpaParser implements DataParser {
     private rawData: RawData[];
 
     constructor(filePath: string){
+        console.log(`Parsing: ${filePath}`);
         const rawData = getSeperatedValueData(
             filePath,
             // This is necessary because an invalid row has an additional column

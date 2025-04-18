@@ -18,6 +18,7 @@ export class SpokenDialectParser implements DataParser {
     private rawData: RawData[]
 
     constructor(filePath: string) {
+        console.log(`Parsing: ${filePath}`);
         this.rawData = getSeperatedValueData(filePath, {delimiter: "\t"});
     }
 

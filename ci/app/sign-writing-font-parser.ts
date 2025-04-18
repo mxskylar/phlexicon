@@ -14,19 +14,40 @@ type RawAlphabetData = {
 type Alphabet = {
     dialectId: string,
     symbolTree: {[index: string]: string[]}
-}
+};
+
+type ParsedSymbol = {
+    glyph: opentype.Glyph,
+    number: number | null,
+    character: string | null
+};
+
+type Symbol = {
+    glyph: opentype.Glyph,
+    character: string
+};
+
+type SymbolMap = {[index: number]: Symbol};
 
 export class SignWritingFontParser implements DataParser {
     warnings: DataWarning[] = [];
     private alphabets: Alphabet[] = [];
-    private font: opentype.Font;
+    private symbols: SymbolMap = {};
 
     constructor(
         alphabetFilePath: string,
-        fontFilePath: string,
-        dictNameDialectIdMap: {[index: string]: string}
+        dictNameDialectIdMap: {[index: string]: string},
+        fontFilePath: string
     ) {
-        // Parse SignWriting alphabets
+        this.setAlphabets(alphabetFilePath, dictNameDialectIdMap);
+        this.setSymbols(fontFilePath);
+    }
+
+    private setAlphabets(
+        alphabetFilePath: string,
+        dictNameDialectIdMap: {[index: string]: string}
+    ): void {
+        console.log(`Parsing: ${alphabetFilePath}`);
         const rawAlphabetData: RawAlphabetData[] = getJsonData(alphabetFilePath);
         rawAlphabetData.forEach(alphabet => {
             this.alphabets.push({
@@ -34,7 +55,9 @@ export class SignWritingFontParser implements DataParser {
                 symbolTree: alphabet.data
             });
         });
-        // Parse SignWriting font
+    }
+
+    private getFont(fontFilePath: string): opentype.Font {
         const fontFileBuffer = fs.readFileSync(fontFilePath);
         const toArrayBuffer = (buffer: Buffer): ArrayBuffer => {
             const arrayBuffer = new ArrayBuffer(buffer.length);
@@ -44,7 +67,22 @@ export class SignWritingFontParser implements DataParser {
             }
             return arrayBuffer;
         };
-        this.font = opentype.parse(toArrayBuffer(fontFileBuffer));
+        return opentype.parse(toArrayBuffer(fontFileBuffer));
+    }
+
+    private getGlyphNumber(glyph: opentype.Glyph): number | null {
+        const match = glyph.name.match(/S(\d+)/);
+        if (match) {
+            try {
+                return new Number(match[1]) as number;
+            } catch (ex) {
+                console.log(`=> WARNING: Unable to get number of glyph ${glyph.name} due to exception:`);
+                console.log(ex);
+            }
+        } else {
+            console.log(`=> WARNING: Unable to extract number of glyph ${glyph.name}`);
+        }
+        return null;
     }
 
     private getUnicodeCharacter(glyph: opentype.Glyph): string | null {
@@ -57,29 +95,47 @@ export class SignWritingFontParser implements DataParser {
         return null;
     }
 
-    public getSymbols(): SignWritingSymbol[] {
-        console.log("Parsing SignWriting symbols...");
-        const charactersBestEffort = Object.values(this.font.glyphs.glyphs)
-            .map(glyph => this.getUnicodeCharacter(glyph));
-        // Using two filters here to make TypeScript happy about the inferred types
-        const characters = charactersBestEffort
-            .filter(symbol => symbol !== null)
-            .filter(symbol => symbol); // Ensure there are no blank strings, just in case
-        // Log warning if not able to get unicode characters for too many glyphs
-        const numGlyphs = charactersBestEffort.length;
-        const numNotFound = numGlyphs - characters.length;
+    private getSymbolBestEffort(glyph: opentype.Glyph): ParsedSymbol {
+        return {
+            glyph,
+            number: this.getGlyphNumber(glyph),
+            character: this.getUnicodeCharacter(glyph)
+        }
+    }
+
+    private setSymbols(fontFilePath: string): void {
+        console.log(`Parsing: ${fontFilePath}`);
+        const font = this.getFont(fontFilePath);
+        const parsedSymbolsBestEffort = Object.values(font.glyphs.glyphs)
+            .map(glyph => this.getSymbolBestEffort(glyph));
+        const parsedSymbols = parsedSymbolsBestEffort
+            .filter(symbol => symbol.number && symbol.character);
+        // Log warning if not able to get numbers and unicode characters for too many glyphs
+        const numGlyphs = parsedSymbolsBestEffort.length;
+        const numNotFound = numGlyphs - parsedSymbols.length;
         const percentCharsRetrieved = getPercent(numNotFound, numGlyphs);
-        console.log(`=> Retrieved unicode characters for ${percentCharsRetrieved}% (${numNotFound}/${numGlyphs}) of SignWriting font glyphs`);
-        const MAX_PERCENT_CHARS_NOT_FOUND = 1;
-        if (percentCharsRetrieved > MAX_PERCENT_CHARS_NOT_FOUND) {
+        console.log(`=> Retrieved numbers and unicode characters for ${percentCharsRetrieved}% (${numNotFound}/${numGlyphs}) of SignWriting font glyphs`);
+        const MAX_PERCENT_SYMBOLS_NOT_PARSED = 2;
+        if (percentCharsRetrieved > MAX_PERCENT_SYMBOLS_NOT_PARSED) {
             this.warnings.push({
                 dataName: SIGN_WRITING_SYMBOLS_TABLE.name,
                 dataType: DataType.TABLE,
-                message: `Unable to retrieve unicode characters for more than ${MAX_PERCENT_CHARS_NOT_FOUND}% of SignWriting font glyphs`
+                message: `Unable to retrieve numbers or unicode characters for more than ${MAX_PERCENT_SYMBOLS_NOT_PARSED}% of SignWriting font glyphs`
             })
         }
-        return characters.map(symbol => {
-            return {symbol};
+        parsedSymbols.forEach(symbol => {
+            this.symbols[symbol.number as number] = {
+                glyph: symbol.glyph,
+                character: symbol.character as string
+            };
         });
+    }
+
+    public getSymbols(): SignWritingSymbol[] {
+        return Object.values(this.symbols).map(symbol => {
+            return {
+                symbol: symbol.character
+            }
+        })
     }
 }

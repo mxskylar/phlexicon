@@ -30,6 +30,7 @@ export class SignDialectParser implements DataParser {
     private rawIsoData: RawIsoData[];
 
     constructor(dictNamesFilePath: string, isoFilePath: string) {
+        console.log(`Parsing: ${dictNamesFilePath}`);
         const dictNames: string[] = getJsonData(dictNamesFilePath);
         dictNames.forEach(name => {
             const dictNameArray = name.split("-");
@@ -42,6 +43,7 @@ export class SignDialectParser implements DataParser {
                 region
             });
         });
+        console.log(`Parsing: ${isoFilePath}`);
         this.rawIsoData = getSeperatedValueData(isoFilePath, {delimiter: "\t"});
     }
 
@@ -94,6 +96,6 @@ export class SignDialectParser implements DataParser {
         this.dictionaries.forEach(dict => {
             dictNameDialectIdMap[dict.name] = dict.dialectId;
         });
-        return new SignWritingFontParser(alphabetFilePath, fontFilePath, dictNameDialectIdMap);
+        return new SignWritingFontParser(alphabetFilePath, dictNameDialectIdMap, fontFilePath);
     }
 }
