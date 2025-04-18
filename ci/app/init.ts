@@ -95,7 +95,7 @@ db.close();
 // where it may be queried when debugging the warnings.
 // These warnings indicate that assumptions made by parsing logic
 // were not met by the raw data, which may have changed.
-const dataWarnings: DataWarning[] = [
+const dataWarnings = [
     ...spokenDialectParser.warnings,
     ...ipaParser.warnings,
     ...signDialectParser.warnings,
