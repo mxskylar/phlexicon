@@ -14,6 +14,9 @@ export const getSeperatedValueData = (
     });
 };
 
+export const getJsonData = (filePath: string) =>
+    JSON.parse(fs.readFileSync(filePath).toString());
+
 export const getUniqueValues = (values: any[]) => {
     return [... new Set(values)];
-}
+};

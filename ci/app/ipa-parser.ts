@@ -4,6 +4,7 @@ import { Vowel, VOWEL_ATTRIBUTES, VowelAttribute } from "../../src/phonemes/spok
 import { DataParser, DataType, DataWarning } from './data-parser';
 import { getSeperatedValueData, getUniqueValues } from "./parse-utils";
 import { CONSONANTS_TABLE, VOWELS_TABLE } from '../../src/db/tables';
+import { IpaSymbol } from "../../src/phonemes/spoken/ipa-symbol"
 
 enum PhonemeName {
     VOWEL = "vowel",
@@ -223,7 +224,7 @@ export class IpaParser implements DataParser {
         this.rawData = rawData;
     }
 
-    public getPhonemeSymbols(): {[index: string]: string}[] {
+    public getPhonemeSymbols(): IpaSymbol[] {
         const symbols = this.rawData
             .filter(rawRow => Object.values(PhonemeName).map(name => name.valueOf()).includes(rawRow.chart))
             .map(rawRow => rawRow.ipa);
@@ -233,7 +234,7 @@ export class IpaParser implements DataParser {
             });
     }
 
-    public getOtherSymbols(): {[index: string]: string}[] {
+    public getOtherSymbols(): IpaSymbol[] {
         return this.rawData.filter(rawRow => 
             !Object.values(PhonemeName).map(name => name.valueOf()).includes(rawRow.chart)
         ).map(rawRow => {

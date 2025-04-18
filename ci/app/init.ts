@@ -72,10 +72,12 @@ db.insertRows(CONSONANTS_TABLE, ipaParser.getConsonants());
 
 saveWarnings(ipaParser.warnings);
 
+// SIGN DIALECTS
+
+db.createTable(SIGN_DIALECTS_TABLE);
+
 /*
 // SIGN DIALECTS
-const getJsonFromFile = (filePath: string) =>
-    JSON.parse(fs.readFileSync(filePath).toString());
 const getSignDialectIsoCode = (dictionaryName: string) =>
     dictionaryName.split("-")[0];
 const getSignDialectRegion = (dictionaryName: string) =>

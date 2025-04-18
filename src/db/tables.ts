@@ -12,10 +12,6 @@ import { SYMBOL_COLUMN_NAME } from "../phonemes/phoneme.ts";
 import { ConsonantAttribute } from "../phonemes/spoken/consonant.ts";
 
 // SPOKEN DIALECTS
-export type SpokenDialect = {
-    id: string,
-    name: string
-};
 const spokenDialectId = new LengthColumn("id", LengthType.CHAR, 4).primaryKey();
 export const SPOKEN_DIALECTS_TABLE = new Table(
     "spoken_dialects",
