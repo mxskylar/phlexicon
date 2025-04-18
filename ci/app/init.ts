@@ -99,7 +99,7 @@ saveWarnings(signWritingFontParser.warnings);
 // - The Phonemes of Sign Dialects
 
 // STEP 3: Close the database and check for warnings
-console.log("Data inserted! Closing the database...")
+console.log("Data inserted! Closing the database...");
 db.close();
 
 // Fail the pipeline if warnings were found while parsing data.
