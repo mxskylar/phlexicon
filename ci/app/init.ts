@@ -81,6 +81,7 @@ const signDialectParser = new SignDialectParser(
 );
 db.createTable(SIGN_DIALECTS_TABLE);
 db.insertRows(SIGN_DIALECTS_TABLE, signDialectParser.getDialects());
+saveWarnings(signDialectParser.warnings);
 
 const signWritingFontParser = signDialectParser.getSignWritingFontParser(
     SIGN_WRITING_ALPHABETS_FILE_PATH,
@@ -88,6 +89,7 @@ const signWritingFontParser = signDialectParser.getSignWritingFontParser(
 );
 db.createTable(SIGN_WRITING_SYMBOLS_TABLE);
 db.insertRows(SIGN_WRITING_SYMBOLS_TABLE, signWritingFontParser.getSymbols());
+saveWarnings(signWritingFontParser.warnings);
 
 // TODO: Initialize these tables
 // - Oriented Handshape Symbols

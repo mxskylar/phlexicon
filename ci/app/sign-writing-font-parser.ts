@@ -66,10 +66,10 @@ export class SignWritingFontParser implements DataParser {
             .filter(symbol => symbol !== null)
             .filter(symbol => symbol); // Ensure there are no blank strings, just in case
         // Log warning if not able to get unicode characters for too many glyphs
-        const numChars = characters.length;
         const numGlyphs = charactersBestEffort.length;
-        const percentCharsRetrieved = getPercent(numChars, numGlyphs);
-        console.log(`=> Retrieved unicode characters for ${percentCharsRetrieved}% (${numChars}/${numGlyphs}) of SignWriting font glyphs`);
+        const numNotFound = numGlyphs - characters.length;
+        const percentCharsRetrieved = getPercent(numNotFound, numGlyphs);
+        console.log(`=> Retrieved unicode characters for ${percentCharsRetrieved}% (${numNotFound}/${numGlyphs}) of SignWriting font glyphs`);
         const MAX_PERCENT_CHARS_NOT_FOUND = 1;
         if (percentCharsRetrieved > MAX_PERCENT_CHARS_NOT_FOUND) {
             this.warnings.push({
