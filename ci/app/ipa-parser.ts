@@ -368,7 +368,7 @@ export class IpaParser implements DataParser {
         rows: Vowel[] | Consonant[],
         logPrefix: string,
         tableName: string,
-        warnIfAllFalse: boolean = false
+        warnIfAllTrueIsLow: boolean = false
     ): void {
         // Calculate percent true of each attribute
         const counts = {};
@@ -417,7 +417,7 @@ export class IpaParser implements DataParser {
             const allTruePercent = getPercent(numAllTrue);
             console.log(`==> [${logPrefix}] ALL TRUE: ${numAllTrue}/${total} = ${allTruePercent}%`);
             const MIN_ALL_TRUE_PERCENT = 90;
-            if (warnIfAllFalse && allTruePercent < MIN_ALL_TRUE_PERCENT) {
+            if (warnIfAllTrueIsLow && allTruePercent < MIN_ALL_TRUE_PERCENT) {
                 this.warnings.push({
                     dataName: tableName,
                     dataType: DataType.TABLE,
