@@ -16,7 +16,7 @@ export class Database {
     public createTable(table: Table): void {
         const columnDeclarations = table.getColumnDeclarations().join(`,${os.EOL}\t`);
         const query = `CREATE TABLE main.${table.name}(${os.EOL}\t${columnDeclarations}${os.EOL});`;
-        console.log(query);
+        //console.log(query);
         this.exec(query);
     }
 
@@ -43,7 +43,7 @@ export class Database {
         row: {[index: string]: string | boolean | number}
     ) {
         const query = this.getInsertRowQuery(table, row);
-        console.log(query);
+        //console.log(query);
         this.exec(query);
     }
 

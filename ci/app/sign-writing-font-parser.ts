@@ -76,11 +76,11 @@ export class SignWritingFontParser implements DataParser {
             try {
                 return new Number(match[1]) as number;
             } catch (ex) {
-                console.log(`=> WARNING: Unable to get number of glyph ${glyph.name} due to exception:`);
-                console.log(ex);
+                //console.log(`=> WARNING: Unable to get number of glyph ${glyph.name} due to exception:`);
+                //console.log(ex);
             }
         } else {
-            console.log(`=> WARNING: Unable to extract number of glyph ${glyph.name}`);
+            //console.log(`=> WARNING: Unable to extract number of glyph ${glyph.name}`);
         }
         return null;
     }
@@ -89,8 +89,8 @@ export class SignWritingFontParser implements DataParser {
         try {
            return String.fromCodePoint(glyph.unicode);
         } catch (ex) {
-            console.log(`=> WARNING: Unable to get unicode character for glyph ${glyph.name} due to exception:`);
-            console.log(ex);
+            //console.log(`=> WARNING: Unable to get unicode character for glyph ${glyph.name} due to exception:`);
+            //console.log(ex);
         }
         return null;
     }
