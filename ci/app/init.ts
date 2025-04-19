@@ -3,6 +3,7 @@ import { BUILD_DIR, DATABASE_FILE_PATH } from '../../src/build-constants';
 import { Database } from '../../src/db/database';
 import {
     CONSONANTS_TABLE,
+    HANDS_TABLE,
     IPA_PHONEME_SYMBOLS_TABLE,
     OTHER_IPA_SYMBOLS_TABLE,
     SIGN_DIALECTS_TABLE,
@@ -80,7 +81,8 @@ const signWritingFontParser = signDialectParser.getSignWritingFontParser(
 db.createTable(SIGN_WRITING_SYMBOLS_TABLE);
 db.insertRows(SIGN_WRITING_SYMBOLS_TABLE, signWritingFontParser.getSymbols());
 
-signWritingFontParser.getHands();
+db.createTable(HANDS_TABLE);
+//console.log(signWritingFontParser.getHands());
 
 // TODO: Initialize these tables
 // - Oriented Handshape Symbols

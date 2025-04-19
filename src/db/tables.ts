@@ -66,6 +66,12 @@ export const SIGN_DIALECTS_TABLE = new Table(
 const signWritingSymbol = new LengthColumn("symbol", LengthType.CHAR, 1).primaryKey()
 export const SIGN_WRITING_SYMBOLS_TABLE = new Table("sign_writing_symbols", signWritingSymbol);
 
+export const HANDS_TABLE = new Table(
+    "hands",
+    getColumnWithForeignKey("symbol", new ForeignKey(SIGN_WRITING_SYMBOLS_TABLE, signWritingSymbol))
+        .primaryKey()
+);
+
 // TODO: Create these tables
 // - Oriented Handshape Symbols
 // - Movement Symbols

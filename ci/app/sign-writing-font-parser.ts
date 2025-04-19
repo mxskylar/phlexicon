@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import opentype from 'opentype.js';
 import { SIGN_WRITING_SYMBOLS_TABLE } from '../../src/db/tables';
-import { CLOCKWISE_FINGER_DIRECTIONS, COUNTER_CLOCKWISE_FINGER_DIRECTIONS, PALM_DIRECTIONS } from '../../src/phonemes/sign/hands';
+import { CLOCKWISE_FINGER_DIRECTIONS, COUNTER_CLOCKWISE_FINGER_DIRECTIONS, Hand, PALM_DIRECTIONS } from '../../src/phonemes/sign/hand';
 import { SignWritingCategory, SignWritingSymbol } from "../../src/phonemes/sign/sign-writing";
 import { DataParser, DataType, DataWarning } from "./data-parser";
 import { getJsonData, getPercent, sortAscending } from "./parse-utils";
@@ -133,10 +133,14 @@ export class SignWritingFontParser implements DataParser {
     }
 
     // https://www.signbank.org/iswa/cat_1.html
-    public getHands() {
+    public getHands(): Hand[] {
         const symbols = this.symbols.filter(symbol => symbol.category === SignWritingCategory.HANDS);
         const handshapes = symbols.map(symbol => {
-            return {symbol: symbol.character}
+            return {
+                symbol: symbol.character,
+                symbol_group: symbol.symbolGroup,
+                base_symbol: symbol.baseSymbol
+            }
         });
         let i = 0;
         while (i < handshapes.length) {
@@ -150,9 +154,9 @@ export class SignWritingFontParser implements DataParser {
                     const nextHand = i + 8;
                     let f = 0;
                     while (i < nextHand) {
-                        handshapes[i]["palmDirection"] = PALM_DIRECTIONS[p];
-                        handshapes[i]["fingerDirection"] = fingerDirections[f];
-                        handshapes[i]["isRightHanded"] = isRightHanded;
+                        handshapes[i]["palm_direction"] = PALM_DIRECTIONS[p];
+                        handshapes[i]["finger_direction"] = fingerDirections[f];
+                        handshapes[i]["is_right_handed"] = isRightHanded;
                         f++;
                         i++;
                     }
@@ -167,6 +171,6 @@ export class SignWritingFontParser implements DataParser {
                 }
             }
         }
-        return handshapes;
+        return handshapes as Hand[];
     }
 }
