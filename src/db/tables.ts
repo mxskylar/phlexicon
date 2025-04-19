@@ -85,6 +85,13 @@ export const BODY_TABLE = new Table(
     SIGN_WRITING_SYMBOL_COLUMN,
 );
 
+export const SIGN_DIALECT_PHONEMES_TABLE = new Table(
+    "sign_dialect_phonemes",
+    SIGN_WRITING_SYMBOL_COLUMN,
+    getColumnWithForeignKey("dialect_id", new ForeignKey(SIGN_DIALECTS_TABLE, signDialectId))
+        .primaryKey(),
+);
+
 // TODO: Create these tables
 // - Movement Symbols
 // - Location & Expression Symbols

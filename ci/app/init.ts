@@ -2,9 +2,14 @@ import * as fs from 'fs';
 import { BUILD_DIR, DATABASE_FILE_PATH } from '../../src/build-constants';
 import { Database } from '../../src/db/database';
 import {
+    BODY_TABLE,
     CONSONANTS_TABLE,
+    DYNAMICS_TABLE,
     HANDS_TABLE,
+    HEAD_AND_FACES_TABLE,
+    MOVEMENT_TABLE,
     OTHER_IPA_SYMBOLS_TABLE,
+    SIGN_DIALECT_PHONEMES_TABLE,
     SIGN_DIALECTS_TABLE,
     SPOKEN_DIALECT_PHONEMES_TABLE,
     SPOKEN_DIALECTS_TABLE,
@@ -77,11 +82,15 @@ const signWritingFontParser = signDialectParser.getSignWritingFontParser(
 db.createTable(HANDS_TABLE);
 //console.log(signWritingFontParser.getHands());
 
-// TODO: Initialize these tables
-// - Oriented Handshape Symbols
-// - Movement Symbols
-// - Location & Expression Symbols
-// - The Phonemes of Sign Dialects
+db.createTable(MOVEMENT_TABLE);
+
+db.createTable(DYNAMICS_TABLE);
+
+db.createTable(HEAD_AND_FACES_TABLE);
+
+db.createTable(BODY_TABLE);
+
+db.createTable(SIGN_DIALECT_PHONEMES_TABLE);
 
 // STEP 3: Close the database and check for warnings
 console.log("Data inserted! Closing the database...");
