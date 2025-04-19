@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 import opentype from 'opentype.js';
 import { SIGN_WRITING_SYMBOLS_TABLE } from '../../src/db/tables';
-import { CLOCKWISE_FINGER_DIRECTIONS, COUNTER_CLOCKWISE_FINGER_DIRECTIONS, PALM_DIRECTIONS } from '../../src/phonemes/sign/orientation';
-import { SignWritingSymbol } from "../../src/phonemes/sign/sign-writing-symbol";
+import { CLOCKWISE_FINGER_DIRECTIONS, COUNTER_CLOCKWISE_FINGER_DIRECTIONS, PALM_DIRECTIONS } from '../../src/phonemes/sign/hands';
+import { SignWritingCategory, SignWritingSymbol } from "../../src/phonemes/sign/sign-writing";
 import { sortAscending } from '../../src/utils';
 import { DataParser, DataType, DataWarning } from "./data-parser";
 import { getJsonData, getPercent } from "./parse-utils";
-import { SignWritingFontSymbol, SignWritingSymbolType } from './sign-writing-font-glyph';
+import { SignWritingFontSymbol } from './sign-writing-font-glyph';
 
 type RawAlphabetData = {
     name: string,
@@ -119,7 +119,7 @@ export class SignWritingFontParser implements DataParser {
 
     // https://www.signbank.org/iswa/cat_1.html
     public getOrientedHandshapes() {
-        const symbols = this.symbols.filter(symbol => symbol.type === SignWritingSymbolType.ORIENTED_HANDSHAPE);
+        const symbols = this.symbols.filter(symbol => symbol.category === SignWritingCategory.HANDS);
         const handshapes = symbols.map(symbol => {
             return {symbol: symbol.character}
         });

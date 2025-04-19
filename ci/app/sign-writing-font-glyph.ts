@@ -1,8 +1,5 @@
 import opentype from 'opentype.js';
-
-export enum SignWritingSymbolType {
-    ORIENTED_HANDSHAPE = "oriented handshape"
-};
+import { SignWritingCategory } from '../../src/phonemes/sign/sign-writing';
 
 const inRange = (number: number | null, min: number, max: number) =>
     number && number >= min && number <= max;
@@ -13,7 +10,7 @@ const LAST_HANDSHAPE = 0x2041f;
 export class SignWritingFontSymbol {
     glyph: opentype.Glyph;
     character: string;
-    type: SignWritingSymbolType;
+    category: SignWritingCategory;
     parent: string;
 
     constructor(glyph: opentype.Glyph, character: string) {
@@ -21,7 +18,7 @@ export class SignWritingFontSymbol {
         this.character = character;
         const type = this.getType();
         if (type) {
-            this.type = type;
+            this.category = type;
         }
         const parent = this.getParent()
         if (parent) {
@@ -37,11 +34,11 @@ export class SignWritingFontSymbol {
         return null
     }
 
-    private getType(): SignWritingSymbolType | undefined {
+    private getType(): SignWritingCategory | undefined {
         const glyphNumber = this.getGlyphNumber(this.glyph);
         // https://www.signbank.org/iswa/cat_1.html
         if (inRange(glyphNumber, FIRST_HANDSHAPE, LAST_HANDSHAPE)) {
-            return SignWritingSymbolType.ORIENTED_HANDSHAPE
+            return SignWritingCategory.HANDS
         }
     }
 
