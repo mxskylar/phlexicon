@@ -80,7 +80,7 @@ const signWritingFontParser = signDialectParser.getSignWritingFontParser(
 db.createTable(SIGN_WRITING_SYMBOLS_TABLE);
 db.insertRows(SIGN_WRITING_SYMBOLS_TABLE, signWritingFontParser.getSymbols());
 
-signWritingFontParser.getOrientedHandshapes();
+signWritingFontParser.getHands();
 
 // TODO: Initialize these tables
 // - Oriented Handshape Symbols

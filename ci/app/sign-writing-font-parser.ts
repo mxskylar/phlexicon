@@ -118,7 +118,7 @@ export class SignWritingFontParser implements DataParser {
     }
 
     // https://www.signbank.org/iswa/cat_1.html
-    public getOrientedHandshapes() {
+    public getHands() {
         const symbols = this.symbols.filter(symbol => symbol.category === SignWritingCategory.HANDS);
         const handshapes = symbols.map(symbol => {
             return {symbol: symbol.character}
