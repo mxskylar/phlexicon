@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import opentype from 'opentype.js';
-import { SIGN_WRITING_SYMBOLS_TABLE } from '../../src/db/tables';
 import { CLOCKWISE_FINGER_DIRECTIONS, COUNTER_CLOCKWISE_FINGER_DIRECTIONS, Hand, PALM_DIRECTIONS } from '../../src/phonemes/sign/hand';
 import { SignWritingCategory, SignWritingSymbol } from "../../src/phonemes/sign/sign-writing";
 import { DataParser, DataType, DataWarning } from "./data-parser";
 import { getJsonData, getPercent, sortAscending } from "./parse-utils";
 import { SignWritingFontSymbol } from './sign-writing-font-glyph';
+import { BODY_TABLE, DYNAMICS_TABLE, HANDS_TABLE, HEAD_AND_FACES_TABLE, MOVEMENT_TABLE } from '../../src/db/tables';
 
 type RawAlphabetData = {
     name: string,
@@ -105,7 +105,13 @@ export class SignWritingFontParser implements DataParser {
         const MAX_PERCENT_SYMBOLS_NOT_PARSED = 2;
         if (percentCharsRetrieved > MAX_PERCENT_SYMBOLS_NOT_PARSED) {
             this.warnings.push({
-                dataName: SIGN_WRITING_SYMBOLS_TABLE.name,
+                dataName: [
+                    HANDS_TABLE.name,
+                    MOVEMENT_TABLE.name,
+                    DYNAMICS_TABLE.name,
+                    HEAD_AND_FACES_TABLE.name,
+                    BODY_TABLE.name,
+                ].join(", "),
                 dataType: DataType.TABLE,
                 message: `Unable to parse number or unicode characters for more than ${MAX_PERCENT_SYMBOLS_NOT_PARSED}% of SignWriting font glyphs`
             })
@@ -122,14 +128,6 @@ export class SignWritingFontParser implements DataParser {
 
         // Sort symbols by glyph index
         this.symbols.sort((a, b) => sortAscending(a.glyph.index, b.glyph.index));
-    }
-
-    public getSymbols(): SignWritingSymbol[] {
-        return this.symbols.map(symbol => {
-            return {
-                symbol: symbol.character
-            }
-        })
     }
 
     // https://www.signbank.org/iswa/cat_1.html

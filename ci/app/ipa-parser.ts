@@ -225,17 +225,6 @@ export class IpaParser implements DataParser {
         this.rawData = rawData;
     }
 
-    public getPhonemeSymbols(): IpaSymbol[] {
-        console.log("Parsing IPA phoneme symbols...");
-        const symbols = this.rawData
-            .filter(rawRow => Object.values(PhonemeName).map(name => name.valueOf()).includes(rawRow.chart))
-            .map(rawRow => rawRow.ipa);
-        return getUniqueValues(symbols)
-            .map(symbol => {
-                return {symbol};
-            });
-    }
-
     public getOtherSymbols(): IpaSymbol[] {
         console.log("Parsing other IPA symbols...")
         return this.rawData.filter(rawRow => 

@@ -8,7 +8,6 @@ import {
 import { Table } from "./table.ts";
 import { ForeignKey } from "./foreign-key.ts";
 import { VowelAttribute } from "../phonemes/spoken/vowel.ts";
-import { SYMBOL_COLUMN_NAME } from "../phonemes/phoneme.ts";
 import { ConsonantAttribute } from "../phonemes/spoken/consonant.ts";
 
 // SPOKEN DIALECTS
@@ -20,38 +19,34 @@ export const SPOKEN_DIALECTS_TABLE = new Table(
 );
 
 // IPA Symbols
-const ipaPhonemeSymbol = new LengthColumn("symbol", LengthType.VARCHAR, 5).primaryKey();
-export const IPA_PHONEME_SYMBOLS_TABLE = new Table("ipa_phoneme_symbols", ipaPhonemeSymbol);
+const IPA_SYMBOL_COLUMN = new LengthColumn("symbol", LengthType.VARCHAR, 5).primaryKey();
 
 export const OTHER_IPA_SYMBOLS_TABLE = new Table(
     "other_ipa_symbols",
-    new LengthColumn("symbol", LengthType.CHAR, 1).primaryKey()
+    IPA_SYMBOL_COLUMN,
 );
 
 export const VOWELS_TABLE = new Table(
     "vowels",
-    getColumnWithForeignKey(SYMBOL_COLUMN_NAME, new ForeignKey(IPA_PHONEME_SYMBOLS_TABLE, ipaPhonemeSymbol))
-        .primaryKey(),
+    IPA_SYMBOL_COLUMN,
     ...Object.values(VowelAttribute).map(columnName =>
         new BasicColumn(columnName, BasicType.BOOLEAN).required()
-    )
+    ),
 );
 
 export const CONSONANTS_TABLE = new Table(
     "consonants",
-    getColumnWithForeignKey("symbol", new ForeignKey(IPA_PHONEME_SYMBOLS_TABLE, ipaPhonemeSymbol))
-        .primaryKey(),
+    IPA_SYMBOL_COLUMN,
     ...Object.values(ConsonantAttribute).map(columnName =>
         new BasicColumn(columnName, BasicType.BOOLEAN).required()
-    )
+    ),
 );
 
 export const SPOKEN_DIALECT_PHONEMES_TABLE = new Table(
     "spoken_dialect_phonemes",
+    IPA_SYMBOL_COLUMN,
     getColumnWithForeignKey("dialect_id", new ForeignKey(SPOKEN_DIALECTS_TABLE, spokenDialectId))
         .primaryKey(),
-    getColumnWithForeignKey("symbol", new ForeignKey(IPA_PHONEME_SYMBOLS_TABLE, ipaPhonemeSymbol))
-        .primaryKey()
 );
 
 // SIGN DIALECTS
@@ -63,17 +58,34 @@ export const SIGN_DIALECTS_TABLE = new Table(
 );
 
 // SignWriting Symbols
-const signWritingSymbol = new LengthColumn("symbol", LengthType.CHAR, 1).primaryKey()
-export const SIGN_WRITING_SYMBOLS_TABLE = new Table("sign_writing_symbols", signWritingSymbol);
+const SIGN_WRITING_SYMBOL_COLUMN = new LengthColumn("symbol", LengthType.CHAR, 1).primaryKey()
 
 export const HANDS_TABLE = new Table(
     "hands",
-    getColumnWithForeignKey("symbol", new ForeignKey(SIGN_WRITING_SYMBOLS_TABLE, signWritingSymbol))
-        .primaryKey()
+    SIGN_WRITING_SYMBOL_COLUMN,
+);
+
+export const MOVEMENT_TABLE = new Table(
+    "movement",
+    SIGN_WRITING_SYMBOL_COLUMN,
+);
+
+export const DYNAMICS_TABLE = new Table(
+    "dynamics",
+    SIGN_WRITING_SYMBOL_COLUMN,
+);
+
+export const HEAD_AND_FACES_TABLE = new Table(
+    "head_and_faces",
+    SIGN_WRITING_SYMBOL_COLUMN,
+);
+
+export const BODY_TABLE = new Table(
+    "head_faces",
+    SIGN_WRITING_SYMBOL_COLUMN,
 );
 
 // TODO: Create these tables
-// - Oriented Handshape Symbols
 // - Movement Symbols
 // - Location & Expression Symbols
 // - The Phonemes of Sign Dialects
