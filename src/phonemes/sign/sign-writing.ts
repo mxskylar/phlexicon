@@ -18,12 +18,6 @@ export enum SignWritingCategory {
     //BODY = "Body",
 };
 
-export type SignWritingBlock = {
-    number: number,
-    name: string,
-    symbol: string,
-}
-
 export enum SignWritingSymbolGroup {
     INDEX = "񀀁",
     //INDEX_MIDDLE = "񀕁",

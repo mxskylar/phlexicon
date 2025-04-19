@@ -1,48 +1,14 @@
 import opentype from 'opentype.js';
-import { SignWritingBaseSymbol, SignWritingBlock, SignWritingCategory, SignWritingSymbolGroup } from '../../src/phonemes/sign/sign-writing';
-
-type Range = {
-    min: number,
-    max: number,
-};
-
-// Returns true if number is in inclusive range
-const inRange = (number: number, range: Range) => {
-    const {max, min} = range;
-    if (range.max < range.min) {
-        throw new Error(`Failed to determine if ${number} is in range ${min}-${max} because max is less than min`);
-    }
-    return number >= min && number <= max;
-};
-
-const CATEGORY_RANGES: {[key in SignWritingCategory]: Range} = {
-    [SignWritingCategory.HANDS]: {
-        min: 0x10000,
-        max: 0x2041f,
-    },
-};
-
-const SYMBOL_GROUP_RANGES: {[key in SignWritingSymbolGroup]: Range} = {
-    [SignWritingSymbolGroup.INDEX]: {
-        min: 0x10000,
-        max: 0x10d5f,
-    },
-};
-
-const BASE_SYMBOL_RANGES: {[key in SignWritingBaseSymbol]: Range} = {
-    [SignWritingBaseSymbol.INDEX]: {
-        min: 0x10000,
-        max: 0x1005f,
-    },
-};
+import { SignWritingBaseSymbol, SignWritingCategory, SignWritingSymbolGroup } from '../../src/phonemes/sign/sign-writing';
+import { BASE_SYMBOL_RANGES, CATEGORY_RANGES, FontSection, inRange, SYMBOL_GROUP_RANGES } from './sign-writing-font';
 
 export class SignWritingFontSymbol {
     glyph: opentype.Glyph;
     character: string;
     number: number;
     category: SignWritingCategory;
-    symbolGroup: SignWritingBlock;
-    baseSymbol: SignWritingBlock;
+    symbolGroup: SignWritingSymbolGroup;
+    baseSymbol: SignWritingBaseSymbol;
 
     constructor(glyph: opentype.Glyph, character: string, number: number) {
         this.glyph = glyph;
@@ -50,25 +16,23 @@ export class SignWritingFontSymbol {
         this.number = number;
         const category = this.getSectionKey(CATEGORY_RANGES);
         if (category) {
-            this.category = SignWritingCategory[category];
+            this.category = category;
         }
         const symbolGroup = this.getSectionKey(SYMBOL_GROUP_RANGES);
         if (symbolGroup) {
-            this.symbolGroup = SignWritingSymbolGroup[symbolGroup];
+            this.symbolGroup = symbolGroup;
         }
         const baseSymbol = this.getSectionKey(BASE_SYMBOL_RANGES);
         if (baseSymbol) {
-            this.baseSymbol = SignWritingBaseSymbol[baseSymbol];
+            this.baseSymbol = baseSymbol;
         }
     }
 
-    private getSectionKey(sectionMap: {[index: string | number]: Range}): string | undefined {
-        const ranges = Object.values(sectionMap);
-        const keys = Object.keys(sectionMap);
+    private getSectionKey<Type>(ranges: FontSection<Type>[]): Type | undefined {
         for (const i in ranges) {
-            const range = ranges[i];
-            if (inRange(this.number, range)) {
-                return keys[i];
+            const section = ranges[i];
+            if (inRange(this.number, section.range)) {
+                return section.name;
             }
         }
     }

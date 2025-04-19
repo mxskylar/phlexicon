@@ -109,7 +109,8 @@ export class SignWritingFontParser implements DataParser {
                 dataType: DataType.TABLE,
                 message: `Unable to parse number or unicode characters for more than ${MAX_PERCENT_SYMBOLS_NOT_PARSED}% of SignWriting font glyphs`
             })
-        }
+        } 
+
         parsedSymbols.forEach(symbol => {
             this.symbols.push(new SignWritingFontSymbol(
                 symbol.glyph,
@@ -117,6 +118,8 @@ export class SignWritingFontParser implements DataParser {
                 symbol.number as number
             ));
         });
+        // TODO: Verify that the category, symbol group, & base symbol was determined for ALL symbols
+
         // Sort symbols by glyph index
         this.symbols.sort((a, b) => sortAscending(a.glyph.index, b.glyph.index));
     }
