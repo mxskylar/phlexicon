@@ -40,9 +40,9 @@ export class SignWritingFontSymbol {
     glyph: opentype.Glyph;
     character: string;
     number: number;
-    category: SignWritingCategory | undefined;
-    symbolGroup: SignWritingBlock | undefined;
-    baseSymbol: SignWritingBlock | undefined;
+    category: SignWritingCategory;
+    symbolGroup: SignWritingBlock;
+    baseSymbol: SignWritingBlock;
 
     constructor(glyph: opentype.Glyph, character: string, number: number) {
         this.glyph = glyph;
