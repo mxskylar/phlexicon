@@ -20,7 +20,8 @@ type Alphabet = {
 
 type ParsedSymbol = {
     glyph: opentype.Glyph,
-    character: string | null
+    character: string | null,
+    number: number | null,
 };
 
 export class SignWritingFontParser implements DataParser {
@@ -74,10 +75,19 @@ export class SignWritingFontParser implements DataParser {
         return null;
     }
 
+    private getGlyphNumber(glyph: opentype.Glyph): number | null {
+        const match = glyph.name.match(/S([0-9a-fA-F]+)/);
+        if (match) {
+            return new Number(`0x${match[1]}`) as number;
+        }
+        return null;
+    }
+
     private getSymbolBestEffort(glyph: opentype.Glyph): ParsedSymbol {
         return {
             glyph,
-            character: this.getUnicodeCharacter(glyph)
+            character: this.getUnicodeCharacter(glyph),
+            number: this.getGlyphNumber(glyph),
         }
     }
 
@@ -91,21 +101,24 @@ export class SignWritingFontParser implements DataParser {
         const numGlyphs = parsedSymbolsBestEffort.length;
         const numNotFound = numGlyphs - parsedSymbols.length;
         const percentCharsRetrieved = getPercent(numNotFound, numGlyphs);
-        console.log(`=> Retrieved unicode characters for ${100 - percentCharsRetrieved}% (${numGlyphs - numNotFound}/${numGlyphs}) of SignWriting font glyphs`);
-        const MAX_PERCENT_SYMBOLS_NOT_PARSED = 1;
+        console.log(`=> Retrieved number and unicode characters for ${100 - percentCharsRetrieved}% (${numGlyphs - numNotFound}/${numGlyphs}) of SignWriting font glyphs`);
+        const MAX_PERCENT_SYMBOLS_NOT_PARSED = 2;
         if (percentCharsRetrieved > MAX_PERCENT_SYMBOLS_NOT_PARSED) {
             this.warnings.push({
                 dataName: SIGN_WRITING_SYMBOLS_TABLE.name,
                 dataType: DataType.TABLE,
-                message: `Unable to unicode characters for more than ${MAX_PERCENT_SYMBOLS_NOT_PARSED}% of SignWriting font glyphs`
+                message: `Unable to parse number or unicode characters for more than ${MAX_PERCENT_SYMBOLS_NOT_PARSED}% of SignWriting font glyphs`
             })
         }
         parsedSymbols.forEach(symbol => {
-            this.symbols.push(new SignWritingFontSymbol(symbol.glyph, symbol.character as string));
+            this.symbols.push(new SignWritingFontSymbol(
+                symbol.glyph,
+                symbol.character as string,
+                symbol.number as number
+            ));
         });
         // Sort symbols by glyph index
         this.symbols.sort((a, b) => sortAscending(a.glyph.index, b.glyph.index));
-        // TODO: Add validation to ensture that types of SignWritingSymbolType's were all set as expected
     }
 
     public getSymbols(): SignWritingSymbol[] {

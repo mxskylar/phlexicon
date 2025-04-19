@@ -1,53 +1,75 @@
 import opentype from 'opentype.js';
-import { SignWritingCategory } from '../../src/phonemes/sign/sign-writing';
+import { SignWritingBaseSymbol, SignWritingBlock, SignWritingCategory, SignWritingSymbolGroup } from '../../src/phonemes/sign/sign-writing';
 
-const inRange = (number: number | null, min: number, max: number) =>
-    number && number >= min && number <= max;
+type Range = {
+    min: number,
+    max: number,
+};
 
-const FIRST_HANDSHAPE = 0x10000;
-const LAST_HANDSHAPE = 0x2041f;
+// Returns true if number is in inclusive range
+const inRange = (number: number, range: Range) => {
+    const {max, min} = range;
+    if (range.max < range.min) {
+        throw new Error(`Failed to determine if ${number} is in range ${min}-${max} because max is less than min`);
+    }
+    return number >= min && number <= max;
+};
+
+const CATEGORY_RANGES: {[key in SignWritingCategory]: Range} = {
+    [SignWritingCategory.HANDS]: {
+        min: 0x10000,
+        max: 0x2041f,
+    },
+};
+
+const SYMBOL_GROUP_RANGES: {[key in SignWritingSymbolGroup]: Range} = {
+    [SignWritingSymbolGroup.INDEX]: {
+        min: 0x10000,
+        max: 0x10d5f,
+    },
+};
+
+const BASE_SYMBOL_RANGES: {[key in SignWritingBaseSymbol]: Range} = {
+    [SignWritingBaseSymbol.INDEX]: {
+        min: 0x10000,
+        max: 0x1005f,
+    },
+};
 
 export class SignWritingFontSymbol {
     glyph: opentype.Glyph;
     character: string;
-    category: SignWritingCategory;
-    parent: string;
+    number: number;
+    category: SignWritingCategory | undefined;
+    symbolGroup: SignWritingBlock | undefined;
+    baseSymbol: SignWritingBlock | undefined;
 
-    constructor(glyph: opentype.Glyph, character: string) {
+    constructor(glyph: opentype.Glyph, character: string, number: number) {
         this.glyph = glyph;
         this.character = character;
-        const type = this.getType();
-        if (type) {
-            this.category = type;
+        this.number = number;
+        const category = this.getSectionKey(CATEGORY_RANGES);
+        if (category) {
+            this.category = SignWritingCategory[category];
         }
-        const parent = this.getParent()
-        if (parent) {
-            this.parent = parent;
+        const symbolGroup = this.getSectionKey(SYMBOL_GROUP_RANGES);
+        if (symbolGroup) {
+            this.symbolGroup = SignWritingSymbolGroup[symbolGroup];
         }
-    }
-
-    private getGlyphNumber(glyph: opentype.Glyph): number | null {
-        const match = glyph.name.match(/S([0-9a-fA-F]+)/);
-        if (match) {
-            return new Number(`0x${match[1]}`) as number;
-        }
-        return null
-    }
-
-    private getType(): SignWritingCategory | undefined {
-        const glyphNumber = this.getGlyphNumber(this.glyph);
-        // https://www.signbank.org/iswa/cat_1.html
-        if (inRange(glyphNumber, FIRST_HANDSHAPE, LAST_HANDSHAPE)) {
-            return SignWritingCategory.HANDS
+        const baseSymbol = this.getSectionKey(BASE_SYMBOL_RANGES);
+        if (baseSymbol) {
+            this.baseSymbol = SignWritingBaseSymbol[baseSymbol];
         }
     }
 
-    private getParent(): string | undefined {
-        const glyphNumber = this.getGlyphNumber(this.glyph);
-        // https://www.signbank.org/iswa/100/100_bs.html
-        if (inRange(glyphNumber, FIRST_HANDSHAPE, 0x1005f)) {
-            return "񀀁"
+    private getSectionKey(sectionMap: {[index: string | number]: Range}): string | undefined {
+        const ranges = Object.values(sectionMap);
+        const keys = Object.keys(sectionMap);
+        for (const i in ranges) {
+            const range = ranges[i];
+            if (inRange(this.number, range)) {
+                return keys[i];
+            }
         }
-        // TODO: Add checks for all handshapes: https://www.signbank.org/iswa/cat_1.html
     }
 }
