@@ -1,5 +1,3 @@
-import { sortAscending, sortDescending } from "../../utils.ts"
-
 // 360 Degree Compass
 export enum FingerDirection {
     DEGREES_0_or_360 = 0,
