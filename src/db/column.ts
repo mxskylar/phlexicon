@@ -15,7 +15,7 @@ export enum BasicType {
 
 // For some reason, instanceof isn't working on union types
 // Checking the enum value instead
-export const isBasicType = (value: any) =>
+export const isBasicType = (value: string) =>
     Object.values(BasicType)
         .map(val => val.valueOf())
         .includes(value.valueOf());
