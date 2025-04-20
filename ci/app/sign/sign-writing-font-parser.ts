@@ -93,31 +93,39 @@ export class SignWritingFontParser implements DataParser {
         }
     }
 
+    private getSymbolsWithCategory(category: SignWritingCategory) {
+        return this.symbols.filter(symbol => symbol.category === category);
+    }
+
     // https://www.signbank.org/iswa/cat_1.html
     public getHands(): Hand[] {
-        const symbols = this.symbols.filter(symbol => symbol.category === SignWritingCategory.HANDS);
-        const handshapes = symbols.map(symbol => {
-            return {
-                symbol: symbol.character,
-                symbol_group: symbol.symbolGroup,
-                base_symbol: symbol.baseSymbol
-            }
-        });
+        const symbols = this.getSymbolsWithCategory(SignWritingCategory.HANDS);
+        const hands: Hand[] = [];
         let i = 0;
-        while (i < handshapes.length) {
+        while (i < symbols.length) {
             const nextHandshape = i + 96;
             let p = 0;
+            // TODO: Use range constants while they are ready rather than
+            // assuming that handshapes are always 96 characters apart
             while (i < nextHandshape) {
+                // TODO: Add verification that there are exactly 16 more characters when starting
                 const nextPalmDirection = i + 16;
                 let fingerDirections = COUNTER_CLOCKWISE_FINGER_DIRECTIONS;
                 let isRightHanded = true;
                 while (i < nextPalmDirection) {
+                    // TODO: Add verification that there are exactly 8 more characters when starting
                     const nextHand = i + 8;
                     let f = 0;
                     while (i < nextHand) {
-                        handshapes[i]["palm_direction"] = PALM_DIRECTIONS[p];
-                        handshapes[i]["finger_direction"] = fingerDirections[f];
-                        handshapes[i]["is_right_handed"] = isRightHanded;
+                        const symbol = symbols[i];
+                        hands.push({
+                            symbol: symbol.character,
+                            symbol_group: symbol.symbolGroup,
+                            base_symbol: symbol.baseSymbol,
+                            palm_direction: PALM_DIRECTIONS[p],
+                            finger_direction: fingerDirections[f],
+                            is_right_handed: isRightHanded,
+                        });
                         f++;
                         i++;
                     }
@@ -127,11 +135,11 @@ export class SignWritingFontParser implements DataParser {
                 p++;
                 // This extra check is necessary because the last handshape
                 // does not have 96 characters: https://www.signbank.org/iswa/204/204_bs.html
-                if (i >= handshapes.length) {
+                if (i >= symbols.length) {
                     break;
                 }
             }
         }
-        return handshapes as Hand[];
+        return hands;
     }
 }
