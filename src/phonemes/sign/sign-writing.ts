@@ -21,6 +21,14 @@ export enum SignWritingCategory {
 export enum SignWritingSymbolGroup {
     INDEX = "񀀁",
     INDEX_MIDDLE = "񀕁",
+    INDEX_MIDDLE_THUMB = "񀭁",
+    FOUR_FINGERS = "񁦁",
+    FIVE_FINGERS = "񁲁",
+    BABY_FINGER = "񃉁",
+    RING_FINGER = "񃶁",
+    MIDDLE_FINGER = "񄗁",
+    INDEX_THUMB = "񄳡",
+    THUMB = "񅯡",
 };
 
 export enum SignWritingBaseSymbol {

@@ -47,6 +47,42 @@ export const SYMBOL_GROUP_RANGES: FontSection<SignWritingSymbolGroup>[] = [
         name: SignWritingSymbolGroup.INDEX,
         range: {min: 0x10000, max: 0x10d5f},
     },
+    {
+        name: SignWritingSymbolGroup.INDEX_MIDDLE,
+        range: {min: 0x10e00, max: 0x11d5f},
+    },
+    {
+        name: SignWritingSymbolGroup.INDEX_MIDDLE_THUMB,
+        range: {min: 0x11e00, max: 0x1435f},
+    },
+    {
+        name: SignWritingSymbolGroup.FOUR_FINGERS,
+        range: {min: 0x14400, max: 0x14b5f},
+    },
+    {
+        name: SignWritingSymbolGroup.FIVE_FINGERS,
+        range: {min: 0x14c00, max: 0x1855f},
+    },
+    {
+        name: SignWritingSymbolGroup.BABY_FINGER,
+        range: {min: 0x18600, max: 0x1a35f},
+    },
+    {
+        name: SignWritingSymbolGroup.RING_FINGER,
+        range: {min: 0x1a400, max: 0x1b95f},
+    },
+    {
+        name: SignWritingSymbolGroup.MIDDLE_FINGER,
+        range: {min: 0x1ba00, max: 0x1cc5f},
+    },
+    {
+        name: SignWritingSymbolGroup.INDEX_THUMB,
+        range: {min: 0x1cd00, max: 0x1f45f},
+    },
+    {
+        name: SignWritingSymbolGroup.THUMB,
+        range: {min: 0x1f500, max: 0x2041f},
+    },
 ];
 
 export const BASE_SYMBOL_RANGES: FontSection<SignWritingBaseSymbol>[] = [
