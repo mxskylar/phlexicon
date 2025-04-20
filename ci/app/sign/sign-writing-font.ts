@@ -1,4 +1,4 @@
-import { SignWritingBaseSymbol, SignWritingCategory, SignWritingSymbolGroup } from "../../src/phonemes/sign/sign-writing";
+import { SignWritingBaseSymbol, SignWritingCategory, SignWritingSymbolGroup } from "../../../src/phonemes/sign/sign-writing";
 
 export type Range = {
     min: number,

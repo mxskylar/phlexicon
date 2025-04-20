@@ -1,8 +1,8 @@
 import * as os from 'os';
-import { DataParser, DataType, DataWarning } from "./data-parser";
-import { getJsonData, getSeperatedValueData } from "./parse-utils";
-import { SignDialect } from "../../src/phonemes/sign/sign-dialect";
-import { SIGN_DIALECTS_TABLE } from "../../src/db/tables";
+import { DataParser, DataType, DataWarning } from "../data-parser";
+import { getJsonData, getSeperatedValueData } from "../parse-utils";
+import { SignDialect } from "../../../src/phonemes/sign/sign-dialect";
+import { SIGN_DIALECTS_TABLE } from "../../../src/db/tables";
 
 type Dictionary = {
     name: string,

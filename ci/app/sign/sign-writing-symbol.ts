@@ -1,5 +1,5 @@
 import opentype from 'opentype.js';
-import { SignWritingBaseSymbol, SignWritingCategory, SignWritingSymbolGroup } from '../../src/phonemes/sign/sign-writing';
+import { SignWritingBaseSymbol, SignWritingCategory, SignWritingSymbolGroup } from '../../../src/phonemes/sign/sign-writing';
 import { BASE_SYMBOL_RANGES, CATEGORY_RANGES, FontSection, inRange, SYMBOL_GROUP_RANGES } from './sign-writing-font';
 
 export class SignWritingSymbol {

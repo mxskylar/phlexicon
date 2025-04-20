@@ -1,5 +1,5 @@
-import { DataParser, DataWarning } from "./data-parser";
-import { getJsonData } from "./parse-utils";
+import { DataParser, DataWarning } from "../data-parser";
+import { getJsonData } from "../parse-utils";
 import { SignWritingSymbol } from "./sign-writing-symbol";
 
 type RawAlphabetData = {

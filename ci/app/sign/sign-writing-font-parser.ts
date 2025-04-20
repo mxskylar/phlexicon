@@ -1,10 +1,10 @@
 import * as fs from 'fs';
 import opentype from 'opentype.js';
-import { BODY_TABLE, DYNAMICS_TABLE, HANDS_TABLE, HEAD_AND_FACES_TABLE, MOVEMENT_TABLE } from '../../src/db/tables';
-import { CLOCKWISE_FINGER_DIRECTIONS, COUNTER_CLOCKWISE_FINGER_DIRECTIONS, Hand, PALM_DIRECTIONS } from '../../src/phonemes/sign/hand';
-import { SignWritingCategory } from "../../src/phonemes/sign/sign-writing";
-import { DataParser, DataType, DataWarning } from "./data-parser";
-import { getPercent, sortAscending } from "./parse-utils";
+import { BODY_TABLE, DYNAMICS_TABLE, HANDS_TABLE, HEAD_AND_FACES_TABLE, MOVEMENT_TABLE } from '../../../src/db/tables';
+import { CLOCKWISE_FINGER_DIRECTIONS, COUNTER_CLOCKWISE_FINGER_DIRECTIONS, Hand, PALM_DIRECTIONS } from '../../../src/phonemes/sign/hand';
+import { SignWritingCategory } from "../../../src/phonemes/sign/sign-writing";
+import { DataParser, DataType, DataWarning } from "../data-parser";
+import { getPercent, sortAscending } from "../parse-utils";
 import { SignWritingSymbol } from './sign-writing-symbol';
 
 type ParsedSymbol = {

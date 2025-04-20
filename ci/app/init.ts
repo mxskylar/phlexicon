@@ -25,11 +25,11 @@ import {
     UNZIPPED_PBASE_FILES_DIR
 } from '../postinstall/constants';
 import { recreateDirectory } from '../utils';
-import { IpaParser } from './ipa-parser';
-import { SignDialectParser } from './sign-dialect-parser';
-import { SpokenDialectParser } from './spoken-dialect-parser';
-import { SignWritingFontParser } from './sign-writing-font-parser';
-import { SignPhonemeParser } from './sign-phoneme-parser';
+import { IpaParser } from './spoken/ipa-parser';
+import { SignDialectParser } from './sign/sign-dialect-parser';
+import { SpokenDialectParser } from './spoken/spoken-dialect-parser';
+import { SignWritingFontParser } from './sign/sign-writing-font-parser';
+import { SignPhonemeParser } from './sign/sign-phoneme-parser';
 
 // STEP 1: Prep the build directory
 recreateDirectory(BUILD_DIR);
