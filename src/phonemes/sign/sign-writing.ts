@@ -19,6 +19,7 @@ export enum SignWritingCategory {
 };
 
 export enum SignWritingSymbolGroup {
+    // HANDS
     INDEX = "񀀁",
     INDEX_MIDDLE = "񀕁",
     INDEX_MIDDLE_THUMB = "񀭁",
@@ -29,9 +30,29 @@ export enum SignWritingSymbolGroup {
     MIDDLE_FINGER = "񄗁",
     INDEX_THUMB = "񄳡",
     THUMB = "񅯡",
+    // MOVEMENT
+    CONTACT = "񆇡",
+    FINGER_MOVEMENT = "񆡁",
+    STRAIGHT_WALL_PLANE = "񆿁",
+    STRAIGHT_DIAGONAL_PLANE = "񇿡",
+    STRAIGHT_FLOOR_PLANE = "񈗡",
+    CURVES_PARALLEL_WALL_PLANE = "񉌁",
+    CURVES_HIT_WALL_PLANE = "񉹁",
+    CURVES_HIT_FLOOR_PLANE = "񊒡",
+    CURVES_PARALLEL_FLOOR_PLANE = "񊿡",
+    CIRCLES = "񋔡",
+    // DYNAMICS
+    // HEAD & FACES
+    // BODY
 };
 
 export enum SignWritingBaseSymbol {
+    // HANDS
+    // Index
     INDEX = "񀀁",
     INDEX_ON_CIRCLE = "񀁱",
+    // MOVEMENT
+    // DYNAMICS
+    // HEAD & FACES
+    // BODY
 };
