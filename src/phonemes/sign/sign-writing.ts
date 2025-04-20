@@ -12,18 +12,18 @@ export type SignWritingSymbol = {
 
 export enum SignWritingCategory {
     HANDS = "Hands",
-    //MOVEMENT = "Movement",
-    //DYNAMICS = "Dynamics",
-    //HEAD_AND_FACES = "Head & Faces",
-    //BODY = "Body",
+    MOVEMENT = "Movement",
+    DYNAMICS = "Dynamics",
+    HEAD_AND_FACES = "Head & Faces",
+    BODY = "Body",
 };
 
 export enum SignWritingSymbolGroup {
     INDEX = "񀀁",
-    //INDEX_MIDDLE = "񀕁",
+    INDEX_MIDDLE = "񀕁",
 };
 
 export enum SignWritingBaseSymbol {
     INDEX = "񀀁",
-    //INDEX_ON_CIRCLE = "񀁱",
+    INDEX_ON_CIRCLE = "񀁱",
 };

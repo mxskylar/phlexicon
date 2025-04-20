@@ -24,6 +24,22 @@ export const CATEGORY_RANGES: FontSection<SignWritingCategory>[] = [
         name: SignWritingCategory.HANDS,
         range: {min: 0x10000, max: 0x2041f},
     },
+    {
+        name: SignWritingCategory.MOVEMENT,
+        range: {min: 0x20500, max: 0x2f657},
+    },
+    {
+        name: SignWritingCategory.DYNAMICS,
+        range: {min: 0x2f700, max: 0x2fe07},
+    },
+    {
+        name: SignWritingCategory.HEAD_AND_FACES,
+        range: {min: 0x2ff00, max: 0x36c30},
+    },
+    {
+        name: SignWritingCategory.BODY,
+        range: {min: 0x36d00, max: 0x37e5f},
+    },
 ];
 
 export const SYMBOL_GROUP_RANGES: FontSection<SignWritingSymbolGroup>[] = [
