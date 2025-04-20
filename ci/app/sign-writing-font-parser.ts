@@ -7,17 +7,6 @@ import { getJsonData, getPercent, sortAscending } from "./parse-utils";
 import { SignWritingFontSymbol } from './sign-writing-font-glyph';
 import { BODY_TABLE, DYNAMICS_TABLE, HANDS_TABLE, HEAD_AND_FACES_TABLE, MOVEMENT_TABLE } from '../../src/db/tables';
 
-type RawAlphabetData = {
-    name: string,
-    "last-modified": string,
-    data: {[index: string]: string[]}
-};
-
-type Alphabet = {
-    dialectId: string,
-    symbolTree: {[index: string]: string[]}
-};
-
 type ParsedSymbol = {
     glyph: opentype.Glyph,
     character: string | null,
@@ -26,30 +15,45 @@ type ParsedSymbol = {
 
 export class SignWritingFontParser implements DataParser {
     warnings: DataWarning[] = [];
-    private alphabets: Alphabet[] = [];
-    private symbols: SignWritingFontSymbol[] = [];
+    symbols: SignWritingFontSymbol[] = [];
 
-    constructor(
-        alphabetFilePath: string,
-        dictNameDialectIdMap: {[index: string]: string},
-        fontFilePath: string
-    ) {
-        this.setAlphabets(alphabetFilePath, dictNameDialectIdMap);
-        this.setSymbols(fontFilePath);
-    }
+    constructor(filePath: string) {
+        console.log(`Parsing: ${filePath}`);
+        const font = this.getFont(filePath);
+        const parsedSymbolsBestEffort = Object.values(font.glyphs.glyphs)
+            .map(glyph => this.getSymbolBestEffort(glyph));
+        const parsedSymbols = parsedSymbolsBestEffort.filter(symbol => symbol.character);
+        // Log warning if not able to get numbers and unicode characters for too many glyphs
+        const numGlyphs = parsedSymbolsBestEffort.length;
+        const numNotFound = numGlyphs - parsedSymbols.length;
+        const percentCharsRetrieved = getPercent(numNotFound, numGlyphs);
+        console.log(`=> Retrieved number and unicode characters for ${100 - percentCharsRetrieved}% (${numGlyphs - numNotFound}/${numGlyphs}) of SignWriting font glyphs`);
+        const MAX_PERCENT_SYMBOLS_NOT_PARSED = 2;
+        if (percentCharsRetrieved > MAX_PERCENT_SYMBOLS_NOT_PARSED) {
+            this.warnings.push({
+                dataName: [
+                    HANDS_TABLE.name,
+                    MOVEMENT_TABLE.name,
+                    DYNAMICS_TABLE.name,
+                    HEAD_AND_FACES_TABLE.name,
+                    BODY_TABLE.name,
+                ].join(", "),
+                dataType: DataType.TABLE,
+                message: `Unable to parse number or unicode characters for more than ${MAX_PERCENT_SYMBOLS_NOT_PARSED}% of SignWriting font glyphs`
+            })
+        } 
 
-    private setAlphabets(
-        alphabetFilePath: string,
-        dictNameDialectIdMap: {[index: string]: string}
-    ): void {
-        console.log(`Parsing: ${alphabetFilePath}`);
-        const rawAlphabetData: RawAlphabetData[] = getJsonData(alphabetFilePath);
-        rawAlphabetData.forEach(alphabet => {
-            this.alphabets.push({
-                dialectId: dictNameDialectIdMap[alphabet.name],
-                symbolTree: alphabet.data
-            });
+        parsedSymbols.forEach(symbol => {
+            this.symbols.push(new SignWritingFontSymbol(
+                symbol.glyph,
+                symbol.character as string,
+                symbol.number as number
+            ));
         });
+        // TODO: Verify that the category, symbol group, & base symbol was determined for ALL symbols
+
+        // Sort symbols by glyph index
+        this.symbols.sort((a, b) => sortAscending(a.glyph.index, b.glyph.index));
     }
 
     private getFont(fontFilePath: string): opentype.Font {
@@ -89,45 +93,6 @@ export class SignWritingFontParser implements DataParser {
             character: this.getUnicodeCharacter(glyph),
             number: this.getGlyphNumber(glyph),
         }
-    }
-
-    private setSymbols(fontFilePath: string): void {
-        console.log(`Parsing: ${fontFilePath}`);
-        const font = this.getFont(fontFilePath);
-        const parsedSymbolsBestEffort = Object.values(font.glyphs.glyphs)
-            .map(glyph => this.getSymbolBestEffort(glyph));
-        const parsedSymbols = parsedSymbolsBestEffort.filter(symbol => symbol.character);
-        // Log warning if not able to get numbers and unicode characters for too many glyphs
-        const numGlyphs = parsedSymbolsBestEffort.length;
-        const numNotFound = numGlyphs - parsedSymbols.length;
-        const percentCharsRetrieved = getPercent(numNotFound, numGlyphs);
-        console.log(`=> Retrieved number and unicode characters for ${100 - percentCharsRetrieved}% (${numGlyphs - numNotFound}/${numGlyphs}) of SignWriting font glyphs`);
-        const MAX_PERCENT_SYMBOLS_NOT_PARSED = 2;
-        if (percentCharsRetrieved > MAX_PERCENT_SYMBOLS_NOT_PARSED) {
-            this.warnings.push({
-                dataName: [
-                    HANDS_TABLE.name,
-                    MOVEMENT_TABLE.name,
-                    DYNAMICS_TABLE.name,
-                    HEAD_AND_FACES_TABLE.name,
-                    BODY_TABLE.name,
-                ].join(", "),
-                dataType: DataType.TABLE,
-                message: `Unable to parse number or unicode characters for more than ${MAX_PERCENT_SYMBOLS_NOT_PARSED}% of SignWriting font glyphs`
-            })
-        } 
-
-        parsedSymbols.forEach(symbol => {
-            this.symbols.push(new SignWritingFontSymbol(
-                symbol.glyph,
-                symbol.character as string,
-                symbol.number as number
-            ));
-        });
-        // TODO: Verify that the category, symbol group, & base symbol was determined for ALL symbols
-
-        // Sort symbols by glyph index
-        this.symbols.sort((a, b) => sortAscending(a.glyph.index, b.glyph.index));
     }
 
     // https://www.signbank.org/iswa/cat_1.html

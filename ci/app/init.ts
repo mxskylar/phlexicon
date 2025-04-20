@@ -28,6 +28,8 @@ import { recreateDirectory } from '../utils';
 import { IpaParser } from './ipa-parser';
 import { SignDialectParser } from './sign-dialect-parser';
 import { SpokenDialectParser } from './spoken-dialect-parser';
+import { SignWritingFontParser } from './sign-writing-font-parser';
+import { SignPhonemeParser } from './sign-phoneme-parser';
 
 // STEP 1: Prep the build directory
 recreateDirectory(BUILD_DIR);
@@ -56,7 +58,6 @@ db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenDialectParser.getDialectPhone
 
 // IPA Symbols
 const ipaParser = new IpaParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`);
-
 db.createTable(OTHER_IPA_SYMBOLS_TABLE);
 db.insertRows(OTHER_IPA_SYMBOLS_TABLE, ipaParser.getOtherSymbols());
 
@@ -74,11 +75,9 @@ const signDialectParser = new SignDialectParser(
 db.createTable(SIGN_DIALECTS_TABLE);
 db.insertRows(SIGN_DIALECTS_TABLE, signDialectParser.getDialects());
 
-const signWritingFontParser = signDialectParser.getSignWritingFontParser(
-    SIGN_WRITING_ALPHABETS_FILE_PATH,
+const signWritingFontParser = new SignWritingFontParser(
     `${INSTALLED_RESOURCES_DIR}/${SIGN_WRITING_FONT_FILE}`
 );
-
 db.createTable(HANDS_TABLE);
 //console.log(signWritingFontParser.getHands());
 
@@ -90,6 +89,11 @@ db.createTable(HEAD_AND_FACES_TABLE);
 
 db.createTable(BODY_TABLE);
 
+const signPhonemeParser = new SignPhonemeParser(
+    signWritingFontParser.symbols,
+    signDialectParser.getDictionaryDialectIdMap(),
+    SIGN_WRITING_ALPHABETS_FILE_PATH
+)
 db.createTable(SIGN_DIALECT_PHONEMES_TABLE);
 
 // STEP 3: Close the database and check for warnings

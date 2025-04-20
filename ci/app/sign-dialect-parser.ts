@@ -88,14 +88,11 @@ export class SignDialectParser implements DataParser {
         });
     }
 
-    public getSignWritingFontParser(
-        alphabetFilePath: string,
-        fontFilePath: string,
-    ): SignWritingFontParser {
+    public getDictionaryDialectIdMap(): {[index: string]: string} {
         const dictNameDialectIdMap = {};
         this.dictionaries.forEach(dict => {
             dictNameDialectIdMap[dict.name] = dict.dialectId;
         });
-        return new SignWritingFontParser(alphabetFilePath, dictNameDialectIdMap, fontFilePath);
+        return dictNameDialectIdMap;
     }
 }
