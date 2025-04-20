@@ -47,6 +47,8 @@ export enum SignWritingBaseSymbol {
     // Index
     INDEX = "񀀁",
     INDEX_ON_CIRCLE = "񀁱",
+    // Thumb
+    FIST_HEEL = "񆆑",
     // MOVEMENT
     // DYNAMICS
     // HEAD & FACES

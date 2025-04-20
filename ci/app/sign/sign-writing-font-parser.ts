@@ -1,10 +1,10 @@
 import * as fs from 'fs';
 import opentype from 'opentype.js';
 import { BODY_TABLE, DYNAMICS_TABLE, HANDS_TABLE, HEAD_AND_FACES_TABLE, MOVEMENT_TABLE } from '../../../src/db/tables';
-import { CLOCKWISE_FINGER_DIRECTIONS, COUNTER_CLOCKWISE_FINGER_DIRECTIONS, Hand, PALM_DIRECTIONS } from '../../../src/phonemes/sign/hand';
-import { SignWritingCategory } from "../../../src/phonemes/sign/sign-writing";
+import { CLOCKWISE_FINGER_DIRECTIONS, COUNTER_CLOCKWISE_FINGER_DIRECTIONS, Hand, PALM_DIRECTIONS, PalmDirection } from '../../../src/phonemes/sign/hand';
+import { SignWritingBaseSymbol, SignWritingCategory } from "../../../src/phonemes/sign/sign-writing";
 import { DataParser, DataType, DataWarning } from "../data-parser";
-import { getPercent, sortAscending } from "../parse-utils";
+import { getPercent, getUniqueValues, sortAscending } from "../parse-utils";
 import { SignWritingSymbol } from './sign-writing-symbol';
 
 type ParsedSymbol = {
@@ -97,49 +97,68 @@ export class SignWritingFontParser implements DataParser {
         return this.symbols.filter(symbol => symbol.category === category);
     }
 
+    private getBaseSymbols(symbols: SignWritingSymbol[]): string[] {
+        return getUniqueValues(symbols.map(symbol => symbol.baseSymbol));
+    }
+
+    private getSymbolsWithBaseSymbol(
+        symbols: SignWritingSymbol[],
+        baseSymbol: string,
+        numExpected: number,
+    ): SignWritingSymbol[] {
+        const filteredSymbols = symbols.filter(symbol => symbol.baseSymbol === baseSymbol);
+        const numFound = filteredSymbols.length;
+        if (numFound !== numExpected) {
+            throw new Error(
+                `Found ${numFound} symbols with the base symbol ${baseSymbol} but expected ${numExpected}`
+            );
+        }
+        return filteredSymbols;
+    }
+
     // https://www.signbank.org/iswa/cat_1.html
     public getHands(): Hand[] {
-        const symbols = this.getSymbolsWithCategory(SignWritingCategory.HANDS);
+        const handSymbols = this.getSymbolsWithCategory(SignWritingCategory.HANDS);
+        const baseSymbols = this.getBaseSymbols(handSymbols);
         const hands: Hand[] = [];
-        let i = 0;
-        while (i < symbols.length) {
-            const nextHandshape = i + 96;
+        baseSymbols.forEach(baseSymbol => {
+            // Fist Heel is the only handshape with a different pattern
+            // https://www.signbank.org/iswa/204/204_bs.html
+            const isFistHeel = baseSymbol === SignWritingBaseSymbol.FIST_HEEL;
+            const symbols = this.getSymbolsWithBaseSymbol(
+                handSymbols,
+                baseSymbol,
+                isFistHeel ? 16 : 96
+            );
+            let isRightHanded = true;
+            let fingerDirections = COUNTER_CLOCKWISE_FINGER_DIRECTIONS;
             let p = 0;
-            // TODO: Use range constants while they are ready rather than
-            // assuming that handshapes are always 96 characters apart
-            while (i < nextHandshape) {
-                // TODO: Add verification that there are exactly 16 more characters when starting
-                const nextPalmDirection = i + 16;
-                let fingerDirections = COUNTER_CLOCKWISE_FINGER_DIRECTIONS;
-                let isRightHanded = true;
-                while (i < nextPalmDirection) {
-                    // TODO: Add verification that there are exactly 8 more characters when starting
-                    const nextHand = i + 8;
-                    let f = 0;
-                    while (i < nextHand) {
-                        const symbol = symbols[i];
-                        hands.push({
-                            symbol: symbol.character,
-                            symbol_group: symbol.symbolGroup,
-                            base_symbol: symbol.baseSymbol,
-                            palm_direction: PALM_DIRECTIONS[p],
-                            finger_direction: fingerDirections[f],
-                            is_right_handed: isRightHanded,
-                        });
-                        f++;
-                        i++;
-                    }
+            const numIterationsMade = (i: number, n: number): boolean =>
+                i > 0 && i % n === 0;
+            symbols.forEach((symbol, i) => {
+                // Switches every 8 characters
+                if (numIterationsMade(i, 8)) {
+                    isRightHanded = !isRightHanded;
                     fingerDirections = CLOCKWISE_FINGER_DIRECTIONS;
-                    isRightHanded = false;
                 }
-                p++;
-                // This extra check is necessary because the last handshape
-                // does not have 96 characters: https://www.signbank.org/iswa/204/204_bs.html
-                if (i >= symbols.length) {
-                    break;
+                // Starts at beginning of list every 8 characters
+                const fingerDirection = fingerDirections[i % 8];
+                if (numIterationsMade(i, 16)) {
+                    p++;
                 }
-            }
-        }
+                const palmDirection = isFistHeel
+                    ? PalmDirection.TOP_VIEW_UP
+                    : PALM_DIRECTIONS[p];
+                hands.push({
+                    symbol: symbol.character,
+                    symbol_group: symbol.symbolGroup,
+                    base_symbol: symbol.baseSymbol,
+                    palm_direction: palmDirection,
+                    finger_direction: fingerDirection,
+                    is_right_handed: isRightHanded,
+                });
+            });
+        });
         return hands;
     }
 }
