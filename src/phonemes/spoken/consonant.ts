@@ -3,7 +3,6 @@
  * https://en.wikipedia.org/wiki/IPA_consonant_chart_with_audio
  */
 
-import { SYMBOL_COLUMN_NAME } from "../phoneme.ts";
 import { SpokenPhonemeAttributes } from "./spoken-phoneme.ts";
 
 export enum ConsonantAttribute {
@@ -37,7 +36,7 @@ export enum ConsonantAttribute {
 };
 
 export type Consonant = {
-    [SYMBOL_COLUMN_NAME]: string,
+    symbol: string,
     // Place (X-Axis)
     [ConsonantAttribute.BILABIAL]: string,
     [ConsonantAttribute.LABIODENTAL]: string,
