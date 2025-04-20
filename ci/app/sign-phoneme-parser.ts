@@ -14,7 +14,7 @@ type Alphabet = {
 };
 
 export class SignPhonemeParser implements DataParser {
-    warnings: DataWarning[];
+    warnings: DataWarning[] = [];
     private symbols: SignWritingFontSymbol[];
     private alphabets: Alphabet[] = [];
 
