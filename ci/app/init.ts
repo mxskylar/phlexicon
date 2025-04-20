@@ -109,7 +109,8 @@ const dataWarnings = [
     ...spokenDialectParser.warnings,
     ...ipaParser.warnings,
     ...signDialectParser.warnings,
-    ...signWritingFontParser.warnings
+    ...signWritingFontParser.warnings,
+    ...signPhonemeParser.warnings,
 ];
 if (dataWarnings.length > 0) {
     console.log("Warnings found for the following data...");
