@@ -6,10 +6,6 @@
  * https://www.signbank.org/iswa/
  */
 
-export type SignWritingSymbol = {
-    symbol: string
-};
-
 export enum SignWritingCategory {
     HANDS = "Hands",
     MOVEMENT = "Movement",

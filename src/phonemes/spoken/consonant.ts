@@ -3,8 +3,6 @@
  * https://en.wikipedia.org/wiki/IPA_consonant_chart_with_audio
  */
 
-import { SpokenPhonemeAttributes } from "./spoken-phoneme.ts";
-
 export enum ConsonantAttribute {
     // Place (X-Axis)
     BILABIAL = "bilabial",
@@ -64,42 +62,4 @@ export type Consonant = {
     [ConsonantAttribute.CLICK]: string,
     // Movement
     [ConsonantAttribute.GLIDE]: string
-};
-
-export const CONSONANT_ATTRIBUTES: SpokenPhonemeAttributes = {
-    xAxis: {
-        attributes: [
-            ConsonantAttribute.BILABIAL,
-            ConsonantAttribute.LABIODENTAL,
-            ConsonantAttribute.DENTAL,
-            ConsonantAttribute.ALVEOLAR,
-            ConsonantAttribute.POSTALVEOLAR,
-            ConsonantAttribute.RETROFLEX,
-            ConsonantAttribute.PALATAL,
-            ConsonantAttribute.VELAR,
-            ConsonantAttribute.UVULAR,
-            ConsonantAttribute.PHARYNGEAL,
-            ConsonantAttribute.EPIGLOTTAL,
-            ConsonantAttribute.GLOTTAL
-        ],
-        otherAttributes: []
-    },
-    yAxis: {
-        attributes: [
-            ConsonantAttribute.NASAL,
-            ConsonantAttribute.AFFRICATE,
-            ConsonantAttribute.FRICATIVE,
-            ConsonantAttribute.APPROXIMANT,
-            ConsonantAttribute.LATERAL_APPROXIMANT,
-            ConsonantAttribute.FLAP,
-            ConsonantAttribute.TRILL,
-            ConsonantAttribute.IMPLOSIVE,
-            ConsonantAttribute.STOP,
-            ConsonantAttribute.LATERAL_STOP,
-            ConsonantAttribute.CLICK
-        ],
-        otherAttributes: [
-            ConsonantAttribute.GLIDE
-        ]
-    }
 };

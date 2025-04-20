@@ -1,10 +1,12 @@
 import * as os from 'os';
-import { Consonant, CONSONANT_ATTRIBUTES, ConsonantAttribute } from "../../../src/phonemes/spoken/consonant";
-import { Vowel, VOWEL_ATTRIBUTES, VowelAttribute } from "../../../src/phonemes/spoken/vowel";
+import { Consonant, ConsonantAttribute } from "../../../src/phonemes/spoken/consonant";
+import { Vowel, VowelAttribute } from "../../../src/phonemes/spoken/vowel";
 import { DataParser, DataType, DataWarning } from '../data-parser';
 import { getSeperatedValueData, getUniqueValues, getPercent } from "../parse-utils";
 import { CONSONANTS_TABLE, VOWELS_TABLE } from '../../../src/db/tables';
 import { IpaSymbol } from "../../../src/phonemes/spoken/ipa-symbol"
+import { CONSONANT_ATTRIBUTES } from './consonant';
+import { VOWEL_ATTRIBUTES } from './vowels';
 
 enum PhonemeName {
     VOWEL = "vowel",

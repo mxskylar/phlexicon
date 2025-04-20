@@ -10,8 +10,6 @@
  *  - Y-Axis: How the vowel may move up or down the axis, e.g. how it may glide
  */
 
-import { SpokenPhonemeAttributes } from "./spoken-phoneme.ts";
-
 export enum VowelAttribute {
     // X-AXIS
     FRONT = "front",
@@ -53,31 +51,4 @@ export type Vowel = {
     [VowelAttribute.OPEN]: boolean,
     // Movement
     [VowelAttribute.GLIDE]: boolean
-};
-
-export const VOWEL_ATTRIBUTES: SpokenPhonemeAttributes = {
-    xAxis: {
-        attributes: [
-            VowelAttribute.FRONT,
-            VowelAttribute.CENTRAL,
-            VowelAttribute.BACK
-        ],
-        otherAttributes: [
-            VowelAttribute.ROUNDED,
-            VowelAttribute.PALATAL,
-            VowelAttribute.LABIOVELAR
-        ]
-    },
-    yAxis: {
-        attributes: [
-            VowelAttribute.CLOSE,
-            VowelAttribute.NEAR_CLOSE,
-            VowelAttribute.CLOSE_MID,
-            VowelAttribute.MID,
-            VowelAttribute.OPEN_MID,
-            VowelAttribute.NEAR_OPEN,
-            VowelAttribute.OPEN
-        ],
-        otherAttributes: [VowelAttribute.GLIDE]
-    }
 };
