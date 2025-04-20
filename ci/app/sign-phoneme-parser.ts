@@ -1,6 +1,6 @@
 import { DataParser, DataWarning } from "./data-parser";
 import { getJsonData } from "./parse-utils";
-import { SignWritingFontSymbol } from "./sign-writing-font-glyph";
+import { SignWritingSymbol } from "./sign-writing-symbol";
 
 type RawAlphabetData = {
     name: string,
@@ -15,11 +15,11 @@ type Alphabet = {
 
 export class SignPhonemeParser implements DataParser {
     warnings: DataWarning[] = [];
-    private symbols: SignWritingFontSymbol[];
+    private symbols: SignWritingSymbol[];
     private alphabets: Alphabet[] = [];
 
     constructor(
-        symbols: SignWritingFontSymbol[],
+        symbols: SignWritingSymbol[],
         dictNameDialectIdMap: {[index: string]: string},
         filePath: string,
     ) {

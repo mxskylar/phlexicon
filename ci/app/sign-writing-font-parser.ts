@@ -5,7 +5,7 @@ import { CLOCKWISE_FINGER_DIRECTIONS, COUNTER_CLOCKWISE_FINGER_DIRECTIONS, Hand,
 import { SignWritingCategory } from "../../src/phonemes/sign/sign-writing";
 import { DataParser, DataType, DataWarning } from "./data-parser";
 import { getPercent, sortAscending } from "./parse-utils";
-import { SignWritingFontSymbol } from './sign-writing-font-glyph';
+import { SignWritingSymbol } from './sign-writing-symbol';
 
 type ParsedSymbol = {
     glyph: opentype.Glyph,
@@ -15,7 +15,7 @@ type ParsedSymbol = {
 
 export class SignWritingFontParser implements DataParser {
     warnings: DataWarning[] = [];
-    symbols: SignWritingFontSymbol[] = [];
+    symbols: SignWritingSymbol[] = [];
 
     constructor(filePath: string) {
         console.log(`Parsing: ${filePath}`);
@@ -44,7 +44,7 @@ export class SignWritingFontParser implements DataParser {
         } 
 
         parsedSymbols.forEach(symbol => {
-            this.symbols.push(new SignWritingFontSymbol(
+            this.symbols.push(new SignWritingSymbol(
                 symbol.glyph,
                 symbol.character as string,
                 symbol.number as number
