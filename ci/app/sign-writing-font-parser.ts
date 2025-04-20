@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import opentype from 'opentype.js';
-import { CLOCKWISE_FINGER_DIRECTIONS, COUNTER_CLOCKWISE_FINGER_DIRECTIONS, Hand, PALM_DIRECTIONS } from '../../src/phonemes/sign/hand';
-import { SignWritingCategory, SignWritingSymbol } from "../../src/phonemes/sign/sign-writing";
-import { DataParser, DataType, DataWarning } from "./data-parser";
-import { getJsonData, getPercent, sortAscending } from "./parse-utils";
-import { SignWritingFontSymbol } from './sign-writing-font-glyph';
 import { BODY_TABLE, DYNAMICS_TABLE, HANDS_TABLE, HEAD_AND_FACES_TABLE, MOVEMENT_TABLE } from '../../src/db/tables';
+import { CLOCKWISE_FINGER_DIRECTIONS, COUNTER_CLOCKWISE_FINGER_DIRECTIONS, Hand, PALM_DIRECTIONS } from '../../src/phonemes/sign/hand';
+import { SignWritingCategory } from "../../src/phonemes/sign/sign-writing";
+import { DataParser, DataType, DataWarning } from "./data-parser";
+import { getPercent, sortAscending } from "./parse-utils";
+import { SignWritingFontSymbol } from './sign-writing-font-glyph';
 
 type ParsedSymbol = {
     glyph: opentype.Glyph,
