@@ -131,7 +131,6 @@ export class SignWritingFontParser implements DataParser {
                 isFistHeel ? 16 : 96
             );
             let isRightHanded = true;
-            let fingerDirections = COUNTER_CLOCKWISE_FINGER_DIRECTIONS;
             let p = 0;
             const numIterationsMade = (i: number, n: number): boolean =>
                 i > 0 && i % n === 0;
@@ -139,16 +138,22 @@ export class SignWritingFontParser implements DataParser {
                 // Switches every 8 characters
                 if (numIterationsMade(i, 8)) {
                     isRightHanded = !isRightHanded;
-                    fingerDirections = CLOCKWISE_FINGER_DIRECTIONS;
                 }
+                const fingerDirections = isRightHanded
+                    ? COUNTER_CLOCKWISE_FINGER_DIRECTIONS
+                    : CLOCKWISE_FINGER_DIRECTIONS;
+                
                 // Starts at beginning of list every 8 characters
                 const fingerDirection = fingerDirections[i % 8];
+
+                // Switches every 6 characters
                 if (numIterationsMade(i, 16)) {
                     p++;
                 }
                 const palmDirection = isFistHeel
                     ? PalmDirection.TOP_VIEW_UP
                     : PALM_DIRECTIONS[p];
+                                        
                 hands.push({
                     symbol: symbol.character,
                     symbol_group: symbol.symbolGroup,
