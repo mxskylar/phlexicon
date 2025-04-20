@@ -142,10 +142,6 @@ export class SignWritingFontParser implements DataParser {
                 const fingerDirections = isRightHanded
                     ? COUNTER_CLOCKWISE_FINGER_DIRECTIONS
                     : CLOCKWISE_FINGER_DIRECTIONS;
-                
-                // Starts at beginning of list every 8 characters
-                const fingerDirection = fingerDirections[i % 8];
-
                 // Switches every 6 characters
                 if (numIterationsMade(i, 16)) {
                     p++;
@@ -153,13 +149,13 @@ export class SignWritingFontParser implements DataParser {
                 const palmDirection = isFistHeel
                     ? PalmDirection.TOP_VIEW_UP
                     : PALM_DIRECTIONS[p];
-                                        
                 hands.push({
                     symbol: symbol.character,
                     symbol_group: symbol.symbolGroup,
                     base_symbol: symbol.baseSymbol,
                     palm_direction: palmDirection,
-                    finger_direction: fingerDirection,
+                    // Starts at beginning of list every 8 characters
+                    finger_direction: fingerDirections[i % 8],
                     is_right_handed: isRightHanded,
                 });
             });
