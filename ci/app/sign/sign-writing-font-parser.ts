@@ -42,18 +42,16 @@ export class SignWritingFontParser implements DataParser {
                 message: `Unable to parse number or unicode characters for more than ${MAX_PERCENT_SYMBOLS_NOT_PARSED}% of SignWriting font glyphs`
             })
         } 
-
-        parsedSymbols.forEach(symbol => {
-            this.symbols.push(new SignWritingSymbol(
-                symbol.glyph,
-                symbol.character as string,
-                symbol.number as number
-            ));
+        // Identify category, symbol group, & base symbols
+        const symbolsBestEfort = parsedSymbols.map(symbol => {
+            return new SignWritingSymbol(symbol.glyph, symbol.character as string, symbol.number as number);
         });
-        // TODO: Verify that the category, symbol group, & base symbol was determined for ALL symbols
-
+        this.symbols = symbolsBestEfort.filter(symbol =>
+            symbol.category && symbol.symbolGroup && symbol.baseSymbol
+        );
         // Sort symbols by glyph index
         this.symbols.sort((a, b) => sortAscending(a.glyph.index, b.glyph.index));
+        // TODO: Verify that the category, symbol group, & base symbol was determined for ALL symbols
     }
 
     private getFont(fontFilePath: string): opentype.Font {

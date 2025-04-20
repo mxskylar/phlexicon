@@ -9,6 +9,7 @@ import { Table } from "./table.ts";
 import { ForeignKey } from "./foreign-key.ts";
 import { VowelAttribute } from "../phonemes/spoken/vowel.ts";
 import { ConsonantAttribute } from "../phonemes/spoken/consonant.ts";
+import { FingerDirection, PalmDirection } from "../phonemes/sign/hand.ts";
 
 // SPOKEN DIALECTS
 const spokenDialectId = new LengthColumn("id", LengthType.CHAR, 4).primaryKey();
@@ -63,6 +64,13 @@ const SIGN_WRITING_SYMBOL_COLUMN = new LengthColumn("symbol", LengthType.CHAR, 1
 export const HANDS_TABLE = new Table(
     "hands",
     SIGN_WRITING_SYMBOL_COLUMN,
+    new BasicColumn("symbol_group", BasicType.STRING).required(),
+    new BasicColumn("base_symbol", BasicType.STRING).required(),
+    new BasicColumn("palm_direction", BasicType.STRING).required()
+        .check(`IN (${Object.values(PalmDirection).map(val => `"${val}"`).join(", ")})`),
+    new BasicColumn("finger_direction", BasicType.STRING).required()
+        .check(`IN (${Object.values(FingerDirection).map(val => `"${val}"`).join(", ")})`),
+    new BasicColumn("is_right_handed", BasicType.BOOLEAN).required(),
 );
 
 export const MOVEMENT_TABLE = new Table(

@@ -79,7 +79,7 @@ const signWritingFontParser = new SignWritingFontParser(
     `${INSTALLED_RESOURCES_DIR}/${SIGN_WRITING_FONT_FILE}`
 );
 db.createTable(HANDS_TABLE);
-//console.log(signWritingFontParser.getHands());
+db.insertRows(HANDS_TABLE, signWritingFontParser.getHands());
 
 db.createTable(MOVEMENT_TABLE);
 
