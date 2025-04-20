@@ -12,6 +12,8 @@ export enum SignWritingCategory {
     DYNAMICS = "Dynamics",
     HEAD_AND_FACES = "Head & Faces",
     BODY = "Body",
+    DETAILED_LOCATION = "Detailed Location",
+    PUNCTUATION = "Punctuation",
 };
 
 export enum SignWritingSymbolGroup {
