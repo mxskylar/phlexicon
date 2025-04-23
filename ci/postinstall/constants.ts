@@ -7,3 +7,6 @@ export const UNZIPPED_PBASE_FILES_DIR = "pbase";
 export const ISWA_FILE_PATH = `${INSTALLED_DATA_DIR}/iswa.json`;
 export const SIGN_WRITING_DICTIONARIES_FILE_PATH = `${INSTALLED_DATA_DIR}/sign-writing-dictionaries.json`;
 export const SIGN_WRITING_ALPHABETS_FILE_PATH = `${INSTALLED_DATA_DIR}/sign-writing-alphabets.json`;
+
+export const CUSTOM_DATA_DIR = "custom-data";
+// Exported from: https://docs.google.com/spreadsheets/d/1sSm0at0adMhk3PKhdvKmT_plLL1EmyYTm9-ZXtYN650/edit?usp=sharing

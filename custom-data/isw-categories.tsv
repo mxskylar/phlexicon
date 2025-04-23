@@ -1,0 +1,8 @@
+name	symbol_id	start_number
+Hands	01-01	0x10000
+Movement	02-01	0x20500
+Dynamics	03-01	0x2f700
+Heads & Faces	04-01	0x2ff00
+Body	05-01	0x36d00
+Detailed Locations	06-01	0x37f00
+Punctuation	07-01	0x38700
