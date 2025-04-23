@@ -63,42 +63,6 @@ export class SignWritingFontParser implements DataParser {
         this.symbols = this.getSymbols(fontFilePath);
     }
 
-    private getBlockName(symbolNumber: number, blocks: SignWritingBlock[]): string {
-        for (let i = blocks.length - 1; i >= 0; i--) {
-            const block = blocks[i];
-            if (symbolNumber >= block.startNumber) {
-                return block.name;
-            }
-        }
-        throw new Error(`No SignWriting font block found for symbol number ${symbolNumber}`);
-    }
-
-    private getBlockSymbol(symbols: string[], blockSymbols: string[]) {
-        for (const i in blockSymbols) {
-            const blockSymbol = blockSymbols[i];
-            if (symbols.includes(blockSymbol)) {
-                return blockSymbol;
-            }
-        }
-        throw new Error(`None of the block symbols ${blockSymbols.join(", ")} were found in block of symbols ${symbols.join(", ")}`);
-    }
-
-    private getBlockNameMap(
-        key: string,
-        parsedSymbols: PasrsedSymbol[],
-        blockSymbols: string[],
-    ): {[index: string]: string} {
-        const blockNameMap = {};
-        const names = getUniqueValues(parsedSymbols.map(parsedSymbol => parsedSymbol[key]));
-        names.forEach(name => {
-            const characters = parsedSymbols
-                .filter(parsedSymbol => parsedSymbol[key] === name)
-                .map(parsedSymbol => parsedSymbol.character);
-            blockNameMap[name] = this.getBlockSymbol(characters, blockSymbols);
-        });
-        return blockNameMap;
-    }
-
     private getSymbols(fontFilePath: string): SignWritingSymbol[]  {
         // PARSE GLYPHS
         const font = this.getFont(fontFilePath);
@@ -206,6 +170,42 @@ export class SignWritingFontParser implements DataParser {
             );
         }
         return filteredSymbols;
+    }
+
+    private getBlockName(symbolNumber: number, blocks: SignWritingBlock[]): string {
+        for (let i = blocks.length - 1; i >= 0; i--) {
+            const block = blocks[i];
+            if (symbolNumber >= block.startNumber) {
+                return block.name;
+            }
+        }
+        throw new Error(`No SignWriting font block found for symbol number ${symbolNumber}`);
+    }
+
+    private getBlockSymbol(symbols: string[], blockSymbols: string[]) {
+        for (const i in blockSymbols) {
+            const blockSymbol = blockSymbols[i];
+            if (symbols.includes(blockSymbol)) {
+                return blockSymbol;
+            }
+        }
+        throw new Error(`None of the block symbols ${blockSymbols.join(", ")} were found in block of symbols ${symbols.join(", ")}`);
+    }
+
+    private getBlockNameMap(
+        key: string,
+        parsedSymbols: PasrsedSymbol[],
+        blockSymbols: string[],
+    ): {[index: string]: string} {
+        const blockNameMap = {};
+        const names = getUniqueValues(parsedSymbols.map(parsedSymbol => parsedSymbol[key]));
+        names.forEach(name => {
+            const characters = parsedSymbols
+                .filter(parsedSymbol => parsedSymbol[key] === name)
+                .map(parsedSymbol => parsedSymbol.character);
+            blockNameMap[name] = this.getBlockSymbol(characters, blockSymbols);
+        });
+        return blockNameMap;
     }
 
     // https://www.signbank.org/iswa/cat_1.html
