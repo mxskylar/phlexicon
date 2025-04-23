@@ -1,4 +1,4 @@
-name	symbol_id	start_number
+name	symbolId	startNumber
 Index	01-01-001-01	0x10000
 Index on Circle	01-01-002-01	0x10100
 Index on Cup	01-01-003-01	0x10200

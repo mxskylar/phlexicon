@@ -1,4 +1,4 @@
-name	symbol_id	start_number
+name	symbolId	startNumber
 Index	01-01	0x10000
 Index Middle	01-02	0x10e00
 Index Middle Thumb	01-03	0x11e00
