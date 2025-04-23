@@ -7,7 +7,8 @@ import {
     DATA_DIR,
     ISO_FILE,
     SIGN_WRITING_ALPHABETS_FILE_PATH,
-    SIGN_WRITING_DICTIONARIES_FILE_PATH
+    SIGN_WRITING_DICTIONARIES_FILE_PATH,
+    ISWA_FILE_PATH
 } from './constants';
 
 const downloadFile = async (url: string, dir: string) => {
@@ -74,18 +75,28 @@ const getSignWritingDictionaries = async () => {
 };
 
 let numberFetchedAlphabets = 0;
-const getSignWritingAlphabet = (dictionary, totalAlphabets) => {
+const getSignWritingAlphabet = (dictionary, totalAlphabets = 1) => {
     const urlPath = `/dictionary/${dictionary}/alphabet?update=1`;
     const url = `${SIGN_PUDDLE_HOST}${urlPath}`;
     return fetch(url, {method: "GET"})
         .then(response => response.json())
         .then(responseData => {
-            numberFetchedAlphabets++;
-            console.log(`==> Fetched SignWriting alphabet ${numberFetchedAlphabets}/${totalAlphabets} from: ${url}`);
+            if (totalAlphabets > 1) {
+                numberFetchedAlphabets++;
+            }
+            const name = totalAlphabets > 1 ? `${numberFetchedAlphabets}/${totalAlphabets}` : dictionary;
+            console.log(`==> Fetched SignWriting alphabet ${name} from: ${url}`);
             return responseData
         });
 };
 
+// International SignWriting alphabet (all characters in all languages SignWriting supports)
+console.log("=> Fetching International SignWriting Alphabet...")
+fs.writeFileSync(ISWA_FILE_PATH, JSON.stringify(
+    await getSignWritingAlphabet("iswa-2010")
+));
+
+// SignWriting alphabets for specific languages
 const signWritingDictionaries = await getSignWritingDictionaries();
 fs.writeFileSync(SIGN_WRITING_DICTIONARIES_FILE_PATH, JSON.stringify(signWritingDictionaries));
 
