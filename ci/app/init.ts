@@ -15,6 +15,7 @@ import {
     DATA_DIR,
     INSTALLED_RESOURCES_DIR,
     ISO_FILE,
+    ISWA_FILE_PATH,
     SIGN_WRITING_ALPHABETS_FILE_PATH,
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
     SIGN_WRITING_FONT_FILE,
@@ -72,7 +73,8 @@ db.createTable(SIGN_DIALECTS_TABLE);
 db.insertRows(SIGN_DIALECTS_TABLE, signDialectParser.getDialects());
 
 const signWritingFontParser = new SignWritingFontParser(
-    `${INSTALLED_RESOURCES_DIR}/${SIGN_WRITING_FONT_FILE}`
+    `${INSTALLED_RESOURCES_DIR}/${SIGN_WRITING_FONT_FILE}`,
+    ISWA_FILE_PATH
 );
 db.createTable(HANDS_TABLE);
 db.insertRows(HANDS_TABLE, signWritingFontParser.getHands());

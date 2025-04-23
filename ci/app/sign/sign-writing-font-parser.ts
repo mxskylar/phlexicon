@@ -17,9 +17,9 @@ export class SignWritingFontParser implements DataParser {
     warnings: DataWarning[] = [];
     symbols: SignWritingSymbol[] = [];
 
-    constructor(filePath: string) {
-        console.log(`Parsing: ${filePath}`);
-        const font = this.getFont(filePath);
+    constructor(fontFilePath: string, iswaFilePath: string) {
+        console.log(`Parsing: ${fontFilePath}`);
+        const font = this.getFont(fontFilePath);
         const parsedSymbolsBestEffort = Object.values(font.glyphs.glyphs)
             .map(glyph => this.getSymbolBestEffort(glyph));
         const parsedSymbols = parsedSymbolsBestEffort.filter(symbol => symbol.character);
