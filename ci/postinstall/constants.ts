@@ -1,9 +1,9 @@
 export const INSTALLED_RESOURCES_DIR = "installed-resources";
 export const SIGN_WRITING_FONT_FILE = "SuttonSignWritingOneD.ttf";
 
-export const DATA_DIR = "data";
+export const INSTALLED_DATA_DIR = "installed-data";
 export const ISO_FILE = "iso-639-3.tab";
 export const UNZIPPED_PBASE_FILES_DIR = "pbase";
-export const ISWA_FILE_PATH = `${DATA_DIR}/iswa.json`;
-export const SIGN_WRITING_DICTIONARIES_FILE_PATH = `${DATA_DIR}/sign-writing-dictionaries.json`;
-export const SIGN_WRITING_ALPHABETS_FILE_PATH = `${DATA_DIR}/sign-writing-alphabets.json`;
+export const ISWA_FILE_PATH = `${INSTALLED_DATA_DIR}/iswa.json`;
+export const SIGN_WRITING_DICTIONARIES_FILE_PATH = `${INSTALLED_DATA_DIR}/sign-writing-dictionaries.json`;
+export const SIGN_WRITING_ALPHABETS_FILE_PATH = `${INSTALLED_DATA_DIR}/sign-writing-alphabets.json`;

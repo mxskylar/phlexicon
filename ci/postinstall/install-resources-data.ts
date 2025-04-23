@@ -4,7 +4,7 @@ import {recreateDirectory} from '../utils';
 import {
     INSTALLED_RESOURCES_DIR,
     SIGN_WRITING_FONT_FILE,
-    DATA_DIR,
+    INSTALLED_DATA_DIR,
     ISO_FILE,
     SIGN_WRITING_ALPHABETS_FILE_PATH,
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
@@ -38,15 +38,15 @@ await downloadFile("https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstr
 await downloadFile(`https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/${SIGN_WRITING_FONT_FILE}`, INSTALLED_RESOURCES_DIR);
 
 // RAW DB DATA
-recreateDirectory(DATA_DIR);
+recreateDirectory(INSTALLED_DATA_DIR);
 
 // ISO 639-3 Code Set: https://iso639-3.sil.org/code_tables/download_tables#639-3%20Code%20Set
-await downloadFile(`https://iso639-3.sil.org/sites/iso639-3/files/downloads/${ISO_FILE}`, DATA_DIR);
+await downloadFile(`https://iso639-3.sil.org/sites/iso639-3/files/downloads/${ISO_FILE}`, INSTALLED_DATA_DIR);
 
 // PBase data on spoken languages: https://pbase.phon.chass.ncsu.edu/
-await downloadFile("https://phon.chass.ncsu.edu/pbase/pbasefiles.zip", DATA_DIR);
-const pbaseZipFile = await new StreamZip.async({file: `${DATA_DIR}/pbasefiles.zip`});
-await pbaseZipFile.extract(null, DATA_DIR);
+await downloadFile("https://phon.chass.ncsu.edu/pbase/pbasefiles.zip", INSTALLED_DATA_DIR);
+const pbaseZipFile = await new StreamZip.async({file: `${INSTALLED_DATA_DIR}/pbasefiles.zip`});
+await pbaseZipFile.extract(null, INSTALLED_DATA_DIR);
 await pbaseZipFile.close();
 
 // SignPuddle API for SignWriting

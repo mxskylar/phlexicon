@@ -12,7 +12,7 @@ import {
     VOWELS_TABLE
 } from '../../src/db/tables';
 import {
-    DATA_DIR,
+    INSTALLED_DATA_DIR,
     INSTALLED_RESOURCES_DIR,
     ISO_FILE,
     ISWA_FILE_PATH,
@@ -46,7 +46,7 @@ const db = new Database(DATABASE_FILE_PATH);
 
 // STEP 2: Insert data into the database
 // SPOKEN DIALECTS
-const spokenDialectParser = new SpokenDialectParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`);
+const spokenDialectParser = new SpokenDialectParser(`${INSTALLED_DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/pb_languages.csv`);
 db.createTable(SPOKEN_DIALECTS_TABLE);
 db.insertRows(SPOKEN_DIALECTS_TABLE, spokenDialectParser.getDialects());
 
@@ -54,7 +54,7 @@ db.createTable(SPOKEN_DIALECT_PHONEMES_TABLE);
 db.insertRows(SPOKEN_DIALECT_PHONEMES_TABLE, spokenDialectParser.getDialectPhonemes());
 
 // IPA Symbols
-const ipaParser = new IpaParser(`${DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`);
+const ipaParser = new IpaParser(`${INSTALLED_DATA_DIR}/${UNZIPPED_PBASE_FILES_DIR}/seg_convert.csv`);
 db.createTable(OTHER_IPA_SYMBOLS_TABLE);
 db.insertRows(OTHER_IPA_SYMBOLS_TABLE, ipaParser.getOtherSymbols());
 
@@ -67,7 +67,7 @@ db.insertRows(CONSONANTS_TABLE, ipaParser.getConsonants());
 // SIGN DIALECTS
 const signDialectParser = new SignDialectParser(
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
-    `${DATA_DIR}/${ISO_FILE}`
+    `${INSTALLED_DATA_DIR}/${ISO_FILE}`
 );
 db.createTable(SIGN_DIALECTS_TABLE);
 db.insertRows(SIGN_DIALECTS_TABLE, signDialectParser.getDialects());
