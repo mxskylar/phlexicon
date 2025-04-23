@@ -1,8 +1,8 @@
 import { DataParser, DataWarning } from "../data-parser";
 import { getJsonData } from "../parse-utils";
-import { SignWritingSymbol } from "./sign-writing-symbol";
+import { SignWritingSymbol } from "./sign-writing-font-parser";
 
-type RawAlphabetData = {
+export type RawAlphabetData = {
     name: string,
     "last-modified": string,
     data: {[index: string]: string[]}

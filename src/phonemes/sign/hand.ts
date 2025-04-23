@@ -1,9 +1,6 @@
-import { SignWritingBaseSymbol, SignWritingSymbolGroup } from "./sign-writing.ts";
-
 export type Hand = {
     symbol: string,
-    symbol_group: SignWritingSymbolGroup,
-    base_symbol: SignWritingBaseSymbol,
+    handshape: string,
     palm_direction: PalmDirection,
     finger_direction: FingerDirection,
     is_right_handed: boolean,

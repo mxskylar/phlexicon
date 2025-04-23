@@ -61,11 +61,15 @@ export const SIGN_DIALECTS_TABLE = new Table(
 // SignWriting Symbols
 const SIGN_WRITING_SYMBOL_COLUMN = new LengthColumn("symbol", LengthType.CHAR, 1).primaryKey()
 
+export const HANDSHAPES_TABLE = new Table(
+    "handshapes",
+    SIGN_WRITING_SYMBOL_COLUMN,
+);
+
 export const HANDS_TABLE = new Table(
     "hands",
     SIGN_WRITING_SYMBOL_COLUMN,
-    new BasicColumn("symbol_group", BasicType.STRING).required(),
-    new BasicColumn("base_symbol", BasicType.STRING).required(),
+    getColumnWithForeignKey("handshape", new ForeignKey(HANDSHAPES_TABLE, SIGN_WRITING_SYMBOL_COLUMN)),
     new BasicColumn("palm_direction", BasicType.STRING).required()
         .check(`IN (${Object.values(PalmDirection).map(val => `"${val}"`).join(", ")})`),
     new BasicColumn("finger_direction", BasicType.STRING).required()
@@ -79,8 +83,3 @@ export const SIGN_DIALECT_PHONEMES_TABLE = new Table(
     getColumnWithForeignKey("dialect_id", new ForeignKey(SIGN_DIALECTS_TABLE, signDialectId))
         .primaryKey(),
 );
-
-// TODO: Create these tables
-// - Movement Symbols
-// - Location & Expression Symbols
-// - The Phonemes of Sign Dialects
