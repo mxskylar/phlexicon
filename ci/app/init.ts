@@ -2,12 +2,8 @@ import * as fs from 'fs';
 import { BUILD_DIR, DATABASE_FILE_PATH } from '../../src/build-constants';
 import { Database } from '../../src/db/database';
 import {
-    BODY_TABLE,
     CONSONANTS_TABLE,
-    DYNAMICS_TABLE,
     HANDS_TABLE,
-    HEAD_AND_FACES_TABLE,
-    MOVEMENT_TABLE,
     OTHER_IPA_SYMBOLS_TABLE,
     SIGN_DIALECT_PHONEMES_TABLE,
     SIGN_DIALECTS_TABLE,
@@ -80,14 +76,6 @@ const signWritingFontParser = new SignWritingFontParser(
 );
 db.createTable(HANDS_TABLE);
 db.insertRows(HANDS_TABLE, signWritingFontParser.getHands());
-
-db.createTable(MOVEMENT_TABLE);
-
-db.createTable(DYNAMICS_TABLE);
-
-db.createTable(HEAD_AND_FACES_TABLE);
-
-db.createTable(BODY_TABLE);
 
 const signPhonemeParser = new SignPhonemeParser(
     signWritingFontParser.symbols,

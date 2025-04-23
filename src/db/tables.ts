@@ -73,26 +73,6 @@ export const HANDS_TABLE = new Table(
     new BasicColumn("is_right_handed", BasicType.BOOLEAN).required(),
 );
 
-export const MOVEMENT_TABLE = new Table(
-    "movement",
-    SIGN_WRITING_SYMBOL_COLUMN,
-);
-
-export const DYNAMICS_TABLE = new Table(
-    "dynamics",
-    SIGN_WRITING_SYMBOL_COLUMN,
-);
-
-export const HEAD_AND_FACES_TABLE = new Table(
-    "head_and_faces",
-    SIGN_WRITING_SYMBOL_COLUMN,
-);
-
-export const BODY_TABLE = new Table(
-    "head_faces",
-    SIGN_WRITING_SYMBOL_COLUMN,
-);
-
 export const SIGN_DIALECT_PHONEMES_TABLE = new Table(
     "sign_dialect_phonemes",
     SIGN_WRITING_SYMBOL_COLUMN,
