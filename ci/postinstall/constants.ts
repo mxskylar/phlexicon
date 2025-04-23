@@ -10,3 +10,4 @@ export const SIGN_WRITING_ALPHABETS_FILE_PATH = `${INSTALLED_DATA_DIR}/sign-writ
 
 export const CUSTOM_DATA_DIR = "custom-data";
 // Exported from: https://docs.google.com/spreadsheets/d/1sSm0at0adMhk3PKhdvKmT_plLL1EmyYTm9-ZXtYN650/edit?usp=sharing
+export const ISWA_CATEGORIES_FILE_PATH =`${CUSTOM_DATA_DIR}/iswa-categories.tsv`;
