@@ -91,7 +91,7 @@ const getSignWritingAlphabet = (dictionary, totalAlphabets = 1) => {
 };
 
 // International SignWriting alphabet (all characters in all languages SignWriting supports)
-console.log("=> Fetching International SignWriting Alphabet...")
+console.log("=> Fetching International SignWriting Alphabet...");
 fs.writeFileSync(ISWA_FILE_PATH, JSON.stringify(
     await getSignWritingAlphabet("iswa-2010")
 ));
