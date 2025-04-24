@@ -184,9 +184,16 @@ export class SignWritingFontParser implements DataParser {
             const isHorizontalOrientation = blockLength === HandSymbolBlockLength.HORIZONTAL_ORIENTATIONS;
             let isVertical = isHorizontalOrientation ? false : true;
             const isInbetweenOrientation = blockLength === HandSymbolBlockLength.INBETWEEN_ORIENTATIONS;
-            let palmOrientations = isInbetweenOrientation
-                ? {palm_towards: true, palm_away: false, palm_sideways: true}
-                : {palm_towards: true, palm_away: false, palm_sideways: false};
+            const getPalmOrientations = () => {
+                if (isHorizontalOrientation) {
+                    return {palm_towards: null, palm_away: null, palm_sideways: null};
+                }
+                if (isInbetweenOrientation) {
+                    return {palm_towards: true, palm_away: false, palm_sideways: true};
+                }
+                return {palm_towards: true, palm_away: false, palm_sideways: false};
+            };
+            let palmOrientations = getPalmOrientations();
             const numIterationsMade = (i: number, n: number): boolean =>
                 i > 0 && i % n === 0;
             symbols.forEach((symbol, i) => {
@@ -197,53 +204,49 @@ export class SignWritingFontParser implements DataParser {
                 const fingerDirections = isRightHanded
                     ? COUNTER_CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS
                     : CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS;
+                const symbolRotation = fingerDirections[i % 8]; // Starts at beginning of list every 8 characters
                 // First half of the characters are vertical, except when all are horizontal
                 if (!isHorizontalOrientation && numIterationsMade(i, blockLength / 2)) {
                     isVertical = !isVertical;
                 }
-                const getPalmOrientations = (): {
-                    palm_towards: boolean | null,
-                    palm_away: boolean | null,
-                    palm_sideways: boolean | null,
-                } => {
-                    // Horizontal orientations are encoded with symbol rotation
-                    // rather than palm orientation indicators
-                    if (isHorizontalOrientation) {
-                        return {
-                            palm_towards: null,
-                            palm_away: null,
-                            palm_sideways: null,
-                        };
-                    }
-                    if (numIterationsMade(i, 16)) {
-                        if (isInbetweenOrientation) {
-                            if (palmOrientations.palm_towards) {
-                                palmOrientations.palm_towards = false;
-                                palmOrientations.palm_away = true;
-                            }
-                            if (palmOrientations.palm_away) {
-                                palmOrientations.palm_away = false;
-                                palmOrientations.palm_towards = true;
-                            }
-                        } else {
-                            if (palmOrientations.palm_towards) {
-                                palmOrientations.palm_towards = false;
-                                palmOrientations.palm_sideways = true;
-                            }
-                            if (palmOrientations.palm_sideways) {
-                                palmOrientations.palm_sideways = false;
-                                palmOrientations.palm_away = true;
-                            }
-                            if (palmOrientations.palm_away) {
-                                palmOrientations.palm_away = false;
-                                palmOrientations.palm_towards = true;
-                            }
+                // PICTURES & PALM ORIENTATIONS
+                if (isHorizontalOrientation) {
+                    // Horizontal orientations are encoded with symbol rotation rather than palm orientation indicators
+                    handSymbolRotationPictures.push({
+                        base_symbol: symbol.baseSymbol,
+                        symbol_rotation: symbolRotation,
+                    });
+                } else if (numIterationsMade(i, 16)) {
+                    if (isInbetweenOrientation) {
+                        if (palmOrientations.palm_towards) {
+                            palmOrientations.palm_towards = false;
+                            palmOrientations.palm_away = true;
+                        }
+                        if (palmOrientations.palm_away) {
+                            palmOrientations.palm_away = false;
+                            palmOrientations.palm_towards = true;
+                        }
+                    } else {
+                        if (palmOrientations.palm_towards) {
+                            palmOrientations.palm_towards = false;
+                            palmOrientations.palm_sideways = true;
+                        }
+                        if (palmOrientations.palm_sideways) {
+                            palmOrientations.palm_sideways = false;
+                            palmOrientations.palm_away = true;
+                        }
+                        if (palmOrientations.palm_away) {
+                            palmOrientations.palm_away = false;
+                            palmOrientations.palm_towards = true;
                         }
                     }
-                    return palmOrientations;
+                    handOrientationPictures.push({
+                        base_symbol: symbol.baseSymbol,
+                        right_handed: isRightHanded,
+                        vertical: isVertical,
+                        ...palmOrientations
+                    });
                 }
-                const symbolRotation = fingerDirections[i % 8]; // Starts at beginning of list every 8 characters
-                const finalPalmOrientations = getPalmOrientations();
                 hands.push({
                     symbol: symbol.character,
                     handshape: "d", // TODO: Get handshape
@@ -252,21 +255,8 @@ export class SignWritingFontParser implements DataParser {
                     // Orientation
                     right_handed: isRightHanded,
                     vertical: isVertical,
-                    ...finalPalmOrientations,
+                    ...palmOrientations,
                 });
-                if (isHorizontalOrientation) {
-                    handSymbolRotationPictures.push({
-                        base_symbol: symbol.baseSymbol,
-                        symbol_rotation: symbolRotation,
-                    });
-                } else {
-                    handOrientationPictures.push({
-                        base_symbol: symbol.baseSymbol,
-                        right_handed: isRightHanded,
-                        vertical: isVertical,
-                        ...finalPalmOrientations
-                    });
-                }
             });
         });
         return {hands, handOrientationPictures, handSymbolRotationPictures};
