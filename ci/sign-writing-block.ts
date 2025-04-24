@@ -1,5 +1,7 @@
+import { SignWritingCategory } from "../src/phonemes/sign/sign-writing";
+
 export type SignWritingCategoryBlock = {
-    name: string,
+    name: SignWritingCategory,
     symbolId: string,
     startNumber: number,
 };

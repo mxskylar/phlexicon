@@ -142,7 +142,7 @@ export class SignWritingFontParser implements DataParser {
         for (let i = categories.length - 1; i >= 0; i--) {
             const category = categories[i];
             if (symbolNumber >= category.startNumber) {
-                return category.name as SignWritingCategory;
+                return category.name;
             }
         }
         throw new Error(`No SignWriting category found for symbol number ${symbolNumber}`);
