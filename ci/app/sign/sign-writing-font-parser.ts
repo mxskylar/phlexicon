@@ -128,6 +128,26 @@ export class SignWritingFontParser implements DataParser {
         }
     }
 
+    private getBlockSymbol(symbolNumber: number, blocks: SignWritingBlock[]): string {
+        for (let i = blocks.length - 1; i >= 0; i--) {
+            const block = blocks[i];
+            if (symbolNumber >= block.startNumber) {
+                return block.symbol;
+            }
+        }
+        throw new Error(`No SignWriting font block found for symbol number ${symbolNumber}`);
+    }
+
+    private getCategoryName(symbolNumber: number, categories: SignWritingCategoryBlock[]): SignWritingCategory {
+        for (let i = categories.length - 1; i >= 0; i--) {
+            const category = categories[i];
+            if (symbolNumber >= category.startNumber) {
+                return category.name as SignWritingCategory;
+            }
+        }
+        throw new Error(`No SignWriting category found for symbol number ${symbolNumber}`);
+    }
+
     private getSymbolsWithCategory(category: SignWritingCategory) {
         return this.symbols.filter(symbol => symbol.category === category);
     }
@@ -149,26 +169,6 @@ export class SignWritingFontParser implements DataParser {
             );
         }
         return filteredSymbols;
-    }
-
-    private getBlockSymbol(symbolNumber: number, blocks: SignWritingBlock[]): string {
-        for (let i = blocks.length - 1; i >= 0; i--) {
-            const block = blocks[i];
-            if (symbolNumber >= block.startNumber) {
-                return block.symbol;
-            }
-        }
-        throw new Error(`No SignWriting font block found for symbol number ${symbolNumber}`);
-    }
-
-    private getCategoryName(symbolNumber: number, categories: SignWritingCategoryBlock[]): SignWritingCategory {
-        for (let i = categories.length - 1; i >= 0; i--) {
-            const category = categories[i];
-            if (symbolNumber >= category.startNumber) {
-                return category.name as SignWritingCategory;
-            }
-        }
-        throw new Error(`No SignWriting category found for symbol number ${symbolNumber}`);
     }
 
     // https://www.signbank.org/iswa/cat_1.html
