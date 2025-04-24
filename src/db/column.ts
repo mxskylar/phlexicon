@@ -15,10 +15,9 @@ export enum BasicType {
     BLOB = "BLOB",
 }
 
+// Forces the TypeScript compiler to include only enum values and NOT keys in array
 const ALL_BASIC_TYPES: string[] = Object.values(BasicType);
 
-// For some reason, instanceof isn't working on union types
-// Checking the enum value instead
 export const isBasicType = (value: string) => ALL_BASIC_TYPES.includes(value.valueOf());
 
 export enum LengthType {
