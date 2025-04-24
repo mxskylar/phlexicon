@@ -85,7 +85,7 @@ const signWritingFontParser = new SignWritingFontParser(
 
 db.createTable(HANDS_TABLE);
 const {hands, handOrientationPictures, handSymbolRotationPictures} = signWritingFontParser.getHandData();
-//db.insertRows(HANDS_TABLE, hands);
+db.insertRows(HANDS_TABLE, hands);
 
 db.createTable(HAND_ORIENTATION_PICTURES_TABLE);
 db.insertRows(HAND_ORIENTATION_PICTURES_TABLE, handOrientationPictures);

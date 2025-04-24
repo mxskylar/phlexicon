@@ -25,6 +25,9 @@ export class Database {
         row: {[index: string]: string | boolean | number}
     ): string {
         const getEscapedValue = (value: string | boolean | number) => {
+            if (value === null) {
+                return "NULL";
+            }
             if (typeof value === "string") {
                 return `"${value}"`;
             }
