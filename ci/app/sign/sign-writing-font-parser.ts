@@ -245,7 +245,7 @@ export class SignWritingFontParser implements DataParser {
                 }
                 hands.push({
                     symbol: symbol.character,
-                    handshape: "",
+                    handshape: "d", // TODO: Get handshape
                     base_symbol: symbol.baseSymbol,
                     symbol_rotation: fingerDirections[i % 8], // Starts at beginning of list every 8 characters
                     // Orientation
