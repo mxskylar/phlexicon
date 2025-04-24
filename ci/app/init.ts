@@ -84,11 +84,18 @@ const signWritingFontParser = new SignWritingFontParser(
 );
 
 db.createTable(HANDS_TABLE);
-signWritingFontParser.getHands();
+const {
+    hands,
+    handPicturesPerOrientation,
+    handPicturesPerSymbolRotation
+} = signWritingFontParser.getHandData();
+db.insertRows(HANDS_TABLE, hands);
 
 db.createTable(HAND_PICTURES_PER_ORIENTATION_TABLE);
+db.insertRows(HAND_PICTURES_PER_ORIENTATION_TABLE, handPicturesPerOrientation);
 
 db.createTable(HAND_PICTURES_PER_SYMBOL_ROTATION_TABLE);
+db.insertRows(HAND_PICTURES_PER_SYMBOL_ROTATION_TABLE, handPicturesPerSymbolRotation);
 
 const signPhonemeParser = new SignPhonemeParser(
     signWritingFontParser.symbols,

@@ -149,7 +149,11 @@ export class SignWritingFontParser implements DataParser {
     }
 
     // https://www.signbank.org/iswa/cat_1.html
-    public getHands(): Hand[] {
+    public getHandData(): {
+        hands: Hand[],
+        handPicturesPerOrientation: [],
+        handPicturesPerSymbolRotation: [],
+    } {
         const handSymbols = this.getSymbolsWithCategory(SignWritingCategory.HANDS)
             .filter(symbol => !["񂈱"].includes(symbol.baseSymbol)); // TODO: Account for these handshapes
         const baseSymbols = this.getBaseSymbols(handSymbols);
@@ -193,7 +197,11 @@ export class SignWritingFontParser implements DataParser {
                 });*/
             });
         });
-        return hands;
+        return {
+            hands,
+            handPicturesPerOrientation: [],
+            handPicturesPerSymbolRotation: [],
+        };
     }
 
     private getSymbolsWithCategory(category: SignWritingCategory) {

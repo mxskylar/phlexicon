@@ -49,7 +49,7 @@ export class Database {
 
     public insertRows(
         table: Table,
-        rows: {[index: string]: string | boolean | number}[]
+        rows: {[index: string]: string | boolean | number | null}[]
     ): void {
         const queries: string[] = ["BEGIN TRANSACTION;"];
         rows.forEach(row => {

@@ -95,14 +95,14 @@ export const HAND_PICTURES_PER_ORIENTATION_TABLE = new Table(
     PALM_TOWARDS_COLUMN.primaryKey(),
     PALM_AWAY_COLUMN.primaryKey(),
     PALM_SIDEWAYS_COLUMN.primaryKey(),
-    PICTURE_COLUMN,
+    //PICTURE_COLUMN,
 );
 
 export const HAND_PICTURES_PER_SYMBOL_ROTATION_TABLE = new Table(
     "hand_pictures_per_symbol_rotation",
     SIGN_WRITING_BASE_SYMBOL_COLUMN.primaryKey(),
     SIGN_WRITING_SYMBOL_ROTATION_COLUMN.primaryKey(),
-    PICTURE_COLUMN,
+    //PICTURE_COLUMN,
 );
 
 export const SIGN_DIALECT_PHONEMES_TABLE = new Table(
