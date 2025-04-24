@@ -148,29 +148,6 @@ export class SignWritingFontParser implements DataParser {
         throw new Error(`No SignWriting category found for symbol number ${symbolNumber}`);
     }
 
-    private getSymbolsWithCategory(category: SignWritingCategory) {
-        return this.symbols.filter(symbol => symbol.category === category);
-    }
-
-    private getBaseSymbols(symbols: SignWritingSymbol[]): string[] {
-        return getUniqueValues(symbols.map(symbol => symbol.baseSymbol));
-    }
-
-    private getSymbolsWithBaseSymbol(
-        symbols: SignWritingSymbol[],
-        baseSymbol: string,
-        numExpected: number,
-    ): SignWritingSymbol[] {
-        const filteredSymbols = symbols.filter(symbol => symbol.baseSymbol === baseSymbol);
-        const numFound = filteredSymbols.length;
-        if (numFound !== numExpected) {
-            throw new Error(
-                `Found ${numFound} symbols with the base symbol ${baseSymbol} but expected ${numExpected}`
-            );
-        }
-        return filteredSymbols;
-    }
-
     // https://www.signbank.org/iswa/cat_1.html
     public getHands(): Hand[] {
         const handSymbols = this.getSymbolsWithCategory(SignWritingCategory.HANDS)
@@ -217,5 +194,28 @@ export class SignWritingFontParser implements DataParser {
             });
         });
         return hands;
+    }
+
+    private getSymbolsWithCategory(category: SignWritingCategory) {
+        return this.symbols.filter(symbol => symbol.category === category);
+    }
+
+    private getBaseSymbols(symbols: SignWritingSymbol[]): string[] {
+        return getUniqueValues(symbols.map(symbol => symbol.baseSymbol));
+    }
+
+    private getSymbolsWithBaseSymbol(
+        symbols: SignWritingSymbol[],
+        baseSymbol: string,
+        numExpected: number,
+    ): SignWritingSymbol[] {
+        const filteredSymbols = symbols.filter(symbol => symbol.baseSymbol === baseSymbol);
+        const numFound = filteredSymbols.length;
+        if (numFound !== numExpected) {
+            throw new Error(
+                `Found ${numFound} symbols with the base symbol ${baseSymbol} but expected ${numExpected}`
+            );
+        }
+        return filteredSymbols;
     }
 }
