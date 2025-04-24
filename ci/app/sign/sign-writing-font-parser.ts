@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import opentype from 'opentype.js';
 import { HANDS_TABLE } from '../../../src/db/tables';
-import { Hand } from '../../../src/phonemes/sign/hand';
+import { Hand, HandOrientationPicture, HandSymbolRotationPicture } from '../../../src/phonemes/sign/hand';
 import {
     CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS,
     COUNTER_CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS,
@@ -25,6 +25,18 @@ export type SignWritingSymbol = {
     symbolGroup: string,
     baseSymbol: string,
 };
+
+enum HandSymbolBlockLength {
+    DEFAULT_ORIENTATIONS = 96,
+    INBETWEEN_ORIENTATIONS = 64,
+    HORIZONTAL_ORIENTATIONS = 16,
+}
+
+const HAND_SYMBOL_BLOCK_LENGTHS = [
+    HandSymbolBlockLength.DEFAULT_ORIENTATIONS,
+    HandSymbolBlockLength.INBETWEEN_ORIENTATIONS,
+    HandSymbolBlockLength.HORIZONTAL_ORIENTATIONS,
+];
 
 export class SignWritingFontParser implements DataParser {
     warnings: DataWarning[] = [];
@@ -151,25 +163,31 @@ export class SignWritingFontParser implements DataParser {
     // https://www.signbank.org/iswa/cat_1.html
     public getHandData(): {
         hands: Hand[],
-        handPicturesPerOrientation: [],
-        handPicturesPerSymbolRotation: [],
+        handOrientationPictures: HandOrientationPicture[],
+        handSymbolRotationPictures: HandSymbolRotationPicture[],
     } {
         const handSymbols = this.getSymbolsWithCategory(SignWritingCategory.HANDS)
             .filter(symbol => !["񂈱"].includes(symbol.baseSymbol)); // TODO: Account for these handshapes
         const baseSymbols = this.getBaseSymbols(handSymbols);
         const hands: Hand[] = [];
+        const handOrientationPictures: HandOrientationPicture[] = [];
+        const handSymbolRotationPictures: HandSymbolRotationPicture[] = [];
         baseSymbols.forEach(baseSymbol => {
-            // Fist Heel is the only handshape with a different pattern
-            // https://www.signbank.org/iswa/204/204_bs.html
-            // TODO: Verify the assmed properties, especially palm & finger directions, are correct for these
-            const isFistHeel = ["񆆑", "񁳱", "񁶱", "񁹱", "񂊑", "񂍑", "񅱑"].includes(baseSymbol);
-            const symbols = this.getSymbolsWithBaseSymbol(
-                handSymbols,
-                baseSymbol,
-                isFistHeel ? 16 : 96
-            );
+            const symbols = handSymbols.filter(symbol => symbol.baseSymbol === baseSymbol);
+            const blockLength = symbols.length as HandSymbolBlockLength;
+            if (!HAND_SYMBOL_BLOCK_LENGTHS.includes(blockLength)) {
+                throw new Error(
+                    `Hand symbol block ${baseSymbol} has ${blockLength} symbols. `
+                    + `Expected number of symbols to be one of: ${HAND_SYMBOL_BLOCK_LENGTHS.join(", ")}`
+                );
+            }
             let isRightHanded = true;
-            let p = 0;
+            const isHorizontalOrientation = blockLength === HandSymbolBlockLength.HORIZONTAL_ORIENTATIONS;
+            let isVertical = isHorizontalOrientation ? false : true;
+            const isInbetweenOrientation = blockLength === HandSymbolBlockLength.INBETWEEN_ORIENTATIONS;
+            let palmOrientations = isInbetweenOrientation
+                ? {palm_towards: true, palm_away: false, palm_sideways: true}
+                : {palm_towards: true, palm_away: false, palm_sideways: false};
             const numIterationsMade = (i: number, n: number): boolean =>
                 i > 0 && i % n === 0;
             symbols.forEach((symbol, i) => {
@@ -180,28 +198,64 @@ export class SignWritingFontParser implements DataParser {
                 const fingerDirections = isRightHanded
                     ? COUNTER_CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS
                     : CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS;
-                // Switches every 6 characters
-                if (numIterationsMade(i, 16)) {
-                    p++;
+                // First half of the characters are vertical, except when all are horizontal
+                if (!isHorizontalOrientation && numIterationsMade(i, blockLength / 2)) {
+                    isVertical = !isVertical;
                 }
-                /*const palmDirection = isFistHeel
-                    ? PalmDirection.TOP_VIEW_UP
-                    : PALM_DIRECTIONS[p];
+                const getPalmOrientations = (): {
+                    palm_towards: boolean | null,
+                    palm_away: boolean | null,
+                    palm_sideways: boolean | null,
+                } => {
+                    // Horizontal orientations are encoded with symbol rotation
+                    // rather than palm orientation indicators
+                    if (isHorizontalOrientation) {
+                        return {
+                            palm_towards: null,
+                            palm_away: null,
+                            palm_sideways: null,
+                        };
+                    }
+                    if (numIterationsMade(i, 16)) {
+                        if (isInbetweenOrientation) {
+                            if (palmOrientations.palm_towards) {
+                                palmOrientations.palm_towards = false;
+                                palmOrientations.palm_away = true;
+                            }
+                            if (palmOrientations.palm_away) {
+                                palmOrientations.palm_away = false;
+                                palmOrientations.palm_towards = true;
+                            }
+                        } else {
+                            if (palmOrientations.palm_towards) {
+                                palmOrientations.palm_towards = false;
+                                palmOrientations.palm_sideways = true;
+                            }
+                            if (palmOrientations.palm_sideways) {
+                                palmOrientations.palm_sideways = false;
+                                palmOrientations.palm_away = true;
+                            }
+                            if (palmOrientations.palm_away) {
+                                palmOrientations.palm_away = false;
+                                palmOrientations.palm_towards = true;
+                            }
+                        }
+                    }
+                    return palmOrientations;
+                }
                 hands.push({
                     symbol: symbol.character,
-                    handshape: symbol.baseSymbol,
-                    palm_direction: palmDirection,
-                    // Starts at beginning of list every 8 characters
-                    symbol_rotation: fingerDirections[i % 8],
+                    handshape: "",
+                    base_symbol: symbol.baseSymbol,
+                    symbol_rotation: fingerDirections[i % 8], // Starts at beginning of list every 8 characters
+                    // Orientation
                     right_handed: isRightHanded,
-                });*/
+                    vertical: isVertical,
+                    ...getPalmOrientations(),
+                });
             });
         });
-        return {
-            hands,
-            handPicturesPerOrientation: [],
-            handPicturesPerSymbolRotation: [],
-        };
+        return {hands, handOrientationPictures, handSymbolRotationPictures};
     }
 
     private getSymbolsWithCategory(category: SignWritingCategory) {
@@ -210,20 +264,5 @@ export class SignWritingFontParser implements DataParser {
 
     private getBaseSymbols(symbols: SignWritingSymbol[]): string[] {
         return getUniqueValues(symbols.map(symbol => symbol.baseSymbol));
-    }
-
-    private getSymbolsWithBaseSymbol(
-        symbols: SignWritingSymbol[],
-        baseSymbol: string,
-        numExpected: number,
-    ): SignWritingSymbol[] {
-        const filteredSymbols = symbols.filter(symbol => symbol.baseSymbol === baseSymbol);
-        const numFound = filteredSymbols.length;
-        if (numFound !== numExpected) {
-            throw new Error(
-                `Found ${numFound} symbols with the base symbol ${baseSymbol} but expected ${numExpected}`
-            );
-        }
-        return filteredSymbols;
     }
 }

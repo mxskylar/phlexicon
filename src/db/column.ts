@@ -15,10 +15,14 @@ export enum BasicType {
     BLOB = "BLOB",
 }
 
-// Forces the TypeScript compiler to include only enum values and NOT keys in array
-const ALL_BASIC_TYPES: string[] = Object.values(BasicType);
+const ALL_BASIC_TYPES: string[] = [
+    BasicType.STRING,
+    BasicType.BOOLEAN,
+    BasicType.INTEGER,
+    BasicType.BLOB,
+]
 
-export const isBasicType = (value: string) => ALL_BASIC_TYPES.includes(value.valueOf());
+export const isBasicType = (value: string) => ALL_BASIC_TYPES.includes(value);
 
 export enum LengthType {
     CHAR = "CHAR",
