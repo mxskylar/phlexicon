@@ -166,8 +166,7 @@ export class SignWritingFontParser implements DataParser {
         handOrientationPictures: HandOrientationPicture[],
         handSymbolRotationPictures: HandSymbolRotationPicture[],
     } {
-        const handSymbols = this.getSymbolsWithCategory(SignWritingCategory.HANDS)
-            .filter(symbol => !["񂈱"].includes(symbol.baseSymbol)); // TODO: Account for these handshapes
+        const handSymbols = this.getSymbolsWithCategory(SignWritingCategory.HANDS);
         const baseSymbols = this.getBaseSymbols(handSymbols);
         const hands: Hand[] = [];
         const handOrientationPictures: HandOrientationPicture[] = [];
@@ -253,6 +252,15 @@ export class SignWritingFontParser implements DataParser {
                     vertical: isVertical,
                     ...getPalmOrientations(),
                 });
+                /*if (isHorizontalOrientation) {
+                    handOrientationPictures.push({
+
+                    });
+                } else {
+                    handSymbolRotationPictures.push({
+
+                    });
+                }*/
             });
         });
         return {hands, handOrientationPictures, handSymbolRotationPictures};

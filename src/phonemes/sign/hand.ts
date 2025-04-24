@@ -21,9 +21,11 @@ export type HandOrientationPicture = {
     palm_towards: boolean | null,
     palm_away: boolean | null,
     palm_sideways: boolean | null,
+    //picture: ,
 };
 
 export type HandSymbolRotationPicture = {
     base_symbol: string,
     symbol_rotation: SignWritingSymbolRotation,
+    //picture: ,
 };
