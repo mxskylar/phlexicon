@@ -8,7 +8,6 @@ import {
     ISO_FILE,
     SIGN_WRITING_ALPHABETS_FILE_PATH,
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
-    ISWA_FILE_PATH
 } from './constants';
 
 const downloadFile = async (url: string, dir: string) => {
@@ -89,12 +88,6 @@ const getSignWritingAlphabet = (dictionary, totalAlphabets = 1) => {
             return responseData
         });
 };
-
-// International SignWriting alphabet (all characters in all languages SignWriting supports)
-console.log("=> Fetching International SignWriting Alphabet...");
-fs.writeFileSync(ISWA_FILE_PATH, JSON.stringify(
-    await getSignWritingAlphabet("iswa-2010")
-));
 
 // SignWriting alphabets for specific languages
 const signWritingDictionaries = await getSignWritingDictionaries();

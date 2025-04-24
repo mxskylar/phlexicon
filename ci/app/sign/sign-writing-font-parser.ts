@@ -8,23 +8,13 @@ import {
     SignWritingCategory
 } from "../../../src/phonemes/sign/sign-writing";
 import { DataParser, DataType, DataWarning } from "../data-parser";
-import { getJsonData, getPercent, getSeperatedValueData, getUniqueValues, sortAscending } from "../parse-utils";
-import { SignWritingBlock } from '../../sign-writing-block';
-import { RawAlphabetData } from './sign-phoneme-parser';
+import { getPercent, getSeperatedValueData, getUniqueValues, sortAscending } from "../parse-utils";
+import { SignWritingBlock, SignWritingCategoryBlock } from '../../sign-writing-block';
 
 type ParsedGlyph = {
     glyph: opentype.Glyph,
     character: string | null,
     number: number | null,
-};
-
-type PasrsedSymbol = {
-    glyph: opentype.Glyph,
-    character: string,
-    number: number,
-    category: SignWritingCategory,
-    symbolGroupName: string,
-    baseSymbolName: string,
 };
 
 export type SignWritingSymbol = {
@@ -39,30 +29,27 @@ export type SignWritingSymbol = {
 export class SignWritingFontParser implements DataParser {
     warnings: DataWarning[] = [];
     symbols: SignWritingSymbol[] = [];
-    categories: SignWritingBlock[];
-    symbolGroupBlocks: SignWritingBlock[];
-    symbolGroups: string[];
-    baseSymbolBlocks: SignWritingBlock[];
-    baseSymbols: string[] = [];
+    categories: SignWritingCategoryBlock[];
+    symbolGroups: SignWritingBlock[];
+    baseSymbols: SignWritingBlock[];
 
     constructor(
         fontFilePath: string,
         categoriesFilePath: string,
         symbolGroupsFilePath: string,
         baseSymbolsFilePath: string,
-        iswaFilePath: string,
     ) {
-        const OPTIONS = {delimiter: "\t"};
+        const TSV_OPTIONS = {delimiter: "\t"};
+        // Symbol Categories
         console.log(`Parsing: ${categoriesFilePath}`);
-        this.categories = getSeperatedValueData(categoriesFilePath, OPTIONS);
+        this.categories = getSeperatedValueData(categoriesFilePath, TSV_OPTIONS);
+        // Symbol Groups
         console.log(`Parsing: ${symbolGroupsFilePath}`);
-        this.symbolGroupBlocks = getSeperatedValueData(symbolGroupsFilePath, OPTIONS);
+        this.symbolGroups = getSeperatedValueData(symbolGroupsFilePath, TSV_OPTIONS);
+        // Base Symbols
         console.log(`Parsing: ${baseSymbolsFilePath}`);
-        this.baseSymbolBlocks = getSeperatedValueData(baseSymbolsFilePath, OPTIONS);
-        console.log(`Parsing ${iswaFilePath}`);
-        const iswaAlphabet: RawAlphabetData = getJsonData(iswaFilePath);
-        this.symbolGroups = Object.keys(iswaAlphabet.data);
-        Object.values(iswaAlphabet.data).forEach(symbols => symbols.forEach(symbol => this.baseSymbols.push(symbol)));
+        this.baseSymbols = getSeperatedValueData(baseSymbolsFilePath, TSV_OPTIONS);
+        // Symbols
         console.log(`Parsing: ${fontFilePath}`);
         this.symbols = this.getSymbols(fontFilePath);
     }
@@ -87,27 +74,15 @@ export class SignWritingFontParser implements DataParser {
             });
         }
         // PARSE SYMBOLS
-        const parsedSymbols: PasrsedSymbol[] = parsedGlyphs.map(symbol => {
+        const symbols: SignWritingSymbol[] = parsedGlyphs.map(symbol => {
             const number = symbol.number as number;
             return {
                 glyph: symbol.glyph,
                 character: symbol.character as string,
                 number,
-                category: this.getBlockName(number, this.categories) as SignWritingCategory,
-                symbolGroupName: this.getBlockName(number, this.symbolGroupBlocks),
-                baseSymbolName: this.getBlockName(number, this.baseSymbolBlocks)
-            };
-        });
-        const symbolGroupNameMap = this.getBlockNameMap("symbolGroupName", parsedSymbols, this.symbolGroups);
-        const baseSymbolNameMap = this.getBlockNameMap("baseSymbolName", parsedSymbols, this.baseSymbols);
-        const symbols: SignWritingSymbol[] = parsedSymbols.map(parsedSymbol => {
-            return {
-                glyph: parsedSymbol.glyph,
-                character: parsedSymbol.character,
-                number: parsedSymbol.number,
-                category: parsedSymbol.category,
-                symbolGroup: symbolGroupNameMap[parsedSymbol.symbolGroupName],
-                baseSymbol: baseSymbolNameMap[parsedSymbol.baseSymbolName],
+                category: this.getCategoryName(number, this.categories),
+                symbolGroup: this.getBlockSymbol(number, this.symbolGroups),
+                baseSymbol: this.getBlockSymbol(number, this.baseSymbols)
             };
         });
         symbols.sort((a, b) => sortAscending(a.glyph.index, b.glyph.index)); // Sort symbols by glyph index
@@ -176,40 +151,24 @@ export class SignWritingFontParser implements DataParser {
         return filteredSymbols;
     }
 
-    private getBlockName(symbolNumber: number, blocks: SignWritingBlock[]): string {
+    private getBlockSymbol(symbolNumber: number, blocks: SignWritingBlock[]): string {
         for (let i = blocks.length - 1; i >= 0; i--) {
             const block = blocks[i];
             if (symbolNumber >= block.startNumber) {
-                return block.name;
+                return block.symbol;
             }
         }
         throw new Error(`No SignWriting font block found for symbol number ${symbolNumber}`);
     }
 
-    private getBlockSymbol(symbols: string[], blockSymbols: string[]) {
-        for (const i in blockSymbols) {
-            const blockSymbol = blockSymbols[i];
-            if (symbols.includes(blockSymbol)) {
-                return blockSymbol;
+    private getCategoryName(symbolNumber: number, categories: SignWritingCategoryBlock[]): SignWritingCategory {
+        for (let i = categories.length - 1; i >= 0; i--) {
+            const category = categories[i];
+            if (symbolNumber >= category.startNumber) {
+                return category.name as SignWritingCategory;
             }
         }
-        throw new Error(`None of the block symbols ${blockSymbols.join(", ")} were found in block of symbols ${symbols.join(", ")}`);
-    }
-
-    private getBlockNameMap(
-        key: string,
-        parsedSymbols: PasrsedSymbol[],
-        blockSymbols: string[],
-    ): {[index: string]: string} {
-        const blockNameMap = {};
-        const names = getUniqueValues(parsedSymbols.map(parsedSymbol => parsedSymbol[key]));
-        names.forEach(name => {
-            const characters = parsedSymbols
-                .filter(parsedSymbol => parsedSymbol[key] === name)
-                .map(parsedSymbol => parsedSymbol.character);
-            blockNameMap[name] = this.getBlockSymbol(characters, blockSymbols);
-        });
-        return blockNameMap;
+        throw new Error(`No SignWriting category found for symbol number ${symbolNumber}`);
     }
 
     // https://www.signbank.org/iswa/cat_1.html
