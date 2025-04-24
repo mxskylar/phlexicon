@@ -242,25 +242,31 @@ export class SignWritingFontParser implements DataParser {
                     }
                     return palmOrientations;
                 }
+                const symbolRotation = fingerDirections[i % 8]; // Starts at beginning of list every 8 characters
+                const finalPalmOrientations = getPalmOrientations();
                 hands.push({
                     symbol: symbol.character,
                     handshape: "d", // TODO: Get handshape
                     base_symbol: symbol.baseSymbol,
-                    symbol_rotation: fingerDirections[i % 8], // Starts at beginning of list every 8 characters
+                    symbol_rotation: symbolRotation, // Starts at beginning of list every 8 characters
                     // Orientation
                     right_handed: isRightHanded,
                     vertical: isVertical,
-                    ...getPalmOrientations(),
+                    ...finalPalmOrientations,
                 });
-                /*if (isHorizontalOrientation) {
-                    handOrientationPictures.push({
-
+                if (isHorizontalOrientation) {
+                    handSymbolRotationPictures.push({
+                        base_symbol: symbol.baseSymbol,
+                        symbol_rotation: symbolRotation,
                     });
                 } else {
-                    handSymbolRotationPictures.push({
-
+                    handOrientationPictures.push({
+                        base_symbol: symbol.baseSymbol,
+                        right_handed: isRightHanded,
+                        vertical: isVertical,
+                        ...finalPalmOrientations
                     });
-                }*/
+                }
             });
         });
         return {hands, handOrientationPictures, handSymbolRotationPictures};
