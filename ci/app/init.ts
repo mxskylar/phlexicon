@@ -3,8 +3,9 @@ import { BUILD_DIR, DATABASE_FILE_PATH } from '../../src/build-constants';
 import { Database } from '../../src/db/database';
 import {
     CONSONANTS_TABLE,
+    HAND_PICTURES_PER_ORIENTATION_TABLE,
+    HAND_PICTURES_PER_SYMBOL_ROTATION_TABLE,
     HANDS_TABLE,
-    HANDSHAPES_TABLE,
     OTHER_IPA_SYMBOLS_TABLE,
     SIGN_DIALECT_PHONEMES_TABLE,
     SIGN_DIALECTS_TABLE,
@@ -83,10 +84,13 @@ const signWritingFontParser = new SignWritingFontParser(
     ISWA_BASE_SYMBOLS_FILE_PATH,
     ISWA_FILE_PATH,
 );
-db.createTable(HANDSHAPES_TABLE);
 
 db.createTable(HANDS_TABLE);
-db.insertRows(HANDS_TABLE, signWritingFontParser.getHands());
+signWritingFontParser.getHands();
+
+db.createTable(HAND_PICTURES_PER_ORIENTATION_TABLE);
+
+db.createTable(HAND_PICTURES_PER_SYMBOL_ROTATION_TABLE);
 
 const signPhonemeParser = new SignPhonemeParser(
     signWritingFontParser.symbols,

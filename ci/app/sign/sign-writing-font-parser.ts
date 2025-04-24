@@ -1,8 +1,12 @@
 import * as fs from 'fs';
 import opentype from 'opentype.js';
 import { HANDS_TABLE } from '../../../src/db/tables';
-import { CLOCKWISE_FINGER_DIRECTIONS, COUNTER_CLOCKWISE_FINGER_DIRECTIONS, Hand, PALM_DIRECTIONS, PalmDirection } from '../../../src/phonemes/sign/hand';
-import { SignWritingCategory } from "../../../src/phonemes/sign/sign-writing-category";
+import { Hand } from '../../../src/phonemes/sign/hand';
+import {
+    CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS,
+    COUNTER_CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS,
+    SignWritingCategory
+} from "../../../src/phonemes/sign/sign-writing";
 import { DataParser, DataType, DataWarning } from "../data-parser";
 import { getJsonData, getPercent, getSeperatedValueData, getUniqueValues, sortAscending } from "../parse-utils";
 import { SignWritingBlock } from '../../sign-writing-block';
@@ -234,13 +238,13 @@ export class SignWritingFontParser implements DataParser {
                     isRightHanded = !isRightHanded;
                 }
                 const fingerDirections = isRightHanded
-                    ? COUNTER_CLOCKWISE_FINGER_DIRECTIONS
-                    : CLOCKWISE_FINGER_DIRECTIONS;
+                    ? COUNTER_CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS
+                    : CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS;
                 // Switches every 6 characters
                 if (numIterationsMade(i, 16)) {
                     p++;
                 }
-                const palmDirection = isFistHeel
+                /*const palmDirection = isFistHeel
                     ? PalmDirection.TOP_VIEW_UP
                     : PALM_DIRECTIONS[p];
                 hands.push({
@@ -248,9 +252,9 @@ export class SignWritingFontParser implements DataParser {
                     handshape: symbol.baseSymbol,
                     palm_direction: palmDirection,
                     // Starts at beginning of list every 8 characters
-                    finger_direction: fingerDirections[i % 8],
-                    is_right_handed: isRightHanded,
-                });
+                    symbol_rotation: fingerDirections[i % 8],
+                    right_handed: isRightHanded,
+                });*/
             });
         });
         return hands;

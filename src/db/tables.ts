@@ -9,7 +9,7 @@ import { Table } from "./table.ts";
 import { ForeignKey } from "./foreign-key.ts";
 import { VowelAttribute } from "../phonemes/spoken/vowel.ts";
 import { ConsonantAttribute } from "../phonemes/spoken/consonant.ts";
-import { FingerDirection, PalmDirection } from "../phonemes/sign/hand.ts";
+import { CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS, SignWritingSymbolRotation } from "../phonemes/sign/sign-writing.ts";
 
 // SPOKEN DIALECTS
 const spokenDialectId = new LengthColumn("id", LengthType.CHAR, 4).primaryKey();
@@ -60,21 +60,49 @@ export const SIGN_DIALECTS_TABLE = new Table(
 
 // SignWriting Symbols
 const SIGN_WRITING_SYMBOL_COLUMN = new LengthColumn("symbol", LengthType.CHAR, 1).primaryKey()
+const SIGN_WRITING_BASE_SYMBOL_COLUMN = new LengthColumn("base_symbol", LengthType.CHAR, 1);
+const SIGN_WRITING_SYMBOL_ROTATION_COLUMN =
+    new BasicColumn("symbol_rotation", BasicType.INTEGER)
+        .check(`IN (${CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS.join(", ")})`);
 
-export const HANDSHAPES_TABLE = new Table(
-    "handshapes",
-    SIGN_WRITING_SYMBOL_COLUMN,
-);
+// Palm orientations
+const RIGHT_HANDED_COLUMN = new BasicColumn("right_handed", BasicType.BOOLEAN);
+const VERTICAL_HAND_COLUMN = new BasicColumn("vertical", BasicType.BOOLEAN);
+const PALM_TOWARDS_COLUMN = new BasicColumn("palm_towards", BasicType.BOOLEAN);
+const PALM_AWAY_COLUMN = new BasicColumn("palm_away", BasicType.BOOLEAN);
+const PALM_SIDEWAYS_COLUMN = new BasicColumn("palm_sideways", BasicType.BOOLEAN);
 
 export const HANDS_TABLE = new Table(
     "hands",
     SIGN_WRITING_SYMBOL_COLUMN,
-    getColumnWithForeignKey("handshape", new ForeignKey(HANDSHAPES_TABLE, SIGN_WRITING_SYMBOL_COLUMN)),
-    new BasicColumn("palm_direction", BasicType.STRING).required()
-        .check(`IN (${Object.values(PalmDirection).map(val => `"${val}"`).join(", ")})`),
-    new BasicColumn("finger_direction", BasicType.STRING).required()
-        .check(`IN (${Object.values(FingerDirection).map(val => `"${val}"`).join(", ")})`),
-    new BasicColumn("is_right_handed", BasicType.BOOLEAN).required(),
+    new LengthColumn("handshape", LengthType.CHAR, 1),
+    SIGN_WRITING_BASE_SYMBOL_COLUMN.unique(),
+    SIGN_WRITING_SYMBOL_ROTATION_COLUMN.required(),
+    RIGHT_HANDED_COLUMN.required(),
+    VERTICAL_HAND_COLUMN.required(),
+    PALM_TOWARDS_COLUMN,
+    PALM_AWAY_COLUMN,
+    PALM_SIDEWAYS_COLUMN,
+);
+
+const PICTURE_COLUMN = new BasicColumn("picture", BasicType.BLOB).required();
+
+export const HAND_PICTURES_PER_ORIENTATION_TABLE = new Table(
+    "hand_pictures_per_orientation",
+    SIGN_WRITING_BASE_SYMBOL_COLUMN.primaryKey(),
+    RIGHT_HANDED_COLUMN.primaryKey(),
+    VERTICAL_HAND_COLUMN.primaryKey(),
+    PALM_TOWARDS_COLUMN.primaryKey(),
+    PALM_AWAY_COLUMN.primaryKey(),
+    PALM_SIDEWAYS_COLUMN.primaryKey(),
+    PICTURE_COLUMN,
+);
+
+export const HAND_PICTURES_PER_SYMBOL_ROTATION_TABLE = new Table(
+    "hand_pictures_per_symbol_rotation",
+    SIGN_WRITING_BASE_SYMBOL_COLUMN.primaryKey(),
+    SIGN_WRITING_SYMBOL_ROTATION_COLUMN.primaryKey(),
+    PICTURE_COLUMN,
 );
 
 export const SIGN_DIALECT_PHONEMES_TABLE = new Table(

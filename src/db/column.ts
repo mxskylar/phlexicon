@@ -10,15 +10,16 @@ export interface Column {
 
 export enum BasicType {
     STRING = "STRING",
-    BOOLEAN = "BOOLEAN"
+    BOOLEAN = "BOOLEAN",
+    INTEGER = "INTEGER",
+    BLOB = "BLOB",
 }
+
+const ALL_BASIC_TYPES: string[] = Object.values(BasicType);
 
 // For some reason, instanceof isn't working on union types
 // Checking the enum value instead
-export const isBasicType = (value: string) =>
-    Object.values(BasicType)
-        .map(val => val.valueOf())
-        .includes(value.valueOf());
+export const isBasicType = (value: string) => ALL_BASIC_TYPES.includes(value.valueOf());
 
 export enum LengthType {
     CHAR = "CHAR",
