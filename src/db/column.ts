@@ -57,7 +57,6 @@ class SqlColumn {
 
     public primaryKey() {
         this.isPrimaryKey = true;
-        this.isRequired = true;
         return this;
     }
 
