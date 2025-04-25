@@ -7,7 +7,6 @@ import { getSeperatedValueData } from '../../utils';
 
 type Dictionary = {
     name: string,
-    dialectId: string,
     isoCode: string,
     region: string
     languageName?: string
@@ -38,9 +37,8 @@ export class SignDialectParser implements DataParser {
             const region = dictNameArray[1];
             this.dictionaries.push({
                 name,
-                dialectId: `${isoCode}-${region}`,
                 isoCode,
-                region
+                region,
             });
         });
         console.log(`Parsing: ${isoFilePath}`);
@@ -82,8 +80,9 @@ export class SignDialectParser implements DataParser {
         }
         return languages.map(dict => {
             return {
-                id: dict.dialectId,
-                name: `${dict.languageName} (${dict.region})`
+                name: `${dict.languageName} (${dict.region})`,
+                iso_code: dict.isoCode,
+                region: dict.region,
             };
         });
     }
