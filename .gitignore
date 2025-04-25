@@ -2,4 +2,5 @@ package-lock.json
 node_modules
 build
 installed-resources
-db/data
+installed-data
+.DS_Store

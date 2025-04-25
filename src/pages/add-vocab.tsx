@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Keyboard} from '../components/keyboard'
+import { Keyboard } from '../components/keyboard.tsx'
 
 export const AddVocab = () => {
     return (

@@ -1,0 +1,653 @@
+name	symbolId	startNumber	symbol
+Index	01-01-001-01	0x10000	񀀁
+Index on Circle	01-01-002-01	0x10100	񀁱
+Index on Cup	01-01-003-01	0x10200	񀃑
+Index on Oval	01-01-004-01	0x10300	񀄱
+Index on Hinge	01-01-005-01	0x10400	񀆑
+Index on Angle	01-01-006-01	0x10500	񀇱
+Index Bent	01-01-007-01	0x10600	񀉑
+Index Bent on Circle	01-01-008-01	0x10700	񀊱
+Index Bent on Fist Thumb Under	01-01-009-01	0x10800	񀌑
+Index Raised Knuckle	01-01-010-01	0x10900	񀍱
+Index Cup	01-01-011-01	0x10a00	񀏑
+Index Hinge on Fist	01-01-012-01	0x10b00	񀐱
+Index Hinge on Fist Low	01-01-013-01	0x10c00	񀒑
+Index Hinge on Circle	01-01-014-01	0x10d00	񀓱
+Index Middle	01-02-001-01	0x10e00	񀕁
+Index Middle on Circle	01-02-002-01	0x10f00	񀖱
+Index Middle Bent	01-02-003-01	0x11000	񀘑
+Index Middle Raised Knuckles	01-02-004-01	0x11100	񀙱
+Index Middle Hinge	01-02-005-01	0x11200	񀛑
+Index Up, Middle Hinge	01-02-006-01	0x11300	񀜱
+Index Hinge, Middle Up	01-02-007-01	0x11400	񀞑
+Index Middle Unit	01-02-008-01	0x11500	񀟱
+Index Middle Unit, Index Bent	01-02-009-01	0x11600	񀡑
+Index Middle Unit, Middle Bent	01-02-010-01	0x11700	񀢱
+Index Middle Unit, Cup	01-02-011-01	0x11800	񀤑
+Index Middle Unit, Hinge	01-02-012-01	0x11900	񀥱
+Index Middle Cross	01-02-013-01	0x11a00	񀧑
+Index Middle Cross on Circle	01-02-014-01	0x11b00	񀨱
+Middle Bent Over Index	01-02-015-01	0x11c00	񀪑
+Index Bent Over Middle	01-02-016-01	0x11d00	񀫱
+Index Middle Thumb	01-03-001-01	0x11e00	񀭁
+Index Middle Thumb on Circle	01-03-002-01	0x11f00	񀮱
+Index Middle Straight, Thumb Bent	01-03-003-01	0x12000	񀰑
+Index Middle Bent, Thumb Straight	01-03-004-01	0x12100	񀱱
+Index Middle Thumb Bent	01-03-005-01	0x12200	񀳑
+Index Middle Hinge Spread, Thumb Side	01-03-006-01	0x12300	񀴱
+Index Up, Middle Hinge, Thumb Side	01-03-007-01	0x12400	񀶑
+Index Up, Middle Hinge, Thumb Unit	01-03-008-01	0x12500	񀷱
+Index Hinge, Middle Up, Thumb Side	01-03-009-01	0x12600	񀹑
+Index Middle Up Spread, Thumb Forward	01-03-010-01	0x12700	񀺱
+Index Middle Thumb Cup	01-03-011-01	0x12800	񀼑
+Index Middle Thumb Circle	01-03-012-01	0x12900	񀽱
+Index Middle Thumb Hook	01-03-013-01	0x12a00	񀿑
+Index Middle Thumb Hinge	01-03-014-01	0x12b00	񁀱
+Thumb Between Index Middle Straight	01-03-015-01	0x12c00	񁂑
+Index Middle Unit, Thumb Side	01-03-016-01	0x12d00	񁃱
+Index Middle Unit, Thumb Side Unit	01-03-017-01	0x12e00	񁅑
+Index Middle Unit, Thumb Side Bent	01-03-018-01	0x12f00	񁆱
+Middle Thumb Hook, Index Up	01-03-019-01	0x13000	񁈑
+Index Thumb Hook, Middle Up	01-03-020-01	0x13100	񁉱
+Index Middle Unit Hinge, Thumb Side	01-03-021-01	0x13200	񁋑
+Index Middle Cross, Thumb Side	01-03-022-01	0x13300	񁌱
+Index Middle Unit, Thumb Forward	01-03-023-01	0x13400	񁎑
+Index Middle Unit Cup, Thumb Forward	01-03-024-01	0x13500	񁏱
+Middle Thumb Cup, Index Up	01-03-025-01	0x13600	񁑑
+Index Thumb Cup, Middle Up	01-03-026-01	0x13700	񁒱
+Middle Thumb Circle, Index Up	01-03-027-01	0x13800	񁔑
+Middle Thumb Circle, Index Hinge	01-03-028-01	0x13900	񁕱
+Index Thumb Angle Out, Middle Up	01-03-029-01	0x13a00	񁗑
+Index Thumb Angle In, Middle Up	01-03-030-01	0x13b00	񁘱
+Index Thumb Circle, Middle Up	01-03-031-01	0x13c00	񁚑
+Index Middle Thumb, Unit Hinge	01-03-032-01	0x13d00	񁛱
+Index Middle Thumb, Angle Out	01-03-033-01	0x13e00	񁝑
+Index Middle Thumb, Angle	01-03-034-01	0x13f00	񁞱
+Middle Thumb Angle Out, Index Up	01-03-035-01	0x14000	񁠑
+Middle Thumb Angle Out, Index Crossed	01-03-036-01	0x14100	񁡱
+Middle Thumb Angle, Index Up	01-03-037-01	0x14200	񁣑
+Index Thumb Hook, Middle Hinge	01-03-038-01	0x14300	񁤱
+Four Fingers	01-04-001-01	0x14400	񁦁
+Four Fingers Bent	01-04-002-01	0x14500	񁧱
+Four Fingers Hinge	01-04-003-01	0x14600	񁩑
+Four Fingers Unit	01-04-004-01	0x14700	񁪱
+Four Fingers Unit Split	01-04-005-01	0x14800	񁬑
+Four Fingers Unit Claw	01-04-006-01	0x14900	񁭱
+Four Fingers Unit Bent	01-04-007-01	0x14a00	񁯑
+Four Fingers Unit Hinge	01-04-008-01	0x14b00	񁰱
+Five Fingers Spread	01-05-001-01	0x14c00	񁲁
+Five Fingers Spread Heel	01-05-002-01	0x14d00	񁳱
+Five Fingers Spread, Four Bent	01-05-003-01	0x14e00	񁵑
+Five Fingers Spread, Four Bent Heel	01-05-004-01	0x14f00	񁶱
+Five Fingers Spread Bent	01-05-005-01	0x15000	񁸑
+Five Fingers Spread Bent Heel	01-05-006-01	0x15100	񁹱
+Five Fingers Spread, Thumb Forward	01-05-007-01	0x15200	񁻑
+Five Fingers Spread Cup	01-05-008-01	0x15300	񁼱
+Five Fingers Spread Cup Open	01-05-009-01	0x15400	񁾑
+Five Fingers Spread Hinge Open	01-05-010-01	0x15500	񁿱
+Five Fingers Spread Oval	01-05-011-01	0x15600	񂁑
+Five Fingers Spread Hinge	01-05-012-01	0x15700	񂂱
+Five Fingers Spread Hinge, Thumb Side	01-05-013-01	0x15800	񂄑
+Five Fingers Spread Hinge, No Thumb	01-05-014-01	0x15900	񂅱
+Flat	01-05-015-01	0x15a00	񂇑
+Flat, Between Palm Facings	01-05-016-01	0x15b00	񂈱
+Flat Heel	01-05-017-01	0x15c00	񂊑
+Flat, Thumb Side	01-05-018-01	0x15d00	񂋱
+Flat, Thumb Side Heel	01-05-019-01	0x15e00	񂍑
+Flat, Thumb Bent	01-05-020-01	0x15f00	񂎱
+Flat, Thumb Forward	01-05-021-01	0x16000	񂐑
+Flat Split Index, Thumb Side	01-05-022-01	0x16100	񂑱
+Flat Split Center	01-05-023-01	0x16200	񂓑
+Flat Split Center, Thumb Side	01-05-024-01	0x16300	񂔱
+Flat Split Center, Thumb Side Bent	01-05-025-01	0x16400	񂖑
+Flat Split Baby	01-05-026-01	0x16500	񂗱
+Claw	01-05-027-01	0x16600	񂙑
+Claw, Thumb Side	01-05-028-01	0x16700	񂚱
+Claw, No Thumb	01-05-029-01	0x16800	񂜑
+Claw, Thumb Forward	01-05-030-01	0x16900	񂝱
+Hook Curlicue	01-05-031-01	0x16a00	񂟑
+Hook	01-05-032-01	0x16b00	񂠱
+Cup Open	01-05-033-01	0x16c00	񂢑
+Cup	01-05-034-01	0x16d00	񂣱
+Cup Open, Thumb Side	01-05-035-01	0x16e00	񂥑
+Cup, Thumb Side	01-05-036-01	0x16f00	񂦱
+Cup Open, No Thumb	01-05-037-01	0x17000	񂨑
+Cup, No Thumb	01-05-038-01	0x17100	񂩱
+Cup Open, Thumb Forward	01-05-039-01	0x17200	񂫑
+Cup, Thumb Forward	01-05-040-01	0x17300	񂬱
+Curlicue Open	01-05-041-01	0x17400	񂮑
+Curlicue	01-05-042-01	0x17500	񂯱
+Circle	01-05-043-01	0x17600	񂱑
+Oval	01-05-044-01	0x17700	񂲱
+Oval, Thumb Side	01-05-045-01	0x17800	񂴑
+Oval, No Thumb	01-05-046-01	0x17900	񂵱
+Oval, Thumb Forward	01-05-047-01	0x17a00	񂷑
+Hinge Open	01-05-048-01	0x17b00	񂸱
+Hinge Open, Thumb Forward	01-05-049-01	0x17c00	񂺑
+Hinge	01-05-050-01	0x17d00	񂻱
+Hinge Small	01-05-051-01	0x17e00	񂽑
+Hinge Open, Thumb Side	01-05-052-01	0x17f00	񂾱
+Hinge, Thumb Side	01-05-053-01	0x18000	񃀑
+Hinge Open, No Thumb	01-05-054-01	0x18100	񃁱
+Hinge, No Thumb	01-05-055-01	0x18200	񃃑
+Hinge, Thumb Side Touches Index	01-05-056-01	0x18300	񃄱
+Hinge, Thumb Between Middle Ring	01-05-057-01	0x18400	񃆑
+Angle	01-05-058-01	0x18500	񃇱
+Index Middle Ring	01-06-001-01	0x18600	񃉁
+Index Middle Ring on Circle	01-06-002-01	0x18700	񃊱
+Index Middle Ring on Hinge	01-06-003-01	0x18800	񃌑
+Index Middle Ring on Angle	01-06-004-01	0x18900	񃍱
+Baby Hinge	01-06-005-01	0x18a00	񃏑
+Index Middle Ring, Bent	01-06-006-01	0x18b00	񃐱
+Index Middle Ring, Unit	01-06-007-01	0x18c00	񃒑
+Index Middle Ring, Unit Hinge	01-06-008-01	0x18d00	񃓱
+Baby Down	01-06-009-01	0x18e00	񃕑
+Baby Down, Ripple Straight	01-06-010-01	0x18f00	񃖱
+Baby Down, Ripple Curved	01-06-011-01	0x19000	񃘑
+Baby Down, Others Circle	01-06-012-01	0x19100	񃙱
+Baby Up	01-06-013-01	0x19200	񃛑
+Baby Up on Fist Thumb Under	01-06-014-01	0x19300	񃜱
+Baby Up on Circle	01-06-015-01	0x19400	񃞑
+Baby Up on Oval	01-06-016-01	0x19500	񃟱
+Baby Up on Angle	01-06-017-01	0x19600	񃡑
+Baby Raised Knuckle	01-06-018-01	0x19700	񃢱
+Baby Bent	01-06-019-01	0x19800	񃤑
+Baby Touches Thumb	01-06-020-01	0x19900	񃥱
+Baby Thumb	01-06-021-01	0x19a00	񃧑
+Baby Thumb on Hinge	01-06-022-01	0x19b00	񃨱
+Baby Index Thumb	01-06-023-01	0x19c00	񃪑
+Baby Index Thumb on Hinge	01-06-024-01	0x19d00	񃫱
+Baby Index Thumb, Index Thumb Angle Out	01-06-025-01	0x19e00	񃭑
+Baby Index Thumb, Index Thumb Angle	01-06-026-01	0x19f00	񃮱
+Baby Index	01-06-027-01	0x1a000	񃰑
+Baby Index on Circle	01-06-028-01	0x1a100	񃱱
+Baby Index on Hinge	01-06-029-01	0x1a200	񃳑
+Baby Index on Angle	01-06-030-01	0x1a300	񃴱
+Index Middle Baby	01-07-001-01	0x1a400	񃶁
+Index Middle Baby on Circle	01-07-002-01	0x1a500	񃷱
+Index Middle Baby on Hinge	01-07-003-01	0x1a600	񃹑
+Ring Hinge	01-07-004-01	0x1a700	񃺱
+Index Middle Baby on Angle	01-07-005-01	0x1a800	񃼑
+Index Middle Cross with Baby	01-07-006-01	0x1a900	񃽱
+Index Middle Cross with Baby on Circle	01-07-007-01	0x1aa00	񃿑
+Ring Down	01-07-008-01	0x1ab00	񄀱
+Ring Down, Index Thumb Hook, Middle Hinge	01-07-009-01	0x1ac00	񄂑
+Ring Down, Middle Thumb Angle, Index Cross	01-07-010-01	0x1ad00	񄃱
+Ring Up	01-07-011-01	0x1ae00	񄅑
+Ring Raised Knuckle	01-07-012-01	0x1af00	񄆱
+Ring Baby	01-07-013-01	0x1b000	񄈑
+Ring Baby on Circle	01-07-014-01	0x1b100	񄉱
+Ring Baby on Oval	01-07-015-01	0x1b200	񄋑
+Ring Baby on Angle	01-07-016-01	0x1b300	񄌱
+Ring Middle	01-07-017-01	0x1b400	񄎑
+Ring Middle Unit	01-07-018-01	0x1b500	񄏱
+Ring Middle Raised Knuckles	01-07-019-01	0x1b600	񄑑
+Ring Index	01-07-020-01	0x1b700	񄒱
+Ring Thumb	01-07-021-01	0x1b800	񄔑
+Ring Thumb Hook	01-07-022-01	0x1b900	񄕱
+Index Ring Baby	01-08-001-01	0x1ba00	񄗁
+Index Ring Baby on Circle	01-08-002-01	0x1bb00	񄘱
+Index Ring Baby on Curlicue	01-08-003-01	0x1bc00	񄚑
+Index Ring Baby on Hook Out	01-08-004-01	0x1bd00	񄛱
+Index Ring Baby on Hook In	01-08-005-01	0x1be00	񄝑
+Index Ring Baby on Hook Under	01-08-006-01	0x1bf00	񄞱
+Index Ring Baby on Cup	01-08-007-01	0x1c000	񄠑
+Index Ring Baby on Hinge	01-08-008-01	0x1c100	񄡱
+Index Ring Baby on Angle Out	01-08-009-01	0x1c200	񄣑
+Index Ring Baby on Angle	01-08-010-01	0x1c300	񄤱
+Middle Down	01-08-011-01	0x1c400	񄦑
+Middle Hinge	01-08-012-01	0x1c500	񄧱
+Middle Up	01-08-013-01	0x1c600	񄩑
+Middle Up on Circle	01-08-014-01	0x1c700	񄪱
+Middle Raised Knuckle	01-08-015-01	0x1c800	񄬑
+Middle Up, Thumb Side	01-08-016-01	0x1c900	񄭱
+Middle Thumb Hook	01-08-017-01	0x1ca00	񄯑
+Middle Thumb Baby	01-08-018-01	0x1cb00	񄰱
+Middle Baby	01-08-019-01	0x1cc00	񄲑
+Middle Ring Baby	01-09-001-01	0x1cd00	񄳡
+Middle Ring Baby on Circle	01-09-002-01	0x1ce00	񄵑
+Middle Ring Baby on Curlicue	01-09-003-01	0x1cf00	񄶱
+Middle Ring Baby on Cup	01-09-004-01	0x1d000	񄸑
+Middle Ring Baby on Hinge	01-09-005-01	0x1d100	񄹱
+Middle Ring Baby on Angle Out	01-09-006-01	0x1d200	񄻑
+Middle Ring Baby on Angle In	01-09-007-01	0x1d300	񄼱
+Middle Ring Baby on Angle	01-09-008-01	0x1d400	񄾑
+Middle Ring Baby Bent	01-09-009-01	0x1d500	񄿱
+Middle Ring Baby Unit on Claw	01-09-010-01	0x1d600	񅁑
+Middle Ring Baby Unit on Claw Side	01-09-011-01	0x1d700	񅂱
+Middle Ring Baby Unit on Hook Out	01-09-012-01	0x1d800	񅄑
+Middle Ring Baby Unit on Hook In	01-09-013-01	0x1d900	񅅱
+Middle Ring Baby Unit on Hook	01-09-014-01	0x1da00	񅇑
+Index Hinge	01-09-015-01	0x1db00	񅈱
+Index Thumb Side	01-09-016-01	0x1dc00	񅊑
+Index Thumb Side on Hinge	01-09-017-01	0x1dd00	񅋱
+Index Thumb Side, Thumb Diagonal	01-09-018-01	0x1de00	񅍑
+Index Thumb Side, Thumb Unit	01-09-019-01	0x1df00	񅎱
+Index Thumb Side, Thumb Bent	01-09-020-01	0x1e000	񅐑
+Index Thumb Side, Index Bent	01-09-021-01	0x1e100	񅑱
+Index Thumb Side, Both Bent	01-09-022-01	0x1e200	񅓑
+Index Thumb Side, Index Hinge	01-09-023-01	0x1e300	񅔱
+Index Thumb Forward, Index Straight	01-09-024-01	0x1e400	񅖑
+Index Thumb Forward, Index Bent	01-09-025-01	0x1e500	񅗱
+Index Thumb Hook	01-09-026-01	0x1e600	񅙑
+Index Thumb Curlicue	01-09-027-01	0x1e700	񅚱
+Index Thumb Curve, Thumb Inside	01-09-028-01	0x1e800	񅜑
+Index Thumb Curve, Thumb Inside on Claw	01-09-029-01	0x1e900	񅝱
+Index Thumb Curve, Thumb Under	01-09-030-01	0x1ea00	񅟑
+Index Thumb Circle	01-09-031-01	0x1eb00	񅠱
+Index Thumb Cup	01-09-032-01	0x1ec00	񅢑
+Index Thumb Cup Open	01-09-033-01	0x1ed00	񅣱
+Index Thumb Hinge Open	01-09-034-01	0x1ee00	񅥑
+Index Thumb Hinge Large	01-09-035-01	0x1ef00	񅦱
+Index Thumb Hinge	01-09-036-01	0x1f000	񅨑
+Index Thumb Hinge Small	01-09-037-01	0x1f100	񅩱
+Index Thumb Angle Out	01-09-038-01	0x1f200	񅫑
+Index Thumb Angle In	01-09-039-01	0x1f300	񅬱
+Index Thumb Angle	01-09-040-01	0x1f400	񅮑
+Thumb	01-10-001-01	0x1f500	񅯡
+Thumb Heel	01-10-002-01	0x1f600	񅱑
+Thumb Side Diagonal	01-10-003-01	0x1f700	񅲱
+Thumb Side Unit	01-10-004-01	0x1f800	񅴑
+Thumb Side Bent	01-10-005-01	0x1f900	񅵱
+Thumb Forward	01-10-006-01	0x1fa00	񅷑
+Thumb Between Index Middle	01-10-007-01	0x1fb00	񅸱
+Thumb Between Middle Ring	01-10-008-01	0x1fc00	񅺑
+Thumb Between Ring Baby	01-10-009-01	0x1fd00	񅻱
+Thumb Under Two Fingers	01-10-010-01	0x1fe00	񅽑
+Thumb Over Two Fingers	01-10-011-01	0x1ff00	񅾱
+Thumb Under Three Fingers	01-10-012-01	0x20000	񆀑
+Thumb Under Four Fingers	01-10-013-01	0x20100	񆁱
+Thumb Over Four Raised Knuckles	01-10-014-01	0x20200	񆃑
+Fist	01-10-015-01	0x20300	񆄱
+Fist Heel	01-10-016-01	0x20400	񆆑
+Touch Single	02-01-001-01	0x20500	񆇡
+Touch Multiple	02-01-002-01	0x20600	񆉁
+Touch Between	02-01-003-01	0x20700	񆊡
+Grasp Single	02-01-004-01	0x20800	񆌁
+Grasp Multiple	02-01-005-01	0x20900	񆍡
+Grasp Between	02-01-006-01	0x20a00	񆏁
+Strike Single	02-01-007-01	0x20b00	񆐡
+Strike Multiple	02-01-008-01	0x20c00	񆒁
+Strike Between	02-01-009-01	0x20d00	񆓡
+Brush Single	02-01-010-01	0x20e00	񆕁
+Brush Multiple	02-01-011-01	0x20f00	񆖡
+Brush Between	02-01-012-01	0x21000	񆘁
+Rub Single	02-01-013-01	0x21100	񆙡
+Rub Multiple	02-01-014-01	0x21200	񆛁
+Rub Between	02-01-015-01	0x21300	񆜡
+Surface Symbols	02-01-016-01	0x21400	񆞁
+Surface Between	02-01-017-01	0x21500	񆟡
+Squeeze Large Single	02-02-001-01	0x21600	񆡁
+Squeeze Small Single	02-02-001-02	0x21700	񆢡
+Squeeze Large Multiple	02-02-002-01	0x21800	񆤁
+Squeeze Small Multiple	02-02-002-02	0x21900	񆥡
+Squeeze Sequential	02-02-003-01	0x21a00	񆧁
+Flick Large Single	02-02-004-01	0x21b00	񆨡
+Flick Small Single	02-02-004-02	0x21c00	񆪁
+Flick Large Multiple	02-02-005-01	0x21d00	񆫡
+Flick Small Multiple	02-02-005-02	0x21e00	񆭁
+Flick Sequential	02-02-006-01	0x21f00	񆮡
+Squeeze Flick Alternating	02-02-007-01	0x22000	񆰁
+Hinge Movement, Up Down Large	02-02-008-01	0x22100	񆱡
+Hinge Movement, Up Down Small	02-02-008-02	0x22200	񆳁
+Hinge Movement, Up Sequential	02-02-009-01	0x22300	񆴡
+Hinge Movement, Down Sequential	02-02-009-02	0x22400	񆶁
+Hinge Movement, Up Down Alternating Large	02-02-010-01	0x22500	񆷡
+Hinge Movement, Up Down Alternating Small	02-02-010-02	0x22600	񆹁
+Hinge Movement, Side to Side Scissors	02-02-011-01	0x22700	񆺡
+Finger Contact Movement, Wall Plane	02-02-012-01	0x22800	񆼁
+Finger Contact Movement, Floor Plane	02-02-013-01	0x22900	񆽡
+Single Straight Movement, Wall Plane Small	02-03-001-01	0x22a00	񆿁
+Single Straight Movement, Wall Plane Medium	02-03-001-02	0x22b00	񇀡
+Single Straight Movement, Wall Plane Large	02-03-001-03	0x22c00	񇂁
+Single Straight Movement, Wall Plane Largest	02-03-001-04	0x22d00	񇃡
+Single Wrist Flex, Wall Plane	02-03-001-05	0x22e00	񇅁
+Double Straight Movement, Wall Plane	02-03-002-01	0x22f00	񇆡
+Double Wrist Flex, Wall Plane	02-03-002-02	0x23000	񇈁
+Double Alternating Movement, Wall Plane	02-03-003-01	0x23100	񇉡
+Double Alternating Wrist Flex, Wall Plane	02-03-003-02	0x23200	񇋁
+Cross Movement, Wall Plane	02-03-004-01	0x23300	񇌡
+Triple Straight Movement, Wall Plane	02-03-005-01	0x23400	񇎁
+Triple Wrist Flex, Wall Plane	02-03-005-02	0x23500	񇏡
+Triple Alternating Movement, Wall Plane	02-03-006-01	0x23600	񇑁
+Triple Alternating Wrist Flex, Wall Plane	02-03-006-02	0x23700	񇒡
+Bend, Wall Plane Small	02-03-007-01	0x23800	񇔁
+Bend, Wall Plane Medium	02-03-007-02	0x23900	񇕡
+Bend, Wall Plane Large	02-03-007-03	0x23a00	񇗁
+Corner, Wall Plane Small	02-03-008-01	0x23b00	񇘡
+Corner, Wall Plane Medium	02-03-008-02	0x23c00	񇚁
+Corner, Wall Plane Large	02-03-008-03	0x23d00	񇛡
+Corner, Wall Plane with Rotation	02-03-008-04	0x23e00	񇝁
+Check, Wall Plane Small	02-03-009-01	0x23f00	񇞡
+Check, Wall Plane Medium	02-03-009-02	0x24000	񇠁
+Check, Wall Plane Large	02-03-009-03	0x24100	񇡡
+Box, Wall Plane Small	02-03-010-01	0x24200	񇣁
+Box, Wall Plane Medium	02-03-010-02	0x24300	񇤡
+Box, Wall Plane Large	02-03-010-03	0x24400	񇦁
+Zigzag, Wall Plane Small	02-03-011-01	0x24500	񇧡
+Zigzag, Wall Plane Medium	02-03-011-02	0x24600	񇩁
+Zigzag, Wall Plane Large	02-03-011-03	0x24700	񇪡
+Peaks, Wall Plane Small	02-03-012-01	0x24800	񇬁
+Peaks, Wall Plane Medium	02-03-012-02	0x24900	񇭡
+Peaks, Wall Plane Large	02-03-012-03	0x24a00	񇯁
+Travel Rotation, Single Wall Plane	02-03-013-01	0x24b00	񇰡
+Travel Rotation, Double Wall Plane	02-03-014-01	0x24c00	񇲁
+Travel Rotation, Alternating Wall Plane	02-03-015-01	0x24d00	񇳡
+Travel Rotation, Single Floor Plane	02-03-016-01	0x24e00	񇵁
+Travel Rotation, Double Floor Plane	02-03-017-01	0x24f00	񇶡
+Travel Rotation, Alternating Floor Plane	02-03-018-01	0x25000	񇸁
+Travel Shaking, Wall Plane	02-03-019-01	0x25100	񇹡
+Travel Arm Spiral, Wall Plane Single	02-03-020-01	0x25200	񇻁
+Travel Arm Spiral, Wall Plane Double	02-03-020-02	0x25300	񇼡
+Travel Arm Spiral, Wall Plane Triple	02-03-020-03	0x25400	񇾁
+Diagonal Away Movement Small	02-04-001-01	0x25500	񇿡
+Diagonal Away Movement Medium	02-04-001-02	0x25600	񈁁
+Diagonal Away Movement Large	02-04-001-03	0x25700	񈂡
+Diagonal Away Movement Largest	02-04-001-04	0x25800	񈄁
+Diagonal Towards Movement Small	02-04-002-01	0x25900	񈅡
+Diagonal Towards Movement Medium	02-04-002-02	0x25a00	񈇁
+Diagonal Towards Movement Large	02-04-002-03	0x25b00	񈈡
+Diagonal Towards Movement Largest	02-04-002-04	0x25c00	񈊁
+Diagonal Between Away Small	02-04-003-01	0x25d00	񈋡
+Diagonal Between Away Medium	02-04-003-02	0x25e00	񈍁
+Diagonal Between Away Large	02-04-003-03	0x25f00	񈎡
+Diagonal Between Away Largest	02-04-003-04	0x26000	񈐁
+Diagonal Between Towards Small	02-04-004-01	0x26100	񈑡
+Diagonal Between Towards Medium	02-04-004-02	0x26200	񈓁
+Diagonal Between Towards Large	02-04-004-03	0x26300	񈔡
+Diagonal Between Towards Largest	02-04-004-04	0x26400	񈖁
+Single Straight Movement, Floor Plane Small	02-05-001-01	0x26500	񈗡
+Single Straight Movement, Floor Plane Medium	02-05-001-02	0x26600	񈙁
+Single Straight Movement, Floor Plane Large	02-05-001-03	0x26700	񈚡
+Single Straight Movement, Floor Plane Largest	02-05-001-04	0x26800	񈜁
+Single Wrist Flex, Floor Plane	02-05-001-05	0x26900	񈝡
+Double Straight Movement, Floor Plane	02-05-002-01	0x26a00	񈟁
+Double Wrist Flex, Floor Plane	02-05-002-02	0x26b00	񈠡
+Double Alternating Movement, Floor Plane	02-05-003-01	0x26c00	񈢁
+Double Alternating Wrist Flex, Floor Plane	02-05-003-02	0x26d00	񈣡
+Cross Movement, Floor Plane	02-05-004-01	0x26e00	񈥁
+Triple Straight Movement, Floor Plane	02-05-005-01	0x26f00	񈦡
+Triple Wrist Flex, Floor Plane	02-05-005-02	0x27000	񈨁
+Triple Alternating Movement, Floor Plane	02-05-006-01	0x27100	񈩡
+Triple Alternating Wrist Flex, Floor Plane	02-05-006-02	0x27200	񈫁
+Bend, Floor Plane	02-05-007-01	0x27300	񈬡
+Corner, Floor Plane Small	02-05-008-01	0x27400	񈮁
+Corner, Floor Plane Medium	02-05-008-02	0x27500	񈯡
+Corner, Floor Plane Large	02-05-008-03	0x27600	񈱁
+Check, Floor Plane	02-05-009-01	0x27700	񈲡
+Box, Floor Plane Small	02-05-010-01	0x27800	񈴁
+Box, Floor Plane Medium	02-05-010-02	0x27900	񈵡
+Box, Floor Plane Large	02-05-010-03	0x27a00	񈷁
+Zigzag, Floor Plane Small	02-05-011-01	0x27b00	񈸡
+Zigzag, Floor Plane Medium	02-05-011-02	0x27c00	񈺁
+Zigzag, Floor Plane Large	02-05-011-03	0x27d00	񈻡
+Peaks, Floor Plane Small	02-05-012-01	0x27e00	񈽁
+Peaks, Floor Plane Medium	02-05-012-02	0x27f00	񈾡
+Peaks, Floor Plane Large	02-05-012-03	0x28000	񉀁
+Travel Rotation Single Floor Plane	02-05-013-01	0x28100	񉁡
+Travel Rotation Double Floor Plane	02-05-014-01	0x28200	񉃁
+Travel Rotation Alternating Floor Plane	02-05-015-01	0x28300	񉄡
+Travel Rotation Single Wall Plane	02-05-016-01	0x28400	񉆁
+Travel Rotation Double Wall Plane	02-05-017-01	0x28500	񉇡
+Travel Rotation Alternating Wall Plane	02-05-018-01	0x28600	񉉁
+Travel Shaking Floor Plane	02-05-019-01	0x28700	񉊡
+Curve Wall Plane, Quarter Small	02-06-001-01	0x28800	񉌁
+Curve Wall Plane, Quarter Medium	02-06-001-02	0x28900	񉍡
+Curve Wall Plane, Quarter Large	02-06-001-03	0x28a00	񉏁
+Curve Wall Plane, Quarter Largest	02-06-001-04	0x28b00	񉐡
+Curve Wall Plane, Half Circle Small	02-06-002-01	0x28c00	񉒁
+Curve Wall Plane, Half Circle Medium	02-06-002-02	0x28d00	񉓡
+Curve Wall Plane, Half Circle Large	02-06-002-03	0x28e00	񉕁
+Curve Wall Plane, Half Circle Largest	02-06-002-04	0x28f00	񉖡
+Curve Wall Plane, 3 Quarter Circle Small	02-06-003-01	0x29000	񉘁
+Curve Wall Plane, 3 Quarter Circle Medium	02-06-003-02	0x29100	񉙡
+Hump Wall Plane Small	02-06-004-01	0x29200	񉛁
+Hump Wall Plane Medium	02-06-004-02	0x29300	񉜡
+Hump Wall Plane Large	02-06-004-03	0x29400	񉞁
+Loop Wall Plane Small	02-06-005-01	0x29500	񉟡
+Loop Wall Plane Medium	02-06-005-02	0x29600	񉡁
+Loop Wall Plane Large	02-06-005-03	0x29700	񉢡
+Loop Wall Plane Small Double	02-06-005-04	0x29800	񉤁
+Wave Wall Plane 2 Curves Small	02-06-006-01	0x29900	񉥡
+Wave Wall Plane 2 Curves Medium	02-06-006-02	0x29a00	񉧁
+Wave Wall Plane 2 Curves Large	02-06-006-03	0x29b00	񉨡
+Wave Wall Plane 3 Curves Small	02-06-006-04	0x29c00	񉪁
+Wave Wall Plane 3 Curves Medium	02-06-006-05	0x29d00	񉫡
+Wave Wall Plane 3 Curves Large	02-06-006-06	0x29e00	񉭁
+Curve Then Straight Movement Wall Plane	02-06-007-01	0x29f00	񉮡
+Curved Cross Movement Wall Small	02-06-007-02	0x2a000	񉰁
+Curved Cross Movement Wall Medium	02-06-007-03	0x2a100	񉱡
+Rotation Single Wall Plane	02-06-008-01	0x2a200	񉳁
+Rotation Double Wall Plane	02-06-009-01	0x2a300	񉴡
+Rotation Alternate Wall Plane	02-06-010-01	0x2a400	񉶁
+Shaking Wall Plane	02-06-011-01	0x2a500	񉷡
+Curve Hits Front Wall	02-07-001-01	0x2a600	񉹁
+Hump Hits Front Wall	02-07-002-01	0x2a700	񉺡
+Loop Hits Front Wall	02-07-003-01	0x2a800	񉼁
+Wave Hits Front Wall	02-07-004-01	0x2a900	񉽡
+Rotation Single Hits Front Wall	02-07-005-01	0x2aa00	񉿁
+Rotation Double Hits Front Wall	02-07-006-01	0x2ab00	񊀡
+Rotation Alternating Hits Front Wall	02-07-007-01	0x2ac00	񊂁
+Curve Hits Chest	02-07-009-01	0x2ad00	񊃡
+Hump Hits Chest	02-07-010-01	0x2ae00	񊅁
+Loop Hits Chest	02-07-011-01	0x2af00	񊆡
+Wave Hits Chest	02-07-012-01	0x2b000	񊈁
+Rotation Single Hits Chest	02-07-013-01	0x2b100	񊉡
+Rotation Double Hits Chest	02-07-014-01	0x2b200	񊋁
+Rotation Alternating Hits Chest	02-07-015-01	0x2b300	񊌡
+Wave Diagonal Path Small	02-07-016-01	0x2b400	񊎁
+Wave Diagonal Path Medium	02-07-016-02	0x2b500	񊏡
+Wave Diagonal Path Large	02-07-016-03	0x2b600	񊑁
+Curve Hits Ceiling Small	02-08-001-01	0x2b700	񊒡
+Curve Hits Ceiling Large	02-08-001-02	0x2b800	񊔁
+Hump Hits Ceiling 2 Humps Small	02-08-002-01	0x2b900	񊕡
+Hump Hits Ceiling 2 Humps Large	02-08-002-02	0x2ba00	񊗁
+Hump Hits Ceiling 3 Humps Small	02-08-002-03	0x2bb00	񊘡
+Hump Hits Ceiling 3 Humps Large	02-08-002-04	0x2bc00	񊚁
+Loop Hits Ceiling Small Single	02-08-003-01	0x2bd00	񊛡
+Loop Hits Ceiling Large Single	02-08-003-02	0x2be00	񊝁
+Loop Hits Ceiling Small Double	02-08-003-03	0x2bf00	񊞡
+Loop Hits Ceiling Large Double	02-08-003-04	0x2c000	񊠁
+Wave Hits Ceiling Small	02-08-004-01	0x2c100	񊡡
+Wave Hits Ceiling Large	02-08-004-02	0x2c200	񊣁
+Rotation Single Hits Ceiling	02-08-005-01	0x2c300	񊤡
+Rotation Double Hits Ceiling	02-08-006-01	0x2c400	񊦁
+Rotation Alternating Hits Ceiling	02-08-007-01	0x2c500	񊧡
+Curve Hits Floor Small	02-08-008-01	0x2c600	񊩁
+Curve Hits Floor Large	02-08-008-02	0x2c700	񊪡
+Hump Hits Floor 2 Humps Small	02-08-009-01	0x2c800	񊬁
+Hump Hits Floor 2 Humps Large	02-08-009-02	0x2c900	񊭡
+Hump Hits Floor 3 Humps Small	02-08-009-03	0x2ca00	񊯁
+Hump Hits Floor 3 Humps Large	02-08-009-04	0x2cb00	񊰡
+Loop Hits Floor Small Single	02-08-010-01	0x2cc00	񊲁
+Loop Hits Floor Large Single	02-08-010-02	0x2cd00	񊳡
+Loop Hits Floor Small Double	02-08-010-03	0x2ce00	񊵁
+Loop Hits Floor Large Double	02-08-010-04	0x2cf00	񊶡
+Wave Hits Floor Small	02-08-011-01	0x2d000	񊸁
+Wave Hits Floor Large	02-08-011-02	0x2d100	񊹡
+Rotation Single Hits Floor	02-08-012-01	0x2d200	񊻁
+Rotation Double Hits Floor	02-08-013-01	0x2d300	񊼡
+Rotation Alternating Hits Floor	02-08-014-01	0x2d400	񊾁
+Curve Floor Plane Small	02-09-001-01	0x2d500	񊿡
+Curve Floor Plane Medium 1	02-09-001-02	0x2d600	񋁁
+Curve Floor Plane Medium 2	02-09-001-03	0x2d700	񋂡
+Curve Floor Plane Large	02-09-001-04	0x2d800	񋄁
+Curve Floor Plane Combined	02-09-001-05	0x2d900	񋅡
+Hump Floor Plane Small	02-09-002-01	0x2da00	񋇁
+Loop Floor Plane Small	02-09-003-01	0x2db00	񋈡
+Wave Floor Plane Snake	02-09-004-01	0x2dc00	񋊁
+Wave Floor Plane Small	02-09-004-02	0x2dd00	񋋡
+Wave Floor Plane Large	02-09-004-03	0x2de00	񋍁
+Rotation Single Floor Plane	02-09-005-01	0x2df00	񋎡
+Rotation Double Floor Plane	02-09-006-01	0x2e000	񋐁
+Rotation Alternating Floor Plane	02-09-007-01	0x2e100	񋑡
+Shaking Parallel Floor	02-09-008-01	0x2e200	񋓁
+Arm Circle Wall Small Single	02-10-001-01	0x2e300	񋔡
+Arm Circle Wall Medium Single	02-10-001-02	0x2e400	񋖁
+Arm Circle Wall Small Double	02-10-002-01	0x2e500	񋗡
+Arm Circle Wall Medium Double	02-10-002-02	0x2e600	񋙁
+Arm Circle Hits Wall Small Single	02-10-003-01	0x2e700	񋚡
+Arm Circle Hits Wall Medium Single	02-10-003-02	0x2e800	񋜁
+Arm Circle Hits Wall Large Single	02-10-003-03	0x2e900	񋝡
+Arm Circle Hits Wall Small Double	02-10-004-01	0x2ea00	񋟁
+Arm Circle Hits Wall Medium Double	02-10-004-02	0x2eb00	񋠡
+Arm Circle Hits Wall Large Double	02-10-004-03	0x2ec00	񋢁
+Wrist Circle Front Wall Single	02-10-005-01	0x2ed00	񋣡
+Wrist Circle Front Wall Double	02-10-005-02	0x2ee00	񋥁
+Wrist Circle Hits Wall Single	02-10-006-01	0x2ef00	񋦡
+Wrist Circle Hits Wall Double	02-10-006-02	0x2f000	񋨁
+Finger Circles Wall Single	02-10-007-01	0x2f100	񋩡
+Finger Circles Wall Double	02-10-007-02	0x2f200	񋫁
+Finger Circles Hits Wall Single	02-10-007-03	0x2f300	񋬡
+Finger Circles Hits Wall Double	02-10-007-04	0x2f400	񋮁
+Arrowheads Small	02-10-008-01	0x2f500	񋯡
+Arrowheads Large	02-10-008-02	0x2f600	񋱁
+Fast	03-01-001-01	0x2f700	񋲡
+Slow	03-01-002-01	0x2f800	񋴁
+Tense	03-01-003-01	0x2f900	񋵡
+Relaxed	03-01-003-02	0x2fa00	񋷁
+Same Time	03-01-004-01	0x2fb00	񋸡
+Same Time Alternating	03-01-004-02	0x2fc00	񋺁
+Every Other Time	03-01-004-03	0x2fd00	񋻡
+Gradual	03-01-004-04	0x2fe00	񋽁
+Head	04-01-001-01	0x2ff00	񋾡
+Head Rims	04-01-002-01	0x30000	񌀁
+Head Movement Straight Wall Plane	04-01-003-01	0x30100	񌁡
+Head Movement Tilts Wall Plane	04-01-004-01	0x30200	񌃁
+Head Movement Straight Floor Plane	04-01-005-01	0x30300	񌄡
+Head Movement Curves Wall Plane	04-01-006-01	0x30400	񌆁
+Head Movement Curves Floor Plane	04-01-007-01	0x30500	񌇡
+Head Movement Circles	04-01-008-01	0x30600	񌉁
+Face Direction Positions, Nose Forward Tilting	04-01-009-01	0x30700	񌊡
+Face Direction Positions, Nose Up or Down	04-01-010-01	0x30800	񌌁
+Face Direction Positions, Nose Up or Down Tilting	04-01-010-02	0x30900	񌍡
+Eyebrows Straight Up	04-02-001-01	0x30a00	񌏁
+Eyebrows Straight Neutral	04-02-001-02	0x30b00	񌐡
+Eyebrows Straight Down	04-02-001-03	0x30c00	񌒁
+Dreamy Eyebrows Neutral Down	04-02-002-01	0x30d00	񌓡
+Dreamy Eyebrows Down Neutral	04-02-002-02	0x30e00	񌕁
+Dreamy Eyebrows Up Neutral	04-02-002-03	0x30f00	񌖡
+Dreamy Eyebrows Neutral-Up	04-02-002-04	0x31000	񌘁
+Forehead Neutral	04-02-003-01	0x31100	񌙡
+Forehead Contact	04-02-003-02	0x31200	񌛁
+Forehead Wrinkled	04-02-003-03	0x31300	񌜡
+Eyes Open	04-02-004-01	0x31400	񌞁
+Eyes Squeezed	04-02-004-02	0x31500	񌟡
+Eyes Closed	04-02-004-03	0x31600	񌡁
+Eye Blink Single	04-02-004-04	0x31700	񌢡
+Eye Blinks Multiple	04-02-004-05	0x31800	񌤁
+Eyes Half Open	04-02-005-01	0x31900	񌥡
+Eyes Wide Open	04-02-005-02	0x31a00	񌧁
+Eyes Half Closed	04-02-005-03	0x31b00	񌨡
+Eyes Widening Movement	04-02-005-04	0x31c00	񌪁
+Eye Wink (Squeezed Eye Blink)	04-02-005-05	0x31d00	񌫡
+Eyelashes Up	04-02-006-01	0x31e00	񌭁
+Eyelashes Down	04-02-006-02	0x31f00	񌮡
+Eyelashes Fluttering	04-02-006-03	0x32000	񌰁
+Eyegaze Straight Wall Plane	04-02-007-01	0x32100	񌱡
+Eyegaze Straight Wall Double	04-02-007-02	0x32200	񌳁
+Eyegaze Straight Wall Alternate	04-02-007-03	0x32300	񌴡
+Eyegaze Straight Floor Plane	04-02-008-01	0x32400	񌶁
+Eyegaze Straight Floor Double	04-02-008-02	0x32500	񌷡
+Eyegaze Straight Floor Alternate	04-02-008-03	0x32600	񌹁
+Eyegaze Curved Wall Plane	04-02-009-01	0x32700	񌺡
+Eyegaze Curved Floor Plane	04-02-010-01	0x32800	񌼁
+Eyegaze Circles Wall Plane	04-02-011-01	0x32900	񌽡
+Cheeks Puffed	04-03-001-01	0x32a00	񌿁
+Cheeks Neutral	04-03-001-02	0x32b00	񍀡
+Cheeks Sucked	04-03-001-03	0x32c00	񍂁
+Tense Cheeks High	04-03-002-01	0x32d00	񍃡
+Tense Cheeks Middle	04-03-002-02	0x32e00	񍅁
+Tense Cheeks Low	04-03-002-03	0x32f00	񍆡
+Ears	04-03-003-01	0x33000	񍈁
+Nose Neutral	04-03-004-01	0x33100	񍉡
+Nose Contact	04-03-004-02	0x33200	񍋁
+Nose Wrinkles	04-03-004-03	0x33300	񍌡
+Nose Wiggles	04-03-004-04	0x33400	񍎁
+Air Blowing Out	04-03-005-01	0x33500	񍏡
+Air Sucking In	04-03-005-02	0x33600	񍑁
+Air Blow Small Rotations	04-03-006-01	0x33700	񍒡
+Air Suck Small Rotations	04-03-006-02	0x33800	񍔁
+Breath Exhale	04-03-007-01	0x33900	񍕡
+Breath Inhale	04-03-007-02	0x33a00	񍗁
+Mouth Closed Neutral	04-04-001-01	0x33b00	񍘡
+Mouth Closed Forward	04-04-001-02	0x33c00	񍚁
+Mouth Closed Contact	04-04-001-03	0x33d00	񍛡
+Mouth Smile	04-04-002-01	0x33e00	񍝁
+Mouth Smile Wrinkled	04-04-002-02	0x33f00	񍞡
+Mouth Smile Open	04-04-002-03	0x34000	񍠁
+Mouth Frown	04-04-003-01	0x34100	񍡡
+Mouth Frown Wrinkled	04-04-003-02	0x34200	񍣁
+Mouth Frown Open	04-04-003-03	0x34300	񍤡
+Mouth Open Circle	04-04-004-01	0x34400	񍦁
+Mouth Open Forward	04-04-004-02	0x34500	񍧡
+Mouth Open Wrinkled	04-04-004-03	0x34600	񍩁
+Mouth Open Oval	04-04-005-01	0x34700	񍪡
+Mouth Open Oval Wrinkled	04-04-005-02	0x34800	񍬁
+Mouth Open Oval Yawn	04-04-005-03	0x34900	񍭡
+Mouth Open Rectangle	04-04-006-01	0x34a00	񍯁
+Mouth Open Rectangle Wrinkled	04-04-006-02	0x34b00	񍰡
+Mouth Open Rectangle Yawn	04-04-006-03	0x34c00	񍲁
+Mouth Kiss	04-04-007-01	0x34d00	񍳡
+Mouth Kiss Forward	04-04-007-02	0x34e00	񍵁
+Mouth Kiss Wrinkled	04-04-007-03	0x34f00	񍶡
+Mouth Tense	04-04-008-01	0x35000	񍸁
+Mouth Tense Forward	04-04-008-02	0x35100	񍹡
+Mouth Tense Sucked	04-04-008-03	0x35200	񍻁
+Lips Pressed Together	04-04-009-01	0x35300	񍼡
+Lip Lower Over Upper	04-04-009-02	0x35400	񍾁
+Lip Upper Over Lower	04-04-009-03	0x35500	񍿡
+Mouth Corners	04-04-010-01	0x35600	񎁁
+Mouth Wrinkles Single	04-04-011-01	0x35700	񎂡
+Mouth Wrinkles Double	04-04-011-02	0x35800	񎄁
+Tongue Sticks Out Far	04-05-001-01	0x35900	񎅡
+Tongue Licks Lips	04-05-001-02	0x35a00	񎇁
+Tongue Tip Between Lips	04-05-001-03	0x35b00	񎈡
+Tongue Tip Touches Inside Mouth	04-05-001-04	0x35c00	񎊁
+Tongue Inside Mouth Relaxed	04-05-001-05	0x35d00	񎋡
+Tongue Moves Against Cheek	04-05-002-01	0x35e00	񎍁
+Tongue Center Sticks Out	04-05-003-01	0x35f00	񎎡
+Tongue Center Inside Mouth	04-05-004-01	0x36000	񎐁
+Teeth	04-05-005-01	0x36100	񎑡
+Teeth Movement	04-05-005-02	0x36200	񎓁
+Teeth on Tongue	04-05-006-01	0x36300	񎔡
+Teeth on Tongue Movement	04-05-006-02	0x36400	񎖁
+Teeth on Lips	04-05-007-01	0x36500	񎗡
+Teeth on Lips Movement	04-05-007-02	0x36600	񎙁
+Teeth Bite Lips	04-05-008-01	0x36700	񎚡
+Jaw Movement Wall Plane	04-05-009-01	0x36800	񎜁
+Jaw Movement Floor Plane	04-05-010-01	0x36900	񎝡
+Neck	04-05-011-01	0x36a00	񎟁
+Hair	04-05-012-01	0x36b00	񎠡
+Excitement	04-05-013-01	0x36c00	񎢁
+Shoulder Hip Spine	05-01-001-01	0x36d00	񎣡
+Shoulder Hip Positions	05-01-002-01	0x36e00	񎥁
+Shoulder Hip Move Wall Plane	05-01-003-01	0x36f00	񎦡
+Shoulder Hip Move Floor Plane	05-01-004-01	0x37000	񎨁
+Shoulder Tilts (from Waist)	05-01-005-01	0x37100	񎩡
+Torso Straight Stretch Wall	05-01-006-01	0x37200	񎫁
+Torso Curved Bend Wall	05-01-007-01	0x37300	񎬡
+Torso Twist Floor Plane	05-01-008-01	0x37400	񎮁
+Upper Body Tilts (from Hip Joints)	05-01-009-01	0x37500	񎯡
+Limb Combinations	05-02-001-01	0x37600	񎱁
+Limb Length 1	05-02-002-01	0x37700	񎲡
+Limb Length 2	05-02-002-02	0x37800	񎴁
+Limb Length 3	05-02-002-03	0x37900	񎵡
+Limb Length 4	05-02-002-04	0x37a00	񎷁
+Limb Length 5	05-02-003-01	0x37b00	񎸡
+Limb Length 6	05-02-003-02	0x37c00	񎺁
+Limb Length 7	05-02-003-03	0x37d00	񎻡
+Fingers	05-02-004-01	0x37e00	񎽁
+Location Space Wall Plane	06-01-001-01	0x37f00	񎾡
+Location Space Floor Plane	06-01-001-02	0x38000	񏀁
+Location Height	06-01-002-01	0x38100	񏁡
+Location Width	06-01-003-01	0x38200	񏃁
+Location Depth	06-01-004-01	0x38300	񏄡
+Location Head Neck	06-01-005-01	0x38400	񏆁
+Location Torso	06-01-006-01	0x38500	񏇡
+Location Limbs Digits	06-01-007-01	0x38600	񏉁
+Comma	07-01-001-01	0x38700	񏊡
+Period	07-01-001-02	0x38800	񏌁
+Semicolon	07-01-002-01	0x38900	񏍡
+Colon	07-01-002-02	0x38a00	񏏁
+Parentheses	07-01-003-01	0x38b00	񏐡

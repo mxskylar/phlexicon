@@ -1,10 +1,10 @@
 
 import * as React from 'react';
-import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Route, Routes, Link, Navigate } from 'react-router-dom';
-import { AddVocab } from './pages/add-vocab';
-import { SearchCustomizeVocab } from './pages/search-customize-vocab';
-import { BackupExportData } from './pages/backup-export-data';
+import {createRoot} from 'react-dom/client';
+import {BrowserRouter, Route, Routes, Link, Navigate} from 'react-router-dom';
+import {AddVocab} from './pages/add-vocab.tsx';
+import {SearchCustomizeVocab} from './pages/search-customize-vocab.tsx';
+import {BackupExportData} from './pages/backup-export-data.tsx';
 
 const Navbar = () => {
     return (

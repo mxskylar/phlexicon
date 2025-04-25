@@ -1,0 +1,31 @@
+name	symbolId	startNumber	symbol
+Index	01-01	0x10000	񀀁
+Index Middle	01-02	0x10e00	񀕁
+Index Middle Thumb	01-03	0x11e00	񀭁
+Four Fingers	01-04	0x14400	񁦁
+Five Fingers	01-05	0x14c00	񁲁
+Baby Finger	01-06	0x18600	񃉁
+Ring Finger	01-07	0x1a400	񃶁
+Middle Finger	01-08	0x1ba00	񄗁
+Index Thumb	01-09	0x1cd00	񄳡
+Thumb	01-10	0x1f500	񅯡
+Contact	02-01	0x20500	񆇡
+Finger Movement	02-02	0x21600	񆡁
+Straight Wall Plane	02-03	0x22a00	񆿁
+Straight Diagonal Plane	02-04	0x25500	񇿡
+Straight Floor Plane	02-05	0x26500	񈗡
+Curves Parallel Wall Plane	02-06	0x28800	񉌁
+Curves Hit Wall Plane	02-07	0x2a600	񉹁
+Curves Hit Floor Plane	02-08	0x2b700	񊒡
+Curves Parallel Floor Plane	02-09	0x2d500	񊿡
+Circles	02-10	0x2e300	񋔡
+Dynamics & Timing	03-01	0x2f700	񋲡
+Head	04-01	0x2ff00	񋾡
+Brow Eyes Eyegaze	04-02	0x30a00	񌏁
+Cheeks Ears Nose Breath	04-03	0x32a00	񌿁
+Mouth Lips	04-04	0x33b00	񍘡
+Tongue Teeth Chin Neck	04-05	0x35900	񎅡
+Trunk	05-01	0x36d00	񎣡
+Limbs	05-02	0x37600	񎱁
+Detailed Location	06-01	0x37f00	񎾡
+Punctuation	07-01	0x38700	񏊡

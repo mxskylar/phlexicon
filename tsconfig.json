@@ -1,12 +1,10 @@
 {
     "compilerOptions": {
-        "target": "es5",         
-        "module": "commonjs",    
-        "strict": true,          
-        "esModuleInterop": true,    
+        "module": "NodeNext",
         "outDir": "./build",
-        "jsx": "react"
+        "jsx": "react",
+        "rewriteRelativeImportExtensions": true
     },
-    "include": ["src/**/*.ts", "tests/**/*.ts", "src/components/keyboard.tsx"],
+    "include": ["src/**/*.ts", "src/**/*.tsx"],
     "exclude": ["node_modules"]
 }
