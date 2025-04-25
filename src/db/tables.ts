@@ -109,22 +109,22 @@ const getHandPictureColumn = () => new BasicColumn("picture", BasicType.BLOB);
 export const HAND_ORIENTATION_PICTURES_TABLE = new Table(
     "hand_orientation_pictures",
     getSignWritingBaseSymbolColumn()
-        .primaryKey()
+        //.primaryKey()
         .required(),
     getRightHandedColumn()
-        .primaryKey()
+        //.primaryKey()
         .required(),
     getVerticalHandColumn()
-        .primaryKey()
+        //.primaryKey()
         .required(),
     getPalmTowardsColumn()
-        .primaryKey()
+        //.primaryKey()
         .required(),
     getPalmAwayColumn()
-        .primaryKey()
+        //.primaryKey()
         .required(),
     getPalmSidewaysColumn()
-        .primaryKey()
+        //.primaryKey()
         .required(),
     /*getHandPictureColumn()
         .required(),*/
@@ -136,6 +136,9 @@ export const HAND_SYMBOL_ROTATION_PICTURES_TABLE = new Table(
         .primaryKey()
         .required(),
     getSignWritingSymbolRotationColumn()
+        .primaryKey()
+        .required(),
+    getRightHandedColumn()
         .primaryKey()
         .required(),
     /*getHandPictureColumn()

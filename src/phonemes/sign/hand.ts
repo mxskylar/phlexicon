@@ -27,5 +27,6 @@ export type HandOrientationPicture = {
 export type HandSymbolRotationPicture = {
     base_symbol: string,
     symbol_rotation: SignWritingSymbolRotation,
+    right_handed: boolean,
     //picture: ,
 };

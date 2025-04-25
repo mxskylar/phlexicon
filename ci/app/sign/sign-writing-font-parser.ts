@@ -215,29 +215,32 @@ export class SignWritingFontParser implements DataParser {
                     handSymbolRotationPictures.push({
                         base_symbol: symbol.baseSymbol,
                         symbol_rotation: symbolRotation,
+                        right_handed: isRightHanded,
                     });
-                } else if (numIterationsMade(i, 16)) {
-                    if (isInbetweenOrientation) {
-                        if (palmOrientations.palm_towards) {
-                            palmOrientations.palm_towards = false;
-                            palmOrientations.palm_away = true;
-                        }
-                        if (palmOrientations.palm_away) {
-                            palmOrientations.palm_away = false;
-                            palmOrientations.palm_towards = true;
-                        }
-                    } else {
-                        if (palmOrientations.palm_towards) {
-                            palmOrientations.palm_towards = false;
-                            palmOrientations.palm_sideways = true;
-                        }
-                        if (palmOrientations.palm_sideways) {
-                            palmOrientations.palm_sideways = false;
-                            palmOrientations.palm_away = true;
-                        }
-                        if (palmOrientations.palm_away) {
-                            palmOrientations.palm_away = false;
-                            palmOrientations.palm_towards = true;
+                } else if (i % 16 === 0) {
+                    if (i > 0) {
+                        if (isInbetweenOrientation) {
+                            if (palmOrientations.palm_towards) {
+                                palmOrientations.palm_towards = false;
+                                palmOrientations.palm_away = true;
+                            }
+                            if (palmOrientations.palm_away) {
+                                palmOrientations.palm_away = false;
+                                palmOrientations.palm_towards = true;
+                            }
+                        } else {
+                            if (palmOrientations.palm_towards) {
+                                palmOrientations.palm_towards = false;
+                                palmOrientations.palm_sideways = true;
+                            }
+                            if (palmOrientations.palm_sideways) {
+                                palmOrientations.palm_sideways = false;
+                                palmOrientations.palm_away = true;
+                            }
+                            if (palmOrientations.palm_away) {
+                                palmOrientations.palm_away = false;
+                                palmOrientations.palm_towards = true;
+                            }
                         }
                     }
                     handOrientationPictures.push({

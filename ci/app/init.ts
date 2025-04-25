@@ -88,10 +88,10 @@ const {hands, handOrientationPictures, handSymbolRotationPictures} = signWriting
 db.insertRows(HANDS_TABLE, hands);
 
 db.createTable(HAND_ORIENTATION_PICTURES_TABLE);
-//db.insertRows(HAND_ORIENTATION_PICTURES_TABLE, handOrientationPictures);
+db.insertRows(HAND_ORIENTATION_PICTURES_TABLE, handOrientationPictures);
 
 db.createTable(HAND_SYMBOL_ROTATION_PICTURES_TABLE);
-//db.insertRows(HAND_SYMBOL_ROTATION_PICTURES_TABLE, handSymbolRotationPictures);
+db.insertRows(HAND_SYMBOL_ROTATION_PICTURES_TABLE, handSymbolRotationPictures);
 
 const signPhonemeParser = new SignPhonemeParser(
     signWritingFontParser.symbols,
