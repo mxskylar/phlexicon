@@ -71,7 +71,6 @@ export const SIGN_DIALECTS_TABLE = new Table(
 );
 
 // SignWriting Symbols
-const getSignWritingSymbolColumn = () => new LengthColumn("symbol", LengthType.CHAR, 1);
 const getSignWritingBaseSymbolColumn = () => new LengthColumn("base_symbol", LengthType.CHAR, 1);
 const getSignWritingSymbolRotationColumn = () =>
     new BasicColumn("symbol_rotation", BasicType.INTEGER)
@@ -86,7 +85,7 @@ const getPalmSidewaysColumn = () => new BasicColumn("palm_sideways", BasicType.B
 
 export const HANDS_TABLE = new Table(
     "hands",
-    getSignWritingSymbolColumn()
+    new LengthColumn("symbol", LengthType.CHAR, 1)
         .required()
         .primaryKey(),
     new LengthColumn("handshape", LengthType.CHAR, 1)
@@ -144,7 +143,10 @@ export const ROTATABLE_PALM_DIRECTIONS_TABLE = new Table(
 
 export const SIGN_DIALECT_PHONEMES_TABLE = new Table(
     "sign_dialect_phonemes",
-    getSignWritingSymbolColumn(),
+    getSignWritingBaseSymbolColumn()
+        .required()
+        .primaryKey(),
     getColumnWithForeignKey("dialect_id", new ForeignKey(SIGN_DIALECTS_TABLE, signDialectId))
+        .required()
         .primaryKey(),
 );
