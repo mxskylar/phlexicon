@@ -61,6 +61,8 @@ await pbaseZipFile.close();
 // SignWriting Tutorial: https://www.signwriting.org/lessons/lessonsw/000%20Cover.html
 // SignWriting Characters: https://signbank.org/SignWriting_Character_Viewer.html#?ui=en&set=uni8
 // SignMaker: https://www.signbank.org/signmaker.html
+// International SignWriting Alphabet (ISWA) 2010 Data: https://www.movementwriting.org/symbolbank/index.html#ISWA2010
+// ISWA 2010 Palm Orientation Photos: https://www.movementwriting.org/symbolbank/downloads/ISWA2010/ISWA2010_Photos/
 const SIGN_PUDDLE_HOST = "https://signpuddle.com/server";
 
 const getSignWritingDictionaries = async () => {
@@ -80,7 +82,7 @@ const getSignWritingDictionaries = async () => {
 };
 
 let numberFetchedAlphabets = 0;
-const getSignWritingAlphabet = (dictionary, totalAlphabets = 1) => {
+const getSignWritingAlphabet = (dictionary: string, totalAlphabets: number) => {
     const urlPath = `/dictionary/${dictionary}/alphabet?update=1`;
     const url = `${SIGN_PUDDLE_HOST}${urlPath}`;
     return fetch(url, {method: "GET"})
