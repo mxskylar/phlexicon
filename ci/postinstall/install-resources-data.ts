@@ -27,7 +27,7 @@ const downloadFile = async (url: string, dir: string) => {
             if (!response.ok) {
                 throw new Error(`Failed to download file: ${response.status}`);
             }
-            return response.arrayBuffer()
+            return response.arrayBuffer();
         })
         .then(responseData => fs.appendFileSync(filePath, Buffer.from(responseData)));
 };
@@ -129,6 +129,7 @@ const getPalmOrientationPicture = (baseSymbolId: string, orientationNumber: numb
     return fetch(url, options)
         .then(response => {
             if (response.status === 404) {
+                console.log(`==> [404] Skipping, no picture found at: ${url}`);
                 return;
             }
             return response.arrayBuffer();
@@ -139,12 +140,13 @@ const getPalmOrientationPicture = (baseSymbolId: string, orientationNumber: numb
                 console.log(`==> Fetched palm orientation picture ${numFetchedPictures}/${totalPictures}, ${totalPictures - numFetchedPictures} left...`);
             }
             if (responseData) {
-                fs.appendFileSync(`${PALM_ORIENTATION_PICTURE_DIR}/${fileName}`, Buffer.from(responseData))
+                fs.appendFileSync(`${PALM_ORIENTATION_PICTURE_DIR}/${fileName}`, Buffer.from(responseData));
             }
         });
     }
 
 const baseSymbolIds = getSeperatedValueData(ISWA_BASE_SYMBOLS_FILE_PATH, {delimiter: "\t"})
+    .filter((row, i) => i < 261) // Filter for base symbols of handshapes only
     .map(baseSymbol => baseSymbol.symbolId);
 const ORIENTATION_NUMBERS = [1, 2, 3, 4, 5, 6];
 const totalPictures = baseSymbolIds.length * ORIENTATION_NUMBERS.length;
