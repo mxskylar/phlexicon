@@ -22,7 +22,7 @@ import {
     ISWA_SYMBOL_GROUPS_FILE_PATH,
     SIGN_WRITING_ALPHABETS_FILE_PATH,
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
-    SIGN_WRITING_FONT_FILE,
+    SIGN_WRITING_ONE_D_FONT_FILE,
     UNZIPPED_PBASE_FILES_DIR
 } from '../postinstall/constants';
 import { recreateDirectory } from '../utils';
@@ -77,7 +77,7 @@ db.createTable(SIGN_DIALECTS_TABLE);
 db.insertRows(SIGN_DIALECTS_TABLE, signDialectParser.getDialects());
 
 const signWritingFontParser = new SignWritingFontParser(
-    `${INSTALLED_RESOURCES_DIR}/${SIGN_WRITING_FONT_FILE}`,
+    `${INSTALLED_RESOURCES_DIR}/${SIGN_WRITING_ONE_D_FONT_FILE}`,
     ISWA_CATEGORIES_FILE_PATH,
     ISWA_SYMBOL_GROUPS_FILE_PATH,
     ISWA_BASE_SYMBOLS_FILE_PATH,

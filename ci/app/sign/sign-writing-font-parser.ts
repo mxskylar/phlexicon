@@ -8,8 +8,9 @@ import {
     SignWritingCategory
 } from "../../../src/phonemes/sign/sign-writing";
 import { DataParser, DataType, DataWarning } from "../data-parser";
-import { getPercent, getSeperatedValueData, getUniqueValues, sortAscending } from "../parse-utils";
+import { getPercent, getUniqueValues, sortAscending } from "../parse-utils";
 import { SignWritingBlock, SignWritingCategoryBlock } from '../../sign-writing-block';
+import { getSeperatedValueData } from '../../utils';
 
 type ParsedGlyph = {
     glyph: opentype.Glyph,

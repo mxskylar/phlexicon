@@ -1,7 +1,8 @@
 import { SpokenDialectPhoneme } from "../../../src/phonemes/spoken/spoken-phoneme";
 import { DataParser, DataWarning } from "../data-parser";
-import { getSeperatedValueData, getUniqueValues } from "../parse-utils";
+import { getUniqueValues } from "../parse-utils";
 import { SpokenDialect } from "../../../src/phonemes/spoken/spoken-dialect";
+import { getSeperatedValueData } from "../../utils";
 
 type RawData = {
     language: string,

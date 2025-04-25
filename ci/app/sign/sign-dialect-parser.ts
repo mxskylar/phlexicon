@@ -1,8 +1,9 @@
 import * as os from 'os';
 import { DataParser, DataType, DataWarning } from "../data-parser";
-import { getJsonData, getSeperatedValueData } from "../parse-utils";
+import { getJsonData } from "../parse-utils";
 import { SignDialect } from "../../../src/phonemes/sign/sign-dialect";
 import { SIGN_DIALECTS_TABLE } from "../../../src/db/tables";
+import { getSeperatedValueData } from '../../utils';
 
 type Dictionary = {
     name: string,

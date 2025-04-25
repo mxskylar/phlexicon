@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import StreamZip from 'node-stream-zip';
-import {recreateDirectory} from '../utils';
+import { Agent } from 'undici';
+import { getSeperatedValueData, recreateDirectory } from '../utils';
 import {
     INSTALLED_RESOURCES_DIR,
     SIGN_WRITING_ONE_D_FONT_FILE,
@@ -10,20 +11,24 @@ import {
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
     SIGN_WRITING_FILL_FONT_FILE,
     SIGN_WRITING_LINE_FONT_FILE,
+    ISWA_BASE_SYMBOLS_FILE_PATH,
 } from './constants';
 
-const downloadFile = async (url: string, dir: string, shouldLog: boolean = true) => {
+const downloadFile = async (url: string, dir: string) => {
     const path = new URL(url).pathname.split("/");
     const fileName = path[path.length - 1];
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
     }
     const filePath = `${dir}/${fileName}`;
-    if (shouldLog) {
-        console.log(`=> Downloading ${filePath} from: ${url}`);
-    }
+    console.log(`=> Downloading ${filePath} from: ${url}`);
     await fetch(url, {method: "GET"})
-        .then(response => response.arrayBuffer())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to download file: ${response.status}`);
+            }
+            return response.arrayBuffer()
+        })
         .then(responseData => fs.appendFileSync(filePath, Buffer.from(responseData)));
 };
 
@@ -87,7 +92,8 @@ let numberFetchedAlphabets = 0;
 const getSignWritingAlphabet = (dictionary: string, totalAlphabets: number) => {
     const urlPath = `/dictionary/${dictionary}/alphabet?update=1`;
     const url = `${SIGN_PUDDLE_HOST}${urlPath}`;
-    return fetch(url, {method: "GET"})
+    const options = {method: "GET", dispatcher: new Agent({ connectTimeout: 100000 })};
+    return fetch(url, options)
         .then(response => response.json())
         .then(responseData => {
             numberFetchedAlphabets++;
@@ -100,35 +106,54 @@ const getSignWritingAlphabet = (dictionary: string, totalAlphabets: number) => {
 const signWritingDictionaries = await getSignWritingDictionaries();
 fs.writeFileSync(SIGN_WRITING_DICTIONARIES_FILE_PATH, JSON.stringify(signWritingDictionaries));
 
-/*console.log(`=> Fetching ${signWritingDictionaries.length} SignWriting alphabets...`);
+console.log(`=> Fetching ${signWritingDictionaries.length} SignWriting alphabets...`);
 const signWritingAlphabets = await Promise.all(
-    signWritingDictionaries.map(dictionary => getSignWritingAlphabet(dictionary, signWritingDictionaries.length))
+    signWritingDictionaries.map(dictionary => {
+        const makeRequest = () => getSignWritingAlphabet(dictionary, signWritingDictionaries.length);
+        return makeRequest().catch(error => setTimeout(makeRequest, 1000));
+    })
 );
 fs.writeFileSync(SIGN_WRITING_ALPHABETS_FILE_PATH, JSON.stringify(signWritingAlphabets));
-console.log(`=> Wrote ${signWritingDictionaries.length} SignWriting alphabets to: ${SIGN_WRITING_ALPHABETS_FILE_PATH}`);*/
+console.log(`=> Wrote ${signWritingDictionaries.length} SignWriting alphabets to: ${SIGN_WRITING_ALPHABETS_FILE_PATH}`);
 
 // Palm orientation pictures
-const PALM_ORIENTATION_PICTURE_DIR = `${INSTALLED_DATA_DIR}/palm-orientation-pictures`;
+const PALM_ORIENTATION_PICTURE_DIR = `${INSTALLED_RESOURCES_DIR}/palm-orientation-pictures`;
 let numFetchedPictures = 0;
 const getPalmOrientationPicture = (baseSymbolId: string, orientationNumber: number, totalPictures) => {
     const idParts = baseSymbolId.split("-");
     const symbolGroupId = `${idParts[0]}-${idParts[1]}`;
+    const fileName = `${baseSymbolId}-0${orientationNumber}.psd`;
     const url = "https://www.movementwriting.org/symbolbank/downloads/ISWA2010/ISWA2010_Photos/"
-        + `${symbolGroupId}/${symbolGroupId}-${idParts[2]}/${baseSymbolId}-0${orientationNumber}.psd`;
-    return downloadFile(url, PALM_ORIENTATION_PICTURE_DIR, false)
+        + `${symbolGroupId}/${symbolGroupId}-${idParts[2]}/${fileName}`;
+    const options = {method: "GET", dispatcher: new Agent({ connectTimeout: 100000 })};
+    return fetch(url, options)
+        .then(response => {
+            if (response.status === 404) {
+                return;
+            }
+            return response.arrayBuffer();
+        })
         .then(responseData => {
             numFetchedPictures++;
-            console.log(`==> Fetched palm orientation picture ${numFetchedPictures}/${totalPictures} from: ${url}`);
-            return responseData;
+            if (numFetchedPictures % 100 === 0) {
+                console.log(`==> Fetched palm orientation picture ${numFetchedPictures}/${totalPictures}, ${totalPictures - numFetchedPictures} left...`);
+            }
+            if (responseData) {
+                fs.appendFileSync(`${PALM_ORIENTATION_PICTURE_DIR}/${fileName}`, Buffer.from(responseData))
+            }
         });
     }
 
-const baseSymbolIds = ["01-01-001-01", "01-01-002-01"];
+const baseSymbolIds = getSeperatedValueData(ISWA_BASE_SYMBOLS_FILE_PATH, {delimiter: "\t"})
+    .map(baseSymbol => baseSymbol.symbolId);
 const ORIENTATION_NUMBERS = [1, 2, 3, 4, 5, 6];
 const totalPictures = baseSymbolIds.length * ORIENTATION_NUMBERS.length;
 fs.mkdirSync(PALM_ORIENTATION_PICTURE_DIR);
-console.log(`=> Downloading ${totalPictures} palm orientation pictures...`)
+console.log(`=> Downloading ${totalPictures} palm orientation pictures...`);
 await Promise.all(baseSymbolIds.map(baseSymbolId => {
-    return ORIENTATION_NUMBERS.map(n => getPalmOrientationPicture(baseSymbolId, n, totalPictures));
+    return ORIENTATION_NUMBERS.map(n => {
+        const makeRequest = () => getPalmOrientationPicture(baseSymbolId, n, totalPictures);
+        return makeRequest().catch(error => setTimeout(makeRequest, 1000));
+    });
 }));
-console.log(`=> Downloaded ${totalPictures} palm orientation pictures!`)
+console.log(`=> Downloaded ${totalPictures} palm orientation pictures!`);
