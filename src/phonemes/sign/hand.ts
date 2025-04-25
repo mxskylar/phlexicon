@@ -5,25 +5,28 @@ export type Hand = {
     handshape: string,
     base_symbol: string,
     symbol_rotation: SignWritingSymbolRotation,
+    // True when the symbol_rotation represents the direction of fingers
+    // False when the symbol_rotation represents palm orientation
+    // without changing the direction of fingers
+    rotatable_finger_direction: boolean,
     right_handed: boolean,
     vertical: boolean,
-    palm_towards: boolean | null,
-    palm_away: boolean | null,
-    palm_sideways: boolean | null,
+    palm_towards: boolean,
+    palm_away: boolean,
+    palm_sideways: boolean,
 };
 
 export type HandOrientationPicture = {
     base_symbol: string,
     vertical: boolean,
-    palm_towards: boolean | null,
-    palm_away: boolean | null,
-    palm_sideways: boolean | null,
+    palm_towards: boolean,
+    palm_away: boolean,
+    palm_sideways: boolean,
     //picture: ,
 };
 
 export type HandSymbolRotationPicture = {
     base_symbol: string,
     symbol_rotation: SignWritingSymbolRotation,
-    right_handed: boolean,
     //picture: ,
 };

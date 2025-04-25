@@ -95,6 +95,8 @@ export const HANDS_TABLE = new Table(
         .required(),
     getSignWritingSymbolRotationColumn()
         .required(),
+    new BasicColumn("rotatable_finger_direction", BasicType.BOOLEAN)
+        .required(),
     getRightHandedColumn()
         .required(),
     getVerticalHandColumn()
@@ -109,19 +111,19 @@ const getHandPictureColumn = () => new BasicColumn("picture", BasicType.BLOB);
 export const HAND_ORIENTATION_PICTURES_TABLE = new Table(
     "hand_orientation_pictures",
     getSignWritingBaseSymbolColumn()
-        //.primaryKey()
+        .primaryKey()
         .required(),
     getVerticalHandColumn()
-        //.primaryKey()
+        .primaryKey()
         .required(),
     getPalmTowardsColumn()
-        //.primaryKey()
+        .primaryKey()
         .required(),
     getPalmAwayColumn()
-        //.primaryKey()
+        .primaryKey()
         .required(),
     getPalmSidewaysColumn()
-        //.primaryKey()
+        .primaryKey()
         .required(),
     /*getHandPictureColumn()
         .required(),*/
@@ -133,9 +135,6 @@ export const HAND_SYMBOL_ROTATION_PICTURES_TABLE = new Table(
         .primaryKey()
         .required(),
     getSignWritingSymbolRotationColumn()
-        .primaryKey()
-        .required(),
-    getRightHandedColumn()
         .primaryKey()
         .required(),
     /*getHandPictureColumn()
