@@ -228,7 +228,7 @@ export class SignWritingFontParser implements DataParser {
                 }
                 // Other symbols have 6 pictures for each 6 palm directions.
                 // Palm directions switch every 16 characters.
-                if (!isHorizontalOrientation && numIterationsMade(i, 16)) {
+                if (!isHorizontalOrientation && (numIterationsMade(i, 16) || i === 0)) {
                     handOrientationPictures.push({
                         base_symbol: symbol.baseSymbol,
                         vertical: isVertical,
