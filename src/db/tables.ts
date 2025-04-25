@@ -9,7 +9,7 @@ import { Table } from "./table.ts";
 import { ForeignKey } from "./foreign-key.ts";
 import { VowelAttribute } from "../phonemes/spoken/vowel.ts";
 import { ConsonantAttribute } from "../phonemes/spoken/consonant.ts";
-import { CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS, SignWritingSymbolRotation } from "../phonemes/sign/sign-writing.ts";
+import { CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS } from "../phonemes/sign/sign-writing.ts";
 
 // SPOKEN DIALECTS
 const spokenDialectId =
@@ -23,19 +23,20 @@ export const SPOKEN_DIALECTS_TABLE = new Table(
 );
 
 // IPA Symbols
-const getIpaSymbolColumn = () =>
-    new LengthColumn("symbol", LengthType.VARCHAR, 5)
-        .required()
-        .primaryKey();
+const getIpaSymbolColumn = () => new LengthColumn("symbol", LengthType.VARCHAR, 5);
 
 export const OTHER_IPA_SYMBOLS_TABLE = new Table(
     "other_ipa_symbols",
-    getIpaSymbolColumn(),
+    getIpaSymbolColumn()
+        .required()
+        .primaryKey(),
 );
 
 export const VOWELS_TABLE = new Table(
     "vowels",
-    getIpaSymbolColumn(),
+    getIpaSymbolColumn()
+        .required()
+        .primaryKey(),
     ...Object.values(VowelAttribute).map(columnName =>
         new BasicColumn(columnName, BasicType.BOOLEAN)
             .required()
@@ -44,7 +45,9 @@ export const VOWELS_TABLE = new Table(
 
 export const CONSONANTS_TABLE = new Table(
     "consonants",
-    getIpaSymbolColumn(),
+    getIpaSymbolColumn()
+        .required()
+        .primaryKey(),
     ...Object.values(ConsonantAttribute).map(columnName =>
         new BasicColumn(columnName, BasicType.BOOLEAN)
             .required()
@@ -53,25 +56,32 @@ export const CONSONANTS_TABLE = new Table(
 
 export const SPOKEN_DIALECT_PHONEMES_TABLE = new Table(
     "spoken_dialect_phonemes",
-    getIpaSymbolColumn(),
+    getIpaSymbolColumn()
+        .required()
+        .primaryKey(),
     getColumnWithForeignKey("dialect_id", new ForeignKey(SPOKEN_DIALECTS_TABLE, spokenDialectId))
         .required()
         .primaryKey(),
 );
 
 // SIGN DIALECTS
-const signDialectId =
-    new LengthColumn("id", LengthType.CHAR, 6)
+const signLanguageIsoCode =
+    new LengthColumn("iso_code", LengthType.CHAR, 3)
+        .required()
+        .primaryKey();
+const signDialectRegion =
+    new BasicColumn("region", BasicType.STRING)
         .required()
         .primaryKey();
 export const SIGN_DIALECTS_TABLE = new Table(
     "sign_dialects",
-    signDialectId,
+    signLanguageIsoCode,
+    signDialectRegion,
     new BasicColumn("name", BasicType.STRING)
+        .required(),
 );
 
 // SignWriting Symbols
-const getSignWritingSymbolColumn = () => new LengthColumn("symbol", LengthType.CHAR, 1);
 const getSignWritingBaseSymbolColumn = () => new LengthColumn("base_symbol", LengthType.CHAR, 1);
 const getSignWritingSymbolRotationColumn = () =>
     new BasicColumn("symbol_rotation", BasicType.INTEGER)
@@ -86,7 +96,7 @@ const getPalmSidewaysColumn = () => new BasicColumn("palm_sideways", BasicType.B
 
 export const HANDS_TABLE = new Table(
     "hands",
-    getSignWritingSymbolColumn()
+    new LengthColumn("symbol", LengthType.CHAR, 1)
         .required()
         .primaryKey(),
     new LengthColumn("handshape", LengthType.CHAR, 1)
@@ -101,9 +111,12 @@ export const HANDS_TABLE = new Table(
         .required(),
     getVerticalHandColumn()
         .required(),
-    getPalmTowardsColumn(),
-    getPalmAwayColumn(),
-    getPalmSidewaysColumn(),
+    getPalmTowardsColumn()
+        .required(),
+    getPalmAwayColumn()
+        .required(),
+    getPalmSidewaysColumn()
+        .required(),
 );
 
 const getPalmDirectionIdColumn = () => new BasicColumn("id", BasicType.STRING);
@@ -144,7 +157,13 @@ export const ROTATABLE_PALM_DIRECTIONS_TABLE = new Table(
 
 export const SIGN_DIALECT_PHONEMES_TABLE = new Table(
     "sign_dialect_phonemes",
-    getSignWritingSymbolColumn(),
-    getColumnWithForeignKey("dialect_id", new ForeignKey(SIGN_DIALECTS_TABLE, signDialectId))
+    getSignWritingBaseSymbolColumn()
+        .required()
+        .primaryKey(),
+    getColumnWithForeignKey("iso_code", new ForeignKey(SIGN_DIALECTS_TABLE, signLanguageIsoCode))
+        .required()
+        .primaryKey(),
+    getColumnWithForeignKey("region", new ForeignKey(SIGN_DIALECTS_TABLE, signDialectRegion))
+        .required()
         .primaryKey(),
 );

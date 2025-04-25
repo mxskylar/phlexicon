@@ -93,12 +93,9 @@ db.insertRows(PALM_DIRECTIONS_TABLE, handOrientationPictures);
 db.createTable(ROTATABLE_PALM_DIRECTIONS_TABLE);
 db.insertRows(ROTATABLE_PALM_DIRECTIONS_TABLE, handSymbolRotationPictures);
 
-const signPhonemeParser = new SignPhonemeParser(
-    signWritingFontParser.symbols,
-    signDialectParser.getDictionaryDialectIdMap(),
-    SIGN_WRITING_ALPHABETS_FILE_PATH
-)
+const signPhonemeParser = new SignPhonemeParser(SIGN_WRITING_ALPHABETS_FILE_PATH);
 db.createTable(SIGN_DIALECT_PHONEMES_TABLE);
+db.insertRows(SIGN_DIALECT_PHONEMES_TABLE, signPhonemeParser.getPhonemes());
 
 // STEP 3: Close the database and check for warnings
 console.log("Data inserted! Closing the database...");

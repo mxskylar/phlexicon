@@ -5,9 +5,8 @@ import { SignDialect } from "../../../src/phonemes/sign/sign-dialect";
 import { SIGN_DIALECTS_TABLE } from "../../../src/db/tables";
 import { getSeperatedValueData } from '../../utils';
 
-type Dictionary = {
+export type SignWritingDictionary = {
     name: string,
-    dialectId: string,
     isoCode: string,
     region: string
     languageName?: string
@@ -26,7 +25,7 @@ type RawIsoData = {
 
 export class SignDialectParser implements DataParser {
     warnings: DataWarning[] = [];
-    private dictionaries: Dictionary[] = [];
+    private dictionaries: SignWritingDictionary[] = [];
     private rawIsoData: RawIsoData[];
 
     constructor(dictNamesFilePath: string, isoFilePath: string) {
@@ -38,9 +37,8 @@ export class SignDialectParser implements DataParser {
             const region = dictNameArray[1];
             this.dictionaries.push({
                 name,
-                dialectId: `${isoCode}-${region}`,
                 isoCode,
-                region
+                region,
             });
         });
         console.log(`Parsing: ${isoFilePath}`);
@@ -58,7 +56,7 @@ export class SignDialectParser implements DataParser {
 
     public getDialects(): SignDialect[] {
         console.log("Parsing sign dialects...");
-        const languagesBestEffort: Dictionary[] = this.dictionaries.map(dict => {
+        const languagesBestEffort: SignWritingDictionary[] = this.dictionaries.map(dict => {
             return {
                 ...dict,
                 languageName: this.getLanguageName(dict.isoCode)
@@ -82,17 +80,10 @@ export class SignDialectParser implements DataParser {
         }
         return languages.map(dict => {
             return {
-                id: dict.dialectId,
-                name: `${dict.languageName} (${dict.region})`
+                name: `${dict.languageName} (${dict.region})`,
+                iso_code: dict.isoCode,
+                region: dict.region,
             };
         });
-    }
-
-    public getDictionaryDialectIdMap(): {[index: string]: string} {
-        const dictNameDialectIdMap = {};
-        this.dictionaries.forEach(dict => {
-            dictNameDialectIdMap[dict.name] = dict.dialectId;
-        });
-        return dictNameDialectIdMap;
     }
 }

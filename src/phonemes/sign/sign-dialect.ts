@@ -1,4 +1,5 @@
 export type SignDialect = {
-    id: string,
-    name: string
+    name: string,
+    iso_code: string,
+    region: string,
 };
