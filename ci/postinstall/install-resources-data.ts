@@ -127,21 +127,13 @@ const getPalmOrientationPicture = (baseSymbolId: string, orientationNumber: numb
         + `${symbolGroupId}/${symbolGroupId}-${idParts[2]}/${fileName}`;
     const options = {method: "GET", dispatcher: new Agent({ connectTimeout: 100000 })};
     return fetch(url, options)
-        .then(response => {
-            if (response.status === 404) {
-                console.log(`==> [404] Skipping, no picture found at: ${url}`);
-                return;
-            }
-            return response.arrayBuffer();
-        })
+        .then(response => response.arrayBuffer())
         .then(responseData => {
             numFetchedPictures++;
             if (numFetchedPictures % 100 === 0) {
                 console.log(`==> Fetched palm orientation picture ${numFetchedPictures}/${totalPictures}, ${totalPictures - numFetchedPictures} left...`);
             }
-            if (responseData) {
-                fs.appendFileSync(`${PALM_ORIENTATION_PICTURE_DIR}/${fileName}`, Buffer.from(responseData));
-            }
+            fs.appendFileSync(`${PALM_ORIENTATION_PICTURE_DIR}/${fileName}`, Buffer.from(responseData));
         });
     }
 
@@ -149,11 +141,14 @@ const baseSymbolIds = getSeperatedValueData(ISWA_BASE_SYMBOLS_FILE_PATH, {delimi
     .filter((row, i) => i < 261) // Filter for base symbols of handshapes only
     .map(baseSymbol => baseSymbol.symbolId);
 const ORIENTATION_NUMBERS = [1, 2, 3, 4, 5, 6];
-const totalPictures = baseSymbolIds.length * ORIENTATION_NUMBERS.length;
+const totalPictures = (baseSymbolIds.length * ORIENTATION_NUMBERS.length) - 2;
 fs.mkdirSync(PALM_ORIENTATION_PICTURE_DIR);
 console.log(`=> Downloading ${totalPictures} palm orientation pictures...`);
 await Promise.all(baseSymbolIds.map(baseSymbolId => {
-    return ORIENTATION_NUMBERS.map(n => {
+    // This base symbol only has 4 orientations, so it only has 4 pictures:
+    // https://www.movementwriting.org/symbolbank/downloads/ISWA2010/ISWA2010_Photos/01-05/01-05-016/
+    const numbers = baseSymbolId === "01-05-016-01" ? ORIENTATION_NUMBERS.slice(0, 4) : ORIENTATION_NUMBERS;
+    return numbers.map(n => {
         const makeRequest = () => getPalmOrientationPicture(baseSymbolId, n, totalPictures);
         return makeRequest().catch(error => setTimeout(makeRequest, 1000));
     });
