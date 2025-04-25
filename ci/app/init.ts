@@ -3,8 +3,8 @@ import { BUILD_DIR, DATABASE_FILE_PATH } from '../../src/build-constants';
 import { Database } from '../../src/db/database';
 import {
     CONSONANTS_TABLE,
-    HAND_ORIENTATION_PICTURES_TABLE,
-    HAND_SYMBOL_ROTATION_PICTURES_TABLE,
+    PALM_DIRECTIONS_TABLE,
+    ROTATABLE_PALM_DIRECTIONS_TABLE,
     HANDS_TABLE,
     OTHER_IPA_SYMBOLS_TABLE,
     SIGN_DIALECT_PHONEMES_TABLE,
@@ -87,11 +87,11 @@ db.createTable(HANDS_TABLE);
 const {hands, handOrientationPictures, handSymbolRotationPictures} = signWritingFontParser.getHandData();
 db.insertRows(HANDS_TABLE, hands);
 
-db.createTable(HAND_ORIENTATION_PICTURES_TABLE);
-db.insertRows(HAND_ORIENTATION_PICTURES_TABLE, handOrientationPictures);
+db.createTable(PALM_DIRECTIONS_TABLE);
+db.insertRows(PALM_DIRECTIONS_TABLE, handOrientationPictures);
 
-db.createTable(HAND_SYMBOL_ROTATION_PICTURES_TABLE);
-db.insertRows(HAND_SYMBOL_ROTATION_PICTURES_TABLE, handSymbolRotationPictures);
+db.createTable(ROTATABLE_PALM_DIRECTIONS_TABLE);
+db.insertRows(ROTATABLE_PALM_DIRECTIONS_TABLE, handSymbolRotationPictures);
 
 const signPhonemeParser = new SignPhonemeParser(
     signWritingFontParser.symbols,

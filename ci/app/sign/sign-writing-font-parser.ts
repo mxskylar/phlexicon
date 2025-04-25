@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import opentype from 'opentype.js';
 import { HANDS_TABLE } from '../../../src/db/tables';
-import { Hand, HandOrientationPicture, HandSymbolRotationPicture } from '../../../src/phonemes/sign/hand';
+import { Hand, PalmDirection, RotatablePalmDirection } from '../../../src/phonemes/sign/hand';
 import {
     CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS,
     COUNTER_CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS,
@@ -21,9 +21,9 @@ export type SignWritingSymbol = {
     glyph: opentype.Glyph,
     character: string,
     number: number,
-    category: SignWritingCategory,
-    symbolGroup: string,
-    baseSymbol: string,
+    category: SignWritingCategoryBlock,
+    symbolGroup: SignWritingBlock,
+    baseSymbol: SignWritingBlock,
 };
 
 enum HandSymbolBlockLength {
@@ -41,7 +41,7 @@ const HAND_SYMBOL_BLOCK_LENGTHS = [
     HandSymbolBlockLength.HORIZONTAL_ORIENTATIONS,
 ];
 
-type PalmDirection = {
+type CardinalPalmDirection = {
     palm_towards: boolean,
     palm_away: boolean,
     palm_sideways: boolean,
@@ -102,8 +102,8 @@ export class SignWritingFontParser implements DataParser {
                 character: symbol.character as string,
                 number,
                 category: this.getCategoryName(number, this.categories),
-                symbolGroup: this.getBlockSymbol(number, this.symbolGroups),
-                baseSymbol: this.getBlockSymbol(number, this.baseSymbols)
+                symbolGroup: this.getBlock(number, this.symbolGroups),
+                baseSymbol: this.getBlock(number, this.baseSymbols),
             };
         });
         symbols.sort((a, b) => sortAscending(a.glyph.index, b.glyph.index)); // Sort symbols by glyph index
@@ -149,21 +149,21 @@ export class SignWritingFontParser implements DataParser {
         }
     }
 
-    private getBlockSymbol(symbolNumber: number, blocks: SignWritingBlock[]): string {
+    private getBlock(symbolNumber: number, blocks: SignWritingBlock[]): SignWritingBlock {
         for (let i = blocks.length - 1; i >= 0; i--) {
             const block = blocks[i];
             if (symbolNumber >= block.startNumber) {
-                return block.symbol;
+                return block;
             }
         }
         throw new Error(`No SignWriting font block found for symbol number ${symbolNumber}`);
     }
 
-    private getCategoryName(symbolNumber: number, categories: SignWritingCategoryBlock[]): SignWritingCategory {
+    private getCategoryName(symbolNumber: number, categories: SignWritingCategoryBlock[]): SignWritingCategoryBlock {
         for (let i = categories.length - 1; i >= 0; i--) {
             const category = categories[i];
             if (symbolNumber >= category.startNumber) {
-                return category.name;
+                return category;
             }
         }
         throw new Error(`No SignWriting category found for symbol number ${symbolNumber}`);
@@ -172,17 +172,17 @@ export class SignWritingFontParser implements DataParser {
     // https://www.signbank.org/iswa/cat_1.html
     public getHandData(): {
         hands: Hand[],
-        handOrientationPictures: HandOrientationPicture[],
-        handSymbolRotationPictures: HandSymbolRotationPicture[],
+        handOrientationPictures: PalmDirection[],
+        handSymbolRotationPictures: RotatablePalmDirection[],
     } {
         const handSymbols = this.getSymbolsWithCategory(SignWritingCategory.HANDS);
         const baseSymbols = this.getBaseSymbols(handSymbols);
         const hands: Hand[] = [];
-        const handOrientationPictures: HandOrientationPicture[] = [];
-        const handSymbolRotationPictures: HandSymbolRotationPicture[] = [];
+        const handOrientationPictures: PalmDirection[] = [];
+        const handSymbolRotationPictures: RotatablePalmDirection[] = [];
         let handshape = baseSymbols[0];
         baseSymbols.forEach(baseSymbol => {
-            const symbols = handSymbols.filter(symbol => symbol.baseSymbol === baseSymbol);
+            const symbols = handSymbols.filter(symbol => symbol.baseSymbol.symbol === baseSymbol);
             const blockLength = symbols.length as HandSymbolBlockLength;
             if (!HAND_SYMBOL_BLOCK_LENGTHS.includes(blockLength)) {
                 throw new Error(
@@ -198,7 +198,9 @@ export class SignWritingFontParser implements DataParser {
             let isRightHanded = true;
             const isHorizontalOrientation = blockLength === HandSymbolBlockLength.HORIZONTAL_ORIENTATIONS;
             let isVertical = isHorizontalOrientation ? false : true;
-            let palmDirection = this.getPalmDirection(blockLength, 0);
+            let cardinalPalmDirection = this.getCardinalPalmDirection(blockLength, 0);
+            let d = 1;
+            const getPalmDirectionId = (symbol: SignWritingSymbol, number: number) => `${symbol.baseSymbol.symbolId}-0${number}`;
             const numIterationsMade = (i: number, n: number): boolean => i > 0 && i % n === 0;
             symbols.forEach((symbol, i) => {
                 // Hand switches every 8 characters
@@ -216,34 +218,38 @@ export class SignWritingFontParser implements DataParser {
                 // Palm directions change every 16 characters, unless symbol only represents horizontal orientations.
                 // In that case, it changes with every symbol, which each have a unique rotation that represents the exact orientation.
                 if (numIterationsMade(i, 16) || isHorizontalOrientation) {
-                    palmDirection = this.getPalmDirection(blockLength, i);
+                    cardinalPalmDirection = this.getCardinalPalmDirection(blockLength, i);
                 }
                 // Base symbols with only horizontal orientations have pictures for 6/8 of the symbol rotations
                 // (that each represent 6/8 palm orientations) for the right hand only.
                 if (isHorizontalOrientation && isRightHanded) {
                     handSymbolRotationPictures.push({
-                        base_symbol: symbol.baseSymbol,
+                        base_symbol: symbol.baseSymbol.symbol,
                         symbol_rotation: symbolRotation,
+                        id: d > 6 ? null : getPalmDirectionId(symbol, d),
                     });
+                    d++;
                 }
                 // Other symbols have 6 pictures for each 6 palm directions.
                 // Palm directions switch every 16 characters.
                 if (!isHorizontalOrientation && (numIterationsMade(i, 16) || i === 0)) {
                     handOrientationPictures.push({
-                        base_symbol: symbol.baseSymbol,
+                        base_symbol: symbol.baseSymbol.symbol,
                         vertical: isVertical,
-                        ...palmDirection
+                        id: getPalmDirectionId(symbol, d),
+                        ...cardinalPalmDirection,
                     });
+                    d++;
                 }
                 hands.push({
                     symbol: symbol.character,
                     handshape,
-                    base_symbol: symbol.baseSymbol,
+                    base_symbol: symbol.baseSymbol.symbol,
                     symbol_rotation: symbolRotation,
                     rotatable_finger_direction: !isHorizontalOrientation,
                     right_handed: isRightHanded,
                     vertical: isVertical,
-                    ...palmDirection,
+                    ...cardinalPalmDirection,
                 });
             });
         });
@@ -251,25 +257,25 @@ export class SignWritingFontParser implements DataParser {
     }
 
     private getSymbolsWithCategory(category: SignWritingCategory) {
-        return this.symbols.filter(symbol => symbol.category === category);
+        return this.symbols.filter(symbol => symbol.category.name === category);
     }
 
     private getBaseSymbols(symbols: SignWritingSymbol[]): string[] {
-        return getUniqueValues(symbols.map(symbol => symbol.baseSymbol));
+        return getUniqueValues(symbols.map(symbol => symbol.baseSymbol.symbol));
     }
 
-    private getPalmDirection(blockLength: HandSymbolBlockLength, i: number): PalmDirection {
+    private getCardinalPalmDirection(blockLength: HandSymbolBlockLength, i: number): CardinalPalmDirection {
         switch (blockLength) {
             case HandSymbolBlockLength.HORIZONTAL_ORIENTATIONS:
-                return this.getHorizontalPalmDirection(i);
+                return this.getHorizontalCardinalPalmDirection(i);
             case HandSymbolBlockLength.INBETWEEN_ORIENTATIONS:
-                return this.getInbetweenPalmDirection(i);
+                return this.getInbetweenCardinalPalmDirection(i);
             case HandSymbolBlockLength.DEFAULT_ORIENTATIONS:
-                return this.getDefaultPalmDirection(i);
+                return this.getDefaultCardinalPalmDirection(i);
         }
     }
 
-    private getDefaultPalmDirection(i: number): PalmDirection {
+    private getDefaultCardinalPalmDirection(i: number): CardinalPalmDirection {
         switch(i) {
             case 32:
             case 80:
@@ -295,7 +301,7 @@ export class SignWritingFontParser implements DataParser {
         }
     }
 
-    private getInbetweenPalmDirection(i: number): PalmDirection {
+    private getInbetweenCardinalPalmDirection(i: number): CardinalPalmDirection {
         switch(i) {
             case 16:
             case 48:
@@ -314,7 +320,7 @@ export class SignWritingFontParser implements DataParser {
         }
     }
 
-    private getHorizontalPalmDirection(i: number): PalmDirection {
+    private getHorizontalCardinalPalmDirection(i: number): CardinalPalmDirection {
         switch(i) {
             case 4:
             case 12:

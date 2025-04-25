@@ -12,14 +12,12 @@ export enum BasicType {
     STRING = "STRING",
     BOOLEAN = "BOOLEAN",
     INTEGER = "INTEGER",
-    BLOB = "BLOB",
 }
 
 const ALL_BASIC_TYPES: string[] = [
     BasicType.STRING,
     BasicType.BOOLEAN,
     BasicType.INTEGER,
-    BasicType.BLOB,
 ]
 
 export const isBasicType = (value: string) => ALL_BASIC_TYPES.includes(value);

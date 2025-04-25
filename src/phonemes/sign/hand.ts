@@ -16,17 +16,17 @@ export type Hand = {
     palm_sideways: boolean,
 };
 
-export type HandOrientationPicture = {
+export type PalmDirection = {
     base_symbol: string,
     vertical: boolean,
     palm_towards: boolean,
     palm_away: boolean,
     palm_sideways: boolean,
-    //picture: ,
+    id: string,
 };
 
-export type HandSymbolRotationPicture = {
+export type RotatablePalmDirection = {
     base_symbol: string,
     symbol_rotation: SignWritingSymbolRotation,
-    //picture: ,
+    id: string | null,
 };

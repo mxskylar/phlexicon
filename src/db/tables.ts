@@ -106,10 +106,10 @@ export const HANDS_TABLE = new Table(
     getPalmSidewaysColumn(),
 );
 
-const getHandPictureColumn = () => new BasicColumn("picture", BasicType.BLOB);
+const getPalmDirectionIdColumn = () => new BasicColumn("id", BasicType.STRING);
 
-export const HAND_ORIENTATION_PICTURES_TABLE = new Table(
-    "hand_orientation_pictures",
+export const PALM_DIRECTIONS_TABLE = new Table(
+    "palm_directions",
     getSignWritingBaseSymbolColumn()
         .primaryKey()
         .required(),
@@ -125,20 +125,21 @@ export const HAND_ORIENTATION_PICTURES_TABLE = new Table(
     getPalmSidewaysColumn()
         .primaryKey()
         .required(),
-    /*getHandPictureColumn()
-        .required(),*/
+    getPalmDirectionIdColumn()
+        .unique()
+        .required(),
 );
 
-export const HAND_SYMBOL_ROTATION_PICTURES_TABLE = new Table(
-    "hand_symbol_rotation_pictures",
+export const ROTATABLE_PALM_DIRECTIONS_TABLE = new Table(
+    "rotatable_palm_directions",
     getSignWritingBaseSymbolColumn()
         .primaryKey()
         .required(),
     getSignWritingSymbolRotationColumn()
         .primaryKey()
         .required(),
-    /*getHandPictureColumn()
-        .required(),*/
+    getPalmDirectionIdColumn()
+        .unique(),
 );
 
 export const SIGN_DIALECT_PHONEMES_TABLE = new Table(
