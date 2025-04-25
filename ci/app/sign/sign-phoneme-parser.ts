@@ -15,15 +15,12 @@ type Alphabet = {
 
 export class SignPhonemeParser implements DataParser {
     warnings: DataWarning[] = [];
-    private symbols: SignWritingSymbol[];
     private alphabets: Alphabet[] = [];
 
     constructor(
-        symbols: SignWritingSymbol[],
         dictNameDialectIdMap: {[index: string]: string},
         filePath: string,
     ) {
-        this.symbols = symbols;
         console.log(`Parsing: ${filePath}`);
         const rawAlphabetData: RawAlphabetData[] = getJsonData(filePath);
         rawAlphabetData.forEach(alphabet => {

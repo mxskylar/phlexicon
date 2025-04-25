@@ -94,7 +94,6 @@ db.createTable(ROTATABLE_PALM_DIRECTIONS_TABLE);
 db.insertRows(ROTATABLE_PALM_DIRECTIONS_TABLE, handSymbolRotationPictures);
 
 const signPhonemeParser = new SignPhonemeParser(
-    signWritingFontParser.symbols,
     signDialectParser.getDictionaryDialectIdMap(),
     SIGN_WRITING_ALPHABETS_FILE_PATH
 )
