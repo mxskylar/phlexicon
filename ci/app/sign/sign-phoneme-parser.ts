@@ -1,6 +1,5 @@
 import { DataParser, DataWarning } from "../data-parser";
 import { getJsonData } from "../parse-utils";
-import { SignWritingSymbol } from "./sign-writing-font-parser";
 
 export type RawAlphabetData = {
     name: string,
