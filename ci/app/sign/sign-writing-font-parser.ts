@@ -245,7 +245,6 @@ export class SignWritingFontParser implements DataParser {
                     }
                     handOrientationPictures.push({
                         base_symbol: symbol.baseSymbol,
-                        right_handed: isRightHanded,
                         vertical: isVertical,
                         ...palmOrientations
                     });

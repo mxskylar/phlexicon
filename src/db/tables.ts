@@ -111,9 +111,6 @@ export const HAND_ORIENTATION_PICTURES_TABLE = new Table(
     getSignWritingBaseSymbolColumn()
         //.primaryKey()
         .required(),
-    getRightHandedColumn()
-        //.primaryKey()
-        .required(),
     getVerticalHandColumn()
         //.primaryKey()
         .required(),

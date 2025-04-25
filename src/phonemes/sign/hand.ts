@@ -5,7 +5,6 @@ export type Hand = {
     handshape: string,
     base_symbol: string,
     symbol_rotation: SignWritingSymbolRotation,
-    // Orientation
     right_handed: boolean,
     vertical: boolean,
     palm_towards: boolean | null,
@@ -15,8 +14,6 @@ export type Hand = {
 
 export type HandOrientationPicture = {
     base_symbol: string,
-    // Orientation
-    right_handed: boolean,
     vertical: boolean,
     palm_towards: boolean | null,
     palm_away: boolean | null,
