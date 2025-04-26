@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import sqlite3 from 'sqlite3';
 import { BUILD_DIR, DATABASE_FILE_PATH } from './build-constants.ts';
 
@@ -10,7 +10,11 @@ const db = new sqlite3.Database(DATABASE_FILE_PATH);
 const createWindow = () => {
     const win = new BrowserWindow({
         width: 700,
-        height: 700
+        height: 700,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        },
     });
     win.loadFile(`${BUILD_DIR}/index.html`);
     // Open new tab links outside of application
@@ -22,6 +26,13 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
     createWindow();
+});
+
+ipcMain.on('asynchronous-message', (event, arg) => {
+    console.log(arg);
+    db.all(arg, (err, rows) => {
+        event.reply('asynchronous-reply', (err && err.message) || rows);
+    });
 });
 
 app.on('window-all-closed', () => {

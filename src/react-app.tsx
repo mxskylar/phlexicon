@@ -1,12 +1,15 @@
 
 import * as React from 'react';
-import {createRoot} from 'react-dom/client';
-import {BrowserRouter, Route, Routes, Link, Navigate} from 'react-router-dom';
-import {AddVocab} from './pages/add-vocab.tsx';
-import {SearchCustomizeVocab} from './pages/search-customize-vocab.tsx';
-import {BackupExportData} from './pages/backup-export-data.tsx';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes, Link, Navigate } from 'react-router-dom';
+import { AddVocab } from './pages/add-vocab.tsx';
+import { SearchCustomizeVocab } from './pages/search-customize-vocab.tsx';
+import { BackupExportData } from './pages/backup-export-data.tsx';
+import { query } from './db/ipc.ts';
 
 const Navbar = () => {
+    query("SELECT * FROM spoken_dialects LIMIT 10;")
+        .then(rows => console.log(rows));
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
             <div className="container-fluid">
