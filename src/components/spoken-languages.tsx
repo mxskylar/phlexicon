@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-export const SearchCustomizeVocab = () => {
+export const SpokenLanguages = () => {
     return (
         <div className="container-fluid">
-            <p>Search & Customize Vocab!</p>
+            Spoken Languages!
         </div>
     );
 };

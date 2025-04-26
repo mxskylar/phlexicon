@@ -2,9 +2,9 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes, Link, Navigate } from 'react-router-dom';
-import { AddVocab } from './pages/add-vocab.tsx';
-import { SearchCustomizeVocab } from './pages/search-customize-vocab.tsx';
-import { BackupExportData } from './pages/backup-export-data.tsx';
+import { SpokenLanguages } from './components/spoken-languages.tsx';
+import { SignLanguages } from './components/sign-languages.tsx';
+import { ExportData } from './components/export-data.tsx';
 import { query } from './db/ipc.ts';
 
 const Navbar = () => {
@@ -20,13 +20,13 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav">
                         <li className="nav-item">
-                            <Link className="nav-link" to="/add-vocab">➕&nbsp;&nbsp;Add Vocab</Link>
+                            <Link className="nav-link" to="/spoken-languages">🗣️&nbsp;&nbsp;Spoken Languages</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/search-customize-vocab">🔍&nbsp;&nbsp;Search & Customize Vocab</Link>
+                            <Link className="nav-link" to="/sign-languages">🤟&nbsp;&nbsp;Sign Languages</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/backup-export-data">💾&nbsp;&nbsp;Backup & Export Data</Link>
+                            <Link className="nav-link" to="/export-data">💾&nbsp;&nbsp;Export Data</Link>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link" href="https://mxskylar.github.io/phlexicon" target="_blank">📖&nbsp;&nbsp;User Guide</a>
@@ -43,10 +43,10 @@ const App = () => {
         <BrowserRouter>
             <Navbar/>
             <Routes>
-                <Route path="/add-vocab" element={<AddVocab/>}/>
-                <Route path="/search-customize-vocab"  element={<SearchCustomizeVocab/>}/>
-                <Route path="/backup-export-data"  element={<BackupExportData/>}/>
-                <Route path="*" element={<Navigate to="/add-vocab" replace />}/>
+                <Route path="/spoken-languages" element={<SpokenLanguages/>}/>
+                <Route path="/sign-languages"  element={<SignLanguages/>}/>
+                <Route path="/export-data"  element={<ExportData/>}/>
+                <Route path="*" element={<Navigate to="/spoken-languages" replace />}/>
             </Routes>
         </BrowserRouter>
     );
