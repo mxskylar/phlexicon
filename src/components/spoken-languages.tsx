@@ -22,7 +22,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
     }
 
     componentDidMount () {
-        query("SELECT * FROM spoken_dialects")
+        query("SELECT * FROM spoken_dialects;")
             .then(rows => {
                 const dialects = rows as SpokenDialect[];
                 this.setState({options: dialects.map(dialect => {
