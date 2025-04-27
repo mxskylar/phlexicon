@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Option, Select } from './select.tsx';
-import { sendQuery } from '../db/ipc.ts';
-import { SpokenDialect } from '../phonemes/spoken/spoken-dialect.ts';
-import { Vowel } from '../phonemes/spoken/vowel.ts';
-import { Consonant } from '../phonemes/spoken/consonant.ts';
+import { Option, Select } from '../select.tsx';
+import { sendQuery } from '../../db/ipc.ts';
+import { SpokenDialect } from '../../phonemes/spoken/spoken-dialect.ts';
+import { Vowel } from '../../phonemes/spoken/vowel.ts';
+import { Consonant } from '../../phonemes/spoken/consonant.ts';
 
 type Props = {};
 
