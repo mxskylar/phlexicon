@@ -5,11 +5,8 @@ import { BrowserRouter, Route, Routes, Link, Navigate } from 'react-router-dom';
 import { SpokenLanguages } from './components/spoken-languages.tsx';
 import { SignLanguages } from './components/sign-languages.tsx';
 import { ExportData } from './components/export-data.tsx';
-import { query } from './db/ipc.ts';
 
 const Navbar = () => {
-    query("SELECT * FROM spoken_dialects LIMIT 10;")
-        .then(rows => console.log(rows));
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
             <div className="container-fluid">
