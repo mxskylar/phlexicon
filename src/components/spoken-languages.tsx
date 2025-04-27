@@ -74,6 +74,9 @@ export class SpokenLanguages extends React.Component<Props, State> {
                         <li className="nav-item">
                             <a className="nav-link" href="#">Consonants</a>
                         </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#">Breakdown</a>
+                        </li>
                     </ul>
                     <div className="keys">
                         {
