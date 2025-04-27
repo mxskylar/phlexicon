@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron";
 
-export const query = (query: string) => {
+export const sendQuery = (query: string) => {
     return new Promise((resolve) => {
         ipcRenderer.once('asynchronous-reply', (_, arg) => {
             resolve(arg);

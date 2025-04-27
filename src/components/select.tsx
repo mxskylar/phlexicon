@@ -8,6 +8,7 @@ export type Option = {
 type Props = {
     defaultOption: Option,
     options: Option[],
+    handleChange: Function,
 };
 
 export const Select = (props: Props) => {
@@ -16,6 +17,7 @@ export const Select = (props: Props) => {
             className="form-select"
             aria-label="Default select example"
             defaultValue={props.defaultOption.value}
+            onChange={e => props.handleChange(e)}
         >
             <option key={props.defaultOption.value} value={props.defaultOption.value}>
                 {props.defaultOption.displayText}
