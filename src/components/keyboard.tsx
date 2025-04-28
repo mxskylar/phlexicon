@@ -25,7 +25,7 @@ export const Keyboard = (props: Props) => {
             }
             {
                 props.keys.map(symbol => (
-                    <div className="modal fade" id={symbol} tabIndex={-1} aria-hidden="true">
+                    <div className="modal fade phoneme-details" id={symbol} tabIndex={-1} aria-hidden="true">
                         <div className="modal-dialog">
                             <div className="modal-content">
                                 <div className="modal-header">
