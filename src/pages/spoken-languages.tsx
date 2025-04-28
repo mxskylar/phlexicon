@@ -7,7 +7,7 @@ import { SpokenDialect } from '../phonemes/spoken/spoken-dialect.ts';
 import { Vowel } from '../phonemes/spoken/vowel.ts';
 import { KEYBOARD_CONTROL_CLASS } from './constants.ts';
 
-enum PhonemeType {
+enum KeyboardType {
     VOWELS = "Vowels",
     CONSONANTS = "Consonants",
 }
@@ -18,7 +18,7 @@ type State = {
     dialectOptions: Option[],
     vowels: Vowel[],
     consonants: Consonant[],
-    tab: PhonemeType,
+    tab: KeyboardType,
 };
 
 const ALL_LANGUAGES_VALUE = "ALL";
@@ -30,7 +30,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
             dialectOptions: [],
             vowels: [],
             consonants: [],
-            tab: PhonemeType.VOWELS,
+            tab: KeyboardType.VOWELS,
         };
     }
 
@@ -78,21 +78,40 @@ export class SpokenLanguages extends React.Component<Props, State> {
 
     switchTab(e: React.BaseSyntheticEvent<HTMLLinkElement>) {
         const {selectedIndex, options} = e.target;
-        this.setState({tab: options[selectedIndex].value as PhonemeType});
+        this.setState({tab: options[selectedIndex].value as KeyboardType});
     }
 
-    getKeyboard(tab: PhonemeType): React.ReactElement {
-        switch(tab) {
-            case PhonemeType.VOWELS:
+    getKeyboard(keyboardType: KeyboardType): React.ReactElement {
+        switch(keyboardType) {
+            case KeyboardType.VOWELS:
                 return (
                     <Keyboard
-                        keys={this.state.vowels.map(vowel => vowel.symbol)}
+                        phonemes={this.state.vowels.map(vowel => {
+                            const {symbol} = vowel;
+                            return {
+                                symbol,
+                                type: "Vowel",
+                                body: (
+                                    <p>Vowel body</p>
+                                ),
+                            };
+                        })}
                     />
                 );
-            case PhonemeType.CONSONANTS:
+            case KeyboardType.CONSONANTS:
                 return (
                     <Keyboard
-                        keys={this.state.consonants.map(consonant => consonant.symbol)}
+                        phonemes={this.state.consonants.map(consonant => {
+                            const {symbol} = consonant;
+                            return {
+                                symbol,
+                                type: "Consonant",
+                                body: (
+                                    <p>Consonant body</p>
+                                ),
+                            };
+
+                        })}
                     />
                 );
         }
@@ -117,10 +136,10 @@ export class SpokenLanguages extends React.Component<Props, State> {
                     id="keyboard-tabs"
                     classes={[KEYBOARD_CONTROL_CLASS]}
                     size={SelectSize.SMALL}
-                    options={Object.values(PhonemeType).map(tab => {
+                    options={Object.values(KeyboardType).map(type => {
                         return {
-                            displayText: tab,
-                            value: tab,
+                            displayText: type,
+                            value: type,
                         };
                     })}
                     handleChange={this.switchTab.bind(this)}
