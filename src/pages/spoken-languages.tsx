@@ -87,8 +87,8 @@ export class SpokenLanguages extends React.Component<Props, State> {
         console.log(e.target.innerText.codePointAt(0));
     }
 
-    getTabContent(href: Tab): React.ReactElement {
-        switch(href) {
+    getTabContent(tab: Tab): React.ReactElement {
+        switch(tab) {
             case Tab.VOWELS:
                 return (
                     <Keyboard
