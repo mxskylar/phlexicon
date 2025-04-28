@@ -5,7 +5,8 @@ import { sendQuery } from '../db/ipc.ts';
 import { Consonant } from '../phonemes/spoken/consonant.ts';
 import { SpokenDialect } from '../phonemes/spoken/spoken-dialect.ts';
 import { Vowel } from '../phonemes/spoken/vowel.ts';
-import { KEYBOARD_CONTROL_CLASS } from './constants.ts';
+import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
+import { VowelDetails } from '../components/spoken/vowel-details.tsx';
 
 enum KeyboardType {
     VOWELS = "Vowels",
@@ -92,7 +93,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                                 symbol,
                                 type: "Vowel",
                                 body: (
-                                    <p>Vowel body</p>
+                                    <VowelDetails />
                                 ),
                             };
                         })}

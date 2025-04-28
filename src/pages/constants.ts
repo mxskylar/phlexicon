@@ -1,1 +1,0 @@
-export const KEYBOARD_CONTROL_CLASS = "keyboard-control";
