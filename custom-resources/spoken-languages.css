@@ -3,6 +3,6 @@
     src: url("CharisSIL-6.200/CharisSIL-Regular.ttf");
 }
 
-#spoken-languages .keyboard {
+#spoken-languages .phoneme-symbol {
     font-family: "Charles SIL"; 
 }
