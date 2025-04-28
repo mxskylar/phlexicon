@@ -83,7 +83,8 @@ export class SpokenLanguages extends React.Component<Props, State> {
     }
 
     handleKeyClick(e: React.BaseSyntheticEvent<HTMLButtonElement>) {
-        console.log(e);
+        console.log(e.target.innerText);
+        console.log(e.target.innerText.codePointAt(0));
     }
 
     getTabContent(href: NavTabHref): React.ReactElement {
@@ -111,7 +112,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
 
     render() {
         return (
-            <div className="container-fluid">
+            <div className="container-fluid" id="spoken-languages">
                 <Select
                     id="dialect-select"
                     options={[

@@ -42,6 +42,14 @@ await downloadFile("https://bootswatch.com/5/cerulean/bootstrap.min.css", INSTAL
 // Minified bundle downloaded from CDN: https://getbootstrap.com/docs/5.3/getting-started/download/#cdn-via-jsdelivr
 await downloadFile("https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js", INSTALLED_RESOURCES_DIR);
 
+// IPA-friendly font: https://software.sil.org/charis/
+// Supports private use area unicode for IPA: https://scripts.sil.org/cms/scripts/page.php?id=fontdownloadsipa&site_id=nrsi#2339eb7c
+// https://www.internationalphoneticassociation.org/content/ipa-fonts
+await downloadFile("https://software.sil.org/downloads/r/charis/CharisSIL-6.200.zip", INSTALLED_RESOURCES_DIR);
+const charlesSilZipFile = await new StreamZip.async({file: `${INSTALLED_RESOURCES_DIR}/CharisSIL-6.200.zip`});
+await charlesSilZipFile.extract(null, INSTALLED_RESOURCES_DIR);
+await charlesSilZipFile.close();
+
 // SignWriting Fonts: https://www.sutton-signwriting.io/#fonts
 const SIGN_WRITING_FONT_REPO = "https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font"
 await downloadFile(`${SIGN_WRITING_FONT_REPO}/${SIGN_WRITING_ONE_D_FONT_FILE}`, INSTALLED_RESOURCES_DIR);

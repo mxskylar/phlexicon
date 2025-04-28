@@ -3,15 +3,8 @@
 }
 
 .keyboard button {
-    margin-top: 5px;
-    margin-right: 5px;
-}
-
-.keyboard .btn-toolbar .btn-group {
-    margin-top: 10px;
-}
-
-.keyboard .btn-toolbar .btn-group .input-group-text {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    font-size: 32px;
+    margin-top: 0.25em;
+    margin-right: 0.25em;
+    padding: 0.75em;
 }

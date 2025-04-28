@@ -1,0 +1,8 @@
+@font-face {
+    font-family: "Charles SIL";
+    src: url("CharisSIL-6.200/CharisSIL-Regular.ttf");
+}
+
+#spoken-languages .keyboard {
+    font-family: "Charles SIL"; 
+}
