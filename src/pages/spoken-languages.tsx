@@ -18,7 +18,7 @@ type State = {
     dialectOptions: Option[],
     vowels: Vowel[],
     consonants: Consonant[],
-    tab: KeyboardType,
+    keyboardType: KeyboardType,
 };
 
 const ALL_LANGUAGES_VALUE = "ALL";
@@ -30,7 +30,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
             dialectOptions: [],
             vowels: [],
             consonants: [],
-            tab: KeyboardType.VOWELS,
+            keyboardType: KeyboardType.VOWELS,
         };
     }
 
@@ -76,9 +76,9 @@ export class SpokenLanguages extends React.Component<Props, State> {
         });
     }
 
-    switchTab(e: React.BaseSyntheticEvent<HTMLLinkElement>) {
+    switchKeyboard(e: React.BaseSyntheticEvent<HTMLLinkElement>) {
         const {selectedIndex, options} = e.target;
-        this.setState({tab: options[selectedIndex].value as KeyboardType});
+        this.setState({keyboardType: options[selectedIndex].value as KeyboardType});
     }
 
     getKeyboard(keyboardType: KeyboardType): React.ReactElement {
@@ -142,9 +142,9 @@ export class SpokenLanguages extends React.Component<Props, State> {
                             value: type,
                         };
                     })}
-                    handleChange={this.switchTab.bind(this)}
+                    handleChange={this.switchKeyboard.bind(this)}
                 />
-                {this.getKeyboard(this.state.tab)}
+                {this.getKeyboard(this.state.keyboardType)}
             </div>
         );
     }
