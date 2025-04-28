@@ -6,7 +6,7 @@ export type Option = {
 };
 
 type Props = {
-    defaultOption: Option,
+    id: string,
     options: Option[],
     handleChange: Function,
 };
@@ -16,15 +16,13 @@ export const Select = (props: Props) => {
         <select
             className="form-select"
             aria-label="Default select example"
-            defaultValue={props.defaultOption.value}
+            defaultValue={props.options[0].value}
             onChange={e => props.handleChange(e)}
+            id={props.id}
         >
-            <option key={props.defaultOption.value} value={props.defaultOption.value}>
-                {props.defaultOption.displayText}
-            </option>
             {
-                props.options.map(option =>
-                    <option key={option.value} value={option.value}>
+                props.options.map((option, i) =>
+                    <option key={`${props.id}-${i}`} value={option.value}>
                         {option.displayText}
                     </option>
                 )

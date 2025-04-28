@@ -2,9 +2,9 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes, Link, Navigate } from 'react-router-dom';
-import { SpokenLanguages } from './components/pages/spoken-languages.tsx';
-import { SignLanguages } from './components/pages/sign-languages.tsx';
-import { ExportData } from './components/pages/export-data.tsx';
+import { SpokenLanguages } from './pages/spoken-languages.tsx';
+import { SignLanguages } from './pages/sign-languages.tsx';
+import { ExportData } from './pages/export-data.tsx';
 
 const Navbar = () => {
     return (

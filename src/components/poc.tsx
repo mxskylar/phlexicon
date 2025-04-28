@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const Keyboard = () => {
+export const PocKeyboard = () => {
     return (
         <div className="keyboard">
             <ul className="nav nav-tabs">
