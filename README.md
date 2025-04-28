@@ -50,6 +50,16 @@ npm install --ignore-scripts
 
 ---
 
+Rebuilds `sqlite3` module for Electron build.
+
+```bash
+npm install --ignore-scripts
+```
+
+*Deletes cache?* Only rebuilds `sqlite3` package used by Electron build.
+
+---
+
 Bundles then launches the app.
 
 ```bash
