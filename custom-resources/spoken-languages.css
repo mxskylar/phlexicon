@@ -6,3 +6,8 @@
 #spoken-languages .phoneme-symbol {
     font-family: "Charles SIL"; 
 }
+
+#vowel-attributes-table {
+    margin-bottom: 0;
+    margin-top: 15px;
+}
