@@ -1,0 +1,1 @@
+export const KEYBOARD_FILTER_CLASS = "keyboard-filter";

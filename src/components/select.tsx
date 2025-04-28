@@ -5,16 +5,27 @@ export type Option = {
     value: string,
 };
 
+export enum SelectSize {
+    SMALL = "form-select-sm",
+    LARGE = "form-select-lg",
+}
+
 type Props = {
     id: string,
     options: Option[],
     handleChange: Function,
+    classes: string[],
+    size?: SelectSize,
 };
 
 export const Select = (props: Props) => {
+    const classes = [...props.classes, "form-select"];
+    if (props.size) {
+        classes.push(props.size);
+    }
     return (
         <select
-            className="form-select"
+            className={classes.join(" ")}
             aria-label="Default select example"
             defaultValue={props.options[0].value}
             onChange={e => props.handleChange(e)}
@@ -29,4 +40,8 @@ export const Select = (props: Props) => {
             }
         </select>
     )
+};
+
+Select.defaultProps = {
+    classes: [],
 };

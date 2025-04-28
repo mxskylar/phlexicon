@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { Option, Select } from '../components/select.tsx';
+import { Keyboard } from '../components/keyboard.tsx';
+import { Option, Select, SelectSize } from '../components/select.tsx';
 import { sendQuery } from '../db/ipc.ts';
+import { Consonant } from '../phonemes/spoken/consonant.ts';
 import { SpokenDialect } from '../phonemes/spoken/spoken-dialect.ts';
 import { Vowel } from '../phonemes/spoken/vowel.ts';
-import { Consonant } from '../phonemes/spoken/consonant.ts';
-import { NavTabs } from '../components/nav-tabs.tsx';
-import { Keyboard } from '../components/keyboard.tsx';
+import { KEYBOARD_FILTER_CLASS } from './constants.ts';
 
-enum NavTabHref {
-    VOWELS = "#Vowels",
-    CONSONANTS = "#Consonants",
-    BREAKDOWN = "#Breakdown",
+enum Tab {
+    VOWELS = "Vowels",
+    CONSONANTS = "Consonants",
+    BREAKDOWN = "Breakdown",
 }
 
 type Props = {};
@@ -19,7 +19,7 @@ type State = {
     dialectOptions: Option[],
     vowels: Vowel[],
     consonants: Consonant[],
-    href: NavTabHref,
+    tab: Tab,
 };
 
 const ALL_LANGUAGES_VALUE = "ALL";
@@ -31,7 +31,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
             dialectOptions: [],
             vowels: [],
             consonants: [],
-            href: NavTabHref.VOWELS,
+            tab: Tab.VOWELS,
         };
     }
 
@@ -78,8 +78,8 @@ export class SpokenLanguages extends React.Component<Props, State> {
     }
 
     switchTab(e: React.BaseSyntheticEvent<HTMLLinkElement>) {
-        const href = new URL(e.target.href).hash as NavTabHref;
-        this.setState({href});
+        const {selectedIndex, options} = e.target;
+        this.setState({tab: options[selectedIndex].value as Tab});
     }
 
     handleKeyClick(e: React.BaseSyntheticEvent<HTMLButtonElement>) {
@@ -87,23 +87,23 @@ export class SpokenLanguages extends React.Component<Props, State> {
         console.log(e.target.innerText.codePointAt(0));
     }
 
-    getTabContent(href: NavTabHref): React.ReactElement {
+    getTabContent(href: Tab): React.ReactElement {
         switch(href) {
-            case NavTabHref.VOWELS:
+            case Tab.VOWELS:
                 return (
                     <Keyboard
                         keys={this.state.vowels.map(vowel => vowel.symbol)}
                         handleClick={this.handleKeyClick.bind(this)}
                     />
                 );
-            case NavTabHref.CONSONANTS:
+            case Tab.CONSONANTS:
                 return (
                     <Keyboard
                         keys={this.state.consonants.map(consonant => consonant.symbol)}
                         handleClick={this.handleKeyClick.bind(this)}
                     />
                 );
-            case NavTabHref.BREAKDOWN:
+            case Tab.BREAKDOWN:
                 return (
                     <p>Breakdown!</p>
                 );
@@ -115,6 +115,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
             <div className="container-fluid" id="spoken-languages">
                 <Select
                     id="dialect-select"
+                    classes={[KEYBOARD_FILTER_CLASS]}
                     options={[
                         {
                             displayText: "Pick a spoken language...",
@@ -124,26 +125,19 @@ export class SpokenLanguages extends React.Component<Props, State> {
                     ]}
                     handleChange={this.switchDialect.bind(this)}
                 />
-                <NavTabs
+                <Select
                     id="keyboard-tabs"
-                    navItems={[
-                        {
-                            displayText: "Vowels",
-                            href: NavTabHref.VOWELS,
-                        },
-                        {
-                            displayText: "Consonants",
-                            href: NavTabHref.CONSONANTS,
-                        },
-                        {
-                            displayText: "Breakdown",
-                            href: NavTabHref.BREAKDOWN,
-                        },
-                    ]}
+                    classes={[KEYBOARD_FILTER_CLASS]}
+                    size={SelectSize.SMALL}
+                    options={Object.values(Tab).map(tab => {
+                        return {
+                            displayText: tab,
+                            value: tab,
+                        };
+                    })}
                     handleChange={this.switchTab.bind(this)}
-                >
-                    {this.getTabContent(this.state.href)}
-                </NavTabs>
+                />
+                {this.getTabContent(this.state.tab)}
             </div>
         );
     }

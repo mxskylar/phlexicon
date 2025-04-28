@@ -1,5 +1,6 @@
 .keyboard {
     text-align: center;
+    margin-top: 5px;
 }
 
 .keyboard button {
@@ -7,4 +8,8 @@
     margin-top: 0.25em;
     margin-right: 0.25em;
     padding: 0.75em;
+}
+
+.keyboard-filter {
+    margin-bottom: 10px;
 }
