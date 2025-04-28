@@ -82,25 +82,18 @@ export class SpokenLanguages extends React.Component<Props, State> {
         this.setState({tab: options[selectedIndex].value as Tab});
     }
 
-    handleKeyClick(e: React.BaseSyntheticEvent<HTMLButtonElement>) {
-        console.log(e.target.innerText);
-        console.log(e.target.innerText.codePointAt(0));
-    }
-
     getTabContent(tab: Tab): React.ReactElement {
         switch(tab) {
             case Tab.VOWELS:
                 return (
                     <Keyboard
                         keys={this.state.vowels.map(vowel => vowel.symbol)}
-                        handleClick={this.handleKeyClick.bind(this)}
                     />
                 );
             case Tab.CONSONANTS:
                 return (
                     <Keyboard
                         keys={this.state.consonants.map(consonant => consonant.symbol)}
-                        handleClick={this.handleKeyClick.bind(this)}
                     />
                 );
             case Tab.BREAKDOWN:

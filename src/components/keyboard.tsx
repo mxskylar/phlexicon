@@ -2,7 +2,6 @@ import * as React from 'react';
 
 type Props = {
     keys: string[],
-    handleClick: Function,
 };
 
 export const Keyboard = (props: Props) => {
@@ -15,7 +14,6 @@ export const Keyboard = (props: Props) => {
                         key={`key-${i}`}
                         type="button"
                         className="btn btn-outline-secondary phoneme-symbol"
-                        onClick={e => props.handleClick(e)}
                         data-bs-toggle="modal"
                         data-bs-target={`#${symbol}`}
                     >
