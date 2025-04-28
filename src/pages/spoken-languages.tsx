@@ -7,10 +7,9 @@ import { SpokenDialect } from '../phonemes/spoken/spoken-dialect.ts';
 import { Vowel } from '../phonemes/spoken/vowel.ts';
 import { KEYBOARD_CONTROL_CLASS } from './constants.ts';
 
-enum Tab {
+enum PhonemeType {
     VOWELS = "Vowels",
     CONSONANTS = "Consonants",
-    BREAKDOWN = "Breakdown",
 }
 
 type Props = {};
@@ -19,7 +18,7 @@ type State = {
     dialectOptions: Option[],
     vowels: Vowel[],
     consonants: Consonant[],
-    tab: Tab,
+    tab: PhonemeType,
 };
 
 const ALL_LANGUAGES_VALUE = "ALL";
@@ -31,7 +30,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
             dialectOptions: [],
             vowels: [],
             consonants: [],
-            tab: Tab.VOWELS,
+            tab: PhonemeType.VOWELS,
         };
     }
 
@@ -79,26 +78,22 @@ export class SpokenLanguages extends React.Component<Props, State> {
 
     switchTab(e: React.BaseSyntheticEvent<HTMLLinkElement>) {
         const {selectedIndex, options} = e.target;
-        this.setState({tab: options[selectedIndex].value as Tab});
+        this.setState({tab: options[selectedIndex].value as PhonemeType});
     }
 
-    getTabContent(tab: Tab): React.ReactElement {
+    getKeyboard(tab: PhonemeType): React.ReactElement {
         switch(tab) {
-            case Tab.VOWELS:
+            case PhonemeType.VOWELS:
                 return (
                     <Keyboard
                         keys={this.state.vowels.map(vowel => vowel.symbol)}
                     />
                 );
-            case Tab.CONSONANTS:
+            case PhonemeType.CONSONANTS:
                 return (
                     <Keyboard
                         keys={this.state.consonants.map(consonant => consonant.symbol)}
                     />
-                );
-            case Tab.BREAKDOWN:
-                return (
-                    <p>Breakdown!</p>
                 );
         }
     }
@@ -122,7 +117,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                     id="keyboard-tabs"
                     classes={[KEYBOARD_CONTROL_CLASS]}
                     size={SelectSize.SMALL}
-                    options={Object.values(Tab).map(tab => {
+                    options={Object.values(PhonemeType).map(tab => {
                         return {
                             displayText: tab,
                             value: tab,
@@ -130,7 +125,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                     })}
                     handleChange={this.switchTab.bind(this)}
                 />
-                {this.getTabContent(this.state.tab)}
+                {this.getKeyboard(this.state.tab)}
             </div>
         );
     }
