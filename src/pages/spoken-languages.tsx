@@ -5,7 +5,7 @@ import { sendQuery } from '../db/ipc.ts';
 import { Consonant } from '../phonemes/spoken/consonant.ts';
 import { SpokenDialect } from '../phonemes/spoken/spoken-dialect.ts';
 import { Vowel } from '../phonemes/spoken/vowel.ts';
-import { KEYBOARD_FILTER_CLASS } from './constants.ts';
+import { KEYBOARD_CONTROL_CLASS } from './constants.ts';
 
 enum Tab {
     VOWELS = "Vowels",
@@ -115,7 +115,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
             <div className="container-fluid" id="spoken-languages">
                 <Select
                     id="dialect-select"
-                    classes={[KEYBOARD_FILTER_CLASS]}
+                    classes={[KEYBOARD_CONTROL_CLASS]}
                     options={[
                         {
                             displayText: "Pick a spoken language...",
@@ -127,7 +127,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                 />
                 <Select
                     id="keyboard-tabs"
-                    classes={[KEYBOARD_FILTER_CLASS]}
+                    classes={[KEYBOARD_CONTROL_CLASS]}
                     size={SelectSize.SMALL}
                     options={Object.values(Tab).map(tab => {
                         return {

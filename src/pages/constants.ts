@@ -1,1 +1,1 @@
-export const KEYBOARD_FILTER_CLASS = "keyboard-filter";
+export const KEYBOARD_CONTROL_CLASS = "keyboard-control";
