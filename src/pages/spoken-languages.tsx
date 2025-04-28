@@ -93,7 +93,9 @@ export class SpokenLanguages extends React.Component<Props, State> {
                                 symbol,
                                 type: "Vowel",
                                 body: (
-                                    <VowelDetails />
+                                    <VowelDetails
+                                        vowel={vowel}
+                                    />
                                 ),
                             };
                         })}
