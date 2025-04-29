@@ -82,8 +82,8 @@ export class SignLanguages extends React.Component<Props, State> {
                             name: "Hand",
                             type: ToolbarType.TOGGLE,
                             buttons: [
-                                {child: "Right", isActive: true},
                                 {child: "Left"},
+                                {child: "Right", isActive: true},
                             ],
                         },
                         {
