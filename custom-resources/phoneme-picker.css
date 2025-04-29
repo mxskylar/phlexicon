@@ -1,3 +1,7 @@
+.phoneme-picker .btn-toolbar {
+    margin-bottom: 0 !important;
+}
+
 /* Filters for keyboard keys & input field with typed characters */
 .keyboard-control {
     margin-bottom: 10px;
@@ -6,7 +10,6 @@
 /* Keyboard keys */
 .keyboard {
     text-align: center;
-    margin-top: 5px;
     margin-bottom: 10px;
 }
 

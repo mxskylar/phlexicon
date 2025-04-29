@@ -7,6 +7,7 @@ import { SpokenDialect } from '../phonemes/spoken/spoken-dialect.ts';
 import { Vowel } from '../phonemes/spoken/vowel.ts';
 import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
 import { VowelDetails } from '../components/spoken/vowel-details.tsx';
+import { Toolbar, ToolbarButtonGroup } from '../components/toolbar.tsx';
 
 enum KeyboardType {
     VOWELS = "Vowels",
@@ -120,9 +121,50 @@ export class SpokenLanguages extends React.Component<Props, State> {
         }
     }
 
+    filterVowels(e) {
+
+    }
+
+    getToolbarGroups(keyboardType: KeyboardType): ToolbarButtonGroup[] {
+        const handleClick = this.filterVowels.bind(this);
+        switch (keyboardType) {
+            case KeyboardType.VOWELS:
+                return [
+                    {
+                        buttons: [
+                            {text: "Front", handleClick},
+                            {text: "Central", handleClick},
+                            {text: "Back", handleClick},
+                        ],
+                    },
+                    {
+                        buttons: [
+                            {text: "Close", handleClick},
+                            {text: "Near-Close", handleClick},
+                            {text: "Close-Mid", handleClick},
+                            {text: "Mid", handleClick},
+                            {text: "Open-Mid", handleClick},
+                            {text: "Near-Mid", handleClick},
+                            {text: "Open", handleClick},
+                        ],
+                    },
+                    {
+                        buttons: [
+                            {text: "Glide", handleClick},
+                            {text: "Rounded", handleClick},
+                            {text: "Palatal", handleClick},
+                            {text: "Labiovelar", handleClick},
+                        ],
+                    },
+                ];
+            case KeyboardType.CONSONANTS:
+                return [];
+        }
+    }
+
     render() {
         return (
-            <div className="container-fluid" id="spoken-languages">
+            <div className="container-fluid phoneme-picker" id="spoken-languages">
                 <Select
                     id="dialect-select"
                     classes={[KEYBOARD_CONTROL_CLASS]}
@@ -146,6 +188,10 @@ export class SpokenLanguages extends React.Component<Props, State> {
                         };
                     })}
                     handleChange={this.switchKeyboard.bind(this)}
+                />
+                <Toolbar
+                    id="spoken-languages-keyboard-filters"
+                    groups={this.getToolbarGroups(this.state.keyboardType)}
                 />
                 {this.getKeyboard(this.state.keyboardType)}
             </div>
