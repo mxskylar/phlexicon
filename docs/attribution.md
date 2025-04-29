@@ -1,4 +1,3 @@
-<!-- TODO: Ensure I am compliant with citation requirements like including licenses in bundled app, specific citation formats, etc. -->
 # Attribution
 
 Phlexicon would be nothing without the open source data and frameworks it depends on:
