@@ -269,6 +269,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                         handleClick: this.filterVowels.bind(this),
                         value: attribute,
                         isActive: this.state.vowelFilters[attribute],
+                        isDisabled: this.state.vowels.every(vowel => !vowel[attribute]),
                     };
                 };
                 return [
@@ -306,6 +307,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                         handleClick: this.filterConsonants.bind(this),
                         value: attribute,
                         isActive: this.state.consonantFilters[attribute],
+                        isDisabled: this.state.consonants.every(consonant => !consonant[attribute]),
                     };
                 };
                 return [

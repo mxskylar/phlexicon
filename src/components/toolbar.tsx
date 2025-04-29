@@ -4,6 +4,7 @@ import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
 export type ToolbarButton = {
     text: string,
     isActive?: boolean,
+    isDisabled?: boolean,
     handleClick: Function,
     value: string,
 };
@@ -20,6 +21,7 @@ type Props = {
 };
 
 const ACTIVE_CLASS = "active";
+const DISABLED_CLASS = "disabled";
 
 export class Toolbar extends React.Component<Props> {
     public static defaultProps = {
@@ -75,11 +77,11 @@ export class Toolbar extends React.Component<Props> {
                             }
                             {
                                 group.buttons.map((button, i) => {
-                                    const {isActive, text, handleClick, value} = button;
+                                    const {isActive, isDisabled, text, handleClick, value} = button;
                                     return (
                                         <button
                                             type="button"
-                                            className={`btn btn-outline-info${isActive ? " active" : ""}`}
+                                            className={`btn btn-outline-info${isActive ? ` ${ACTIVE_CLASS}` : ""}${isDisabled ? ` ${DISABLED_CLASS}`: ""}`}
                                             key={`${this.props.id}-button-${text}-${i}`}
                                             onClick={e => this.handleClick(e, group, handleClick)}
                                             value={value}
