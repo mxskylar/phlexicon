@@ -7,7 +7,7 @@ import { SpokenDialect } from '../phonemes/spoken/spoken-dialect.ts';
 import { Vowel, VowelAttribute } from '../phonemes/spoken/vowel.ts';
 import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
 import { VowelDetails } from '../components/spoken/vowel-details.tsx';
-import { Toolbar, ToolbarButton, ToolbarButtonGroup } from '../components/toolbar.tsx';
+import { Toolbar, ToolbarButton, ToolbarButtonGroup, ToolbarType } from '../components/toolbar.tsx';
 import { ConsonantDetails } from '../components/spoken/consonant-details.tsx';
 
 enum KeyboardType {
@@ -258,6 +258,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
     }
 
     getToolbarGroups(keyboardType: KeyboardType): ToolbarButtonGroup[] {
+        const toolbarType = ToolbarType.MULTI_SELECT;
         switch (keyboardType) {
             case KeyboardType.VOWELS:
                 const getVowelButton = (
@@ -274,6 +275,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                 };
                 return [
                     {
+                        type: toolbarType,
                         buttons: [
                             getVowelButton("Front", VowelAttribute.FRONT),
                             getVowelButton("Central", VowelAttribute.CENTRAL),
@@ -281,6 +283,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                         ],
                     },
                     {
+                        type: toolbarType,
                         buttons: [
                             getVowelButton("Close", VowelAttribute.CLOSE),
                             getVowelButton("Near-Close", VowelAttribute.NEAR_CLOSE),
@@ -292,6 +295,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                         ],
                     },
                     {
+                        type: toolbarType,
                         buttons: [
                             getVowelButton("Glide", VowelAttribute.GLIDE),
                             getVowelButton("Rounded", VowelAttribute.ROUNDED),
@@ -312,6 +316,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                 };
                 return [
                     {
+                        type: toolbarType,
                         buttons: [
                             getConsonantButton(ConsonantAttribute.BILABIAL),
                             getConsonantButton(ConsonantAttribute.LABIODENTAL),
@@ -328,6 +333,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                         ],
                     },
                     {
+                        type: toolbarType,
                         buttons: [
                             getConsonantButton(ConsonantAttribute.NASAL),
                             getConsonantButton(ConsonantAttribute.AFFRICATE),
@@ -343,6 +349,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                         ],
                     },
                     {
+                        type: toolbarType,
                         buttons: [getConsonantButton(ConsonantAttribute.GLIDE)],
                     },
                 ];

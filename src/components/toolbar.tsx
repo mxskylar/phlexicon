@@ -3,15 +3,21 @@ import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
 
 export type ToolbarButton = {
     text: string,
+    value: string,
     isActive?: boolean,
     isDisabled?: boolean,
-    handleClick: Function,
-    value: string,
+    handleClick?: Function,
 };
+
+export enum ToolbarType {
+    CLICKABLE_BUTTON = "CLICKABLE_BUTTON",
+    MULTI_SELECT = "MULTI_SELECT",
+    TOGGLE = "TOGGLE",
+}
 
 export type ToolbarButtonGroup = {
     name?: string,
-    isToggle?: boolean,
+    type: ToolbarType,
     buttons: ToolbarButton[],
 };
 
@@ -24,16 +30,13 @@ const ACTIVE_CLASS = "active";
 const DISABLED_CLASS = "disabled";
 
 export class Toolbar extends React.Component<Props> {
-    public static defaultProps = {
-        isToggle: true,
-    };
-
     constructor(props) {
         super(props);
     }
 
-    handleClick(e, buttonGroup: ToolbarButtonGroup, handleClick: Function) {
-        if (buttonGroup.isToggle) {
+    handleClick(e, buttonGroup: ToolbarButtonGroup, handleClick?: Function) {
+        const {type} = buttonGroup;
+        if (type === ToolbarType.TOGGLE) {
             Array.from(e.target.parentElement.children)
                 .forEach((element, i) => {
                     const button = element as Element;
@@ -43,13 +46,17 @@ export class Toolbar extends React.Component<Props> {
                     }
                 });
         }
-        const {classList} = e.target;
-        if (classList.contains(ACTIVE_CLASS)) {
-            classList.remove(ACTIVE_CLASS);
-        } else {
-            classList.add(ACTIVE_CLASS);
+        if ([ToolbarType.MULTI_SELECT, ToolbarType.TOGGLE].includes(type)) {
+            const {classList} = e.target;
+            if (classList.contains(ACTIVE_CLASS)) {
+                classList.remove(ACTIVE_CLASS);
+            } else {
+                classList.add(ACTIVE_CLASS);
+            }
         }
-        handleClick(e.target);
+        if (handleClick) {
+            handleClick(e.target);
+        }
     }
 
     render() {
