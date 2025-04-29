@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Keyboard } from '../components/keyboard.tsx';
 import { Option, Select, SelectSize } from '../components/select.tsx';
 import { sendQuery } from '../db/ipc.ts';
-import { Consonant } from '../phonemes/spoken/consonant.ts';
+import { Consonant, ConsonantAttribute } from '../phonemes/spoken/consonant.ts';
 import { SpokenDialect } from '../phonemes/spoken/spoken-dialect.ts';
 import { Vowel, VowelAttribute } from '../phonemes/spoken/vowel.ts';
 import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
@@ -37,11 +37,42 @@ type VowelFilters = {
     [VowelAttribute.GLIDE]: boolean
 };
 
+type ConsonantFilters = {
+    // Place (X-Axis)
+    [ConsonantAttribute.BILABIAL]: boolean,
+    [ConsonantAttribute.LABIODENTAL]: boolean,
+    [ConsonantAttribute.DENTAL]: boolean,
+    [ConsonantAttribute.ALVEOLAR]: boolean,
+    [ConsonantAttribute.POSTALVEOLAR]: boolean,
+    [ConsonantAttribute.RETROFLEX]: boolean,
+    [ConsonantAttribute.PALATAL]: boolean,
+    [ConsonantAttribute.VELAR]: boolean,
+    [ConsonantAttribute.UVULAR]: boolean,
+    [ConsonantAttribute.PHARYNGEAL]: boolean,
+    [ConsonantAttribute.EPIGLOTTAL]: boolean,
+    [ConsonantAttribute.GLOTTAL]: boolean,
+    // Manner (Y-Axis)
+    [ConsonantAttribute.NASAL]: boolean,
+    [ConsonantAttribute.AFFRICATE]: boolean,
+    [ConsonantAttribute.FRICATIVE]: boolean,
+    [ConsonantAttribute.APPROXIMANT]: boolean,
+    [ConsonantAttribute.LATERAL_APPROXIMANT]: boolean,
+    [ConsonantAttribute.FLAP]: boolean,
+    [ConsonantAttribute.TRILL]: boolean,
+    [ConsonantAttribute.IMPLOSIVE]: boolean,
+    [ConsonantAttribute.STOP]: boolean,
+    [ConsonantAttribute.LATERAL_STOP]: boolean,
+    [ConsonantAttribute.CLICK]: boolean,
+    // Movement
+    [ConsonantAttribute.GLIDE]: boolean,
+};
+
 type State = {
     dialectOptions: Option[],
     vowels: Vowel[],
     vowelFilters: VowelFilters,
     consonants: Consonant[],
+    consonantFilters: ConsonantFilters,
     keyboardType: KeyboardType,
 };
 
@@ -68,6 +99,36 @@ const DEFAULT_VOWEL_FILTERS: VowelFilters = {
     glide: false,
 };
 
+const DEFAULT_CONSONANT_FILTERS: ConsonantFilters = {
+    // Place (X-Axis)
+    bilabial: false,
+    labiodental: false,
+    dental: false,
+    alveolar: false,
+    postalveolar: false,
+    retroflex: false,
+    palatal: false,
+    velar: false,
+    uvular: false,
+    pharyngeal: false,
+    epiglottal: false,
+    glottal: false,
+    // Manner (Y-Axis)
+    nasal: false,
+    affricate: false,
+    fricative: false,
+    approximant: false,
+    lateral_approximant: false,
+    flap: false,
+    trill: false,
+    implosive: false,
+    stop: false,
+    lateral_stop: false,
+    click: false,
+    // Movement
+    glide: false,
+};
+
 export class SpokenLanguages extends React.Component<Props, State> {
     constructor(props) {
         super(props);
@@ -76,6 +137,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
             vowels: [],
             vowelFilters: DEFAULT_VOWEL_FILTERS,
             consonants: [],
+            consonantFilters: DEFAULT_CONSONANT_FILTERS,
             keyboardType: KeyboardType.VOWELS,
         };
     }
@@ -120,6 +182,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
             vowels: await this.getVowels(dialectId),
             vowelFilters: DEFAULT_VOWEL_FILTERS,
             consonants: await this.getConsonants(dialectId),
+            consonantFilters: DEFAULT_CONSONANT_FILTERS,
         });
     }
 
@@ -151,26 +214,24 @@ export class SpokenLanguages extends React.Component<Props, State> {
                             return {
                                 symbol,
                                 type: "Vowel",
-                                body: (
-                                    <VowelDetails
-                                        vowel={vowel}
-                                    />
-                                ),
+                                body: (<VowelDetails vowel={vowel}/>),
                             };
                         })}
                     />
                 );
             case KeyboardType.CONSONANTS:
+                const consonants = this.filterPhonemes(
+                    this.state.consonants,
+                    this.state.consonantFilters,
+                );
                 return (
                     <Keyboard
-                        phonemes={this.state.consonants.map(consonant => {
+                        phonemes={consonants.map(consonant => {
                             const {symbol} = consonant;
                             return {
                                 symbol,
                                 type: "Consonant",
-                                body: (
-                                    <p>Consonant body</p>
-                                ),
+                                body: (<p>Consonant body</p>),
                             };
 
                         })}
@@ -187,48 +248,104 @@ export class SpokenLanguages extends React.Component<Props, State> {
         }});
     }
 
+    filterConsonants(button) {
+        const attribute = button.value;
+        this.setState({consonantFilters: {
+            ...this.state.consonantFilters,
+            [attribute]: !this.state.consonantFilters[attribute],
+        }});
+    }
+
     getToolbarGroups(keyboardType: KeyboardType): ToolbarButtonGroup[] {
-        const handleClick = this.filterVowels.bind(this);
-        const getButton = (text: string, attribute: VowelAttribute): ToolbarButton => {
-            return {
-                text,
-                handleClick,
-                value: attribute,
-                isActive: this.state.vowelFilters[attribute],
-            };
-        };
         switch (keyboardType) {
             case KeyboardType.VOWELS:
+                const getVowelButton = (
+                    text: string,
+                    attribute: VowelAttribute
+                ): ToolbarButton => {
+                    return {
+                        text,
+                        handleClick: this.filterVowels.bind(this),
+                        value: attribute,
+                        isActive: this.state.vowelFilters[attribute],
+                    };
+                };
                 return [
                     {
                         buttons: [
-                            getButton("Front", VowelAttribute.FRONT),
-                            getButton("Central", VowelAttribute.CENTRAL),
-                            getButton("Back", VowelAttribute.BACK),
+                            getVowelButton("Front", VowelAttribute.FRONT),
+                            getVowelButton("Central", VowelAttribute.CENTRAL),
+                            getVowelButton("Back", VowelAttribute.BACK),
                         ],
                     },
                     {
                         buttons: [
-                            getButton("Close", VowelAttribute.CLOSE),
-                            getButton("Near-Close", VowelAttribute.NEAR_CLOSE),
-                            getButton("Close-Mid", VowelAttribute.CLOSE_MID),
-                            getButton("Mid", VowelAttribute.MID),
-                            getButton("Open-Mid", VowelAttribute.OPEN_MID),
-                            getButton("Near-Open", VowelAttribute.NEAR_OPEN),
-                            getButton("Open", VowelAttribute.OPEN),
+                            getVowelButton("Close", VowelAttribute.CLOSE),
+                            getVowelButton("Near-Close", VowelAttribute.NEAR_CLOSE),
+                            getVowelButton("Close-Mid", VowelAttribute.CLOSE_MID),
+                            getVowelButton("Mid", VowelAttribute.MID),
+                            getVowelButton("Open-Mid", VowelAttribute.OPEN_MID),
+                            getVowelButton("Near-Open", VowelAttribute.NEAR_OPEN),
+                            getVowelButton("Open", VowelAttribute.OPEN),
                         ],
                     },
                     {
                         buttons: [
-                            getButton("Glide", VowelAttribute.GLIDE),
-                            getButton("Rounded", VowelAttribute.ROUNDED),
-                            getButton("Palatal", VowelAttribute.PALATAL),
-                            getButton("Labiovelar", VowelAttribute.LABIOVELAR),
+                            getVowelButton("Glide", VowelAttribute.GLIDE),
+                            getVowelButton("Rounded", VowelAttribute.ROUNDED),
+                            getVowelButton("Palatal", VowelAttribute.PALATAL),
+                            getVowelButton("Labiovelar", VowelAttribute.LABIOVELAR),
                         ],
                     },
                 ];
             case KeyboardType.CONSONANTS:
-                return [];
+                const getConsonantButton = (
+                    text: string,
+                    attribute: ConsonantAttribute
+                ): ToolbarButton => {
+                    return {
+                        text,
+                        handleClick: this.filterConsonants.bind(this),
+                        value: attribute,
+                        isActive: this.state.consonantFilters[attribute],
+                    };
+                };
+                return [
+                    {
+                        buttons: [
+                            getConsonantButton("Bilabial", ConsonantAttribute.BILABIAL),
+                            getConsonantButton("Labiodental", ConsonantAttribute.LABIODENTAL),
+                            getConsonantButton("Dental", ConsonantAttribute.DENTAL),
+                            getConsonantButton("Alveolar", ConsonantAttribute.ALVEOLAR),
+                            getConsonantButton("Postalveolar", ConsonantAttribute.POSTALVEOLAR),
+                            getConsonantButton("Retroflex", ConsonantAttribute.RETROFLEX),
+                            getConsonantButton("Palatal", ConsonantAttribute.PALATAL),
+                            getConsonantButton("Velar", ConsonantAttribute.VELAR),
+                            getConsonantButton("Uvular", ConsonantAttribute.UVULAR),
+                            getConsonantButton("Pharyngeal", ConsonantAttribute.PHARYNGEAL),
+                            getConsonantButton("Epiglottal", ConsonantAttribute.EPIGLOTTAL),
+                            getConsonantButton("Glottal", ConsonantAttribute.GLOTTAL),
+                        ],
+                    },
+                    {
+                        buttons: [
+                            getConsonantButton("Nasal", ConsonantAttribute.NASAL),
+                            getConsonantButton("Affricate", ConsonantAttribute.AFFRICATE),
+                            getConsonantButton("Fricative", ConsonantAttribute.FRICATIVE),
+                            getConsonantButton("Approximant", ConsonantAttribute.APPROXIMANT),
+                            getConsonantButton("Lateral Approximant", ConsonantAttribute.LATERAL_APPROXIMANT),
+                            getConsonantButton("Flap", ConsonantAttribute.FLAP),
+                            getConsonantButton("Trill", ConsonantAttribute.TRILL),
+                            getConsonantButton("Implosive", ConsonantAttribute.IMPLOSIVE),
+                            getConsonantButton("Stop", ConsonantAttribute.STOP),
+                            getConsonantButton("Lateral Stop", ConsonantAttribute.LATERAL_STOP),
+                            getConsonantButton("Click", ConsonantAttribute.CLICK),
+                        ],
+                    },
+                    {
+                        buttons: [getConsonantButton("Glide", ConsonantAttribute.GLIDE)],
+                    },
+                ];
         }
     }
 

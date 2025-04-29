@@ -60,6 +60,6 @@ export type Consonant = {
     [ConsonantAttribute.STOP]: string,
     [ConsonantAttribute.LATERAL_STOP]: string,
     [ConsonantAttribute.CLICK]: string,
-    // Movement
+    // Manner (Y-Axis)
     [ConsonantAttribute.GLIDE]: string
 };
