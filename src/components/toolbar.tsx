@@ -2,8 +2,8 @@ import * as React from 'react';
 import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
 
 export type ToolbarButton = {
-    text: string,
-    value: string,
+    child: string | React.ReactElement,
+    value?: string,
     isActive?: boolean,
     isDisabled?: boolean,
     handleClick?: Function,
@@ -35,13 +35,19 @@ export class Toolbar extends React.Component<Props> {
     }
 
     handleClick(e, buttonGroup: ToolbarButtonGroup, handleClick?: Function) {
+        // TODO: Ensure that e.target is always button that is clicked
+        // And never the button's children
         const {type} = buttonGroup;
         if (type === ToolbarType.TOGGLE) {
             Array.from(e.target.parentElement.children)
-                .forEach((element, i) => {
-                    const button = element as Element;
+                .map(element => element as Element)
+                .filter(element => element.tagName === "BUTTON")
+                .forEach((button, i) => {
                     if (button.classList.contains(ACTIVE_CLASS)) {
-                        buttonGroup.buttons[i].handleClick(button);
+                        const handleParallelClick = buttonGroup.buttons[i].handleClick;
+                        if (handleParallelClick) {
+                            handleParallelClick(button);
+                        }
                         button.classList.remove(ACTIVE_CLASS);
                     }
                 });
@@ -52,6 +58,7 @@ export class Toolbar extends React.Component<Props> {
                 classList.remove(ACTIVE_CLASS);
             } else {
                 classList.add(ACTIVE_CLASS);
+                console.log(classList);
             }
         }
         if (handleClick) {
@@ -84,7 +91,7 @@ export class Toolbar extends React.Component<Props> {
                             }
                             {
                                 group.buttons.map((button, i) => {
-                                    const {isActive, isDisabled, text, handleClick, value} = button;
+                                    const {isActive, isDisabled, child: text, handleClick, value} = button;
                                     return (
                                         <button
                                             type="button"

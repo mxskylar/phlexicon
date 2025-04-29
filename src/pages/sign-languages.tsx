@@ -4,6 +4,7 @@ import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
 import { sendQuery } from '../db/ipc.ts';
 import { SignDialect } from '../phonemes/sign/sign-dialect.ts';
 import { Hand } from '../phonemes/sign/hand.ts';
+import { Toolbar, ToolbarType } from '../components/toolbar.tsx';
 
 type Props = {};
 
@@ -73,6 +74,39 @@ export class SignLanguages extends React.Component<Props, State> {
                         ...this.state.dialectOptions,
                     ]}
                     handleChange={this.switchDialect.bind(this)}
+                />
+                <Toolbar
+                    id="sign-languages-keyboard-controls"
+                    groups={[
+                        {
+                            name: "Hand",
+                            type: ToolbarType.TOGGLE,
+                            buttons: [
+                                {child: "Right", isActive: true},
+                                {child: "Left"},
+                            ],
+                        },
+                        {
+                            name: "Palm",
+                            type: ToolbarType.TOGGLE,
+                            buttons: [
+                                {
+                                    child: (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                        </svg>
+                                    ),
+                                    isActive: true
+                                },
+                                {child: "◑"},
+                                {child: (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle-fill" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="8"/>
+                                    </svg>
+                                )},
+                            ],
+                        },
+                    ]}
                 />
             </div>
         );
