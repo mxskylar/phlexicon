@@ -86,7 +86,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
             : "SELECT v.* FROM vowels v JOIN spoken_dialect_phonemes p " +
                 `ON v.symbol = p.symbol WHERE dialect_id = "${dialectId}"` +
                 "ORDER BY v.symbol;";
-        return await sendQuery(query).then(rows => rows as Vowel[])
+        return await sendQuery(query).then(rows => rows as Vowel[]);
     }
 
     async getConsonants(dialectId: string): Promise<Consonant[]> {
@@ -95,7 +95,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
             : "SELECT c.* FROM consonants c JOIN spoken_dialect_phonemes p " +
                 `ON c.symbol = p.symbol WHERE dialect_id = "${dialectId}"` +
                 "ORDER BY c.symbol;";
-        return await sendQuery(query).then(rows => rows as Consonant[])
+        return await sendQuery(query).then(rows => rows as Consonant[]);
     }
 
     async componentDidMount() {
