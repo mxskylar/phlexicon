@@ -106,6 +106,13 @@ export class SignLanguages extends React.Component<Props, State> {
                                 )},
                             ],
                         },
+                        {
+                            type: ToolbarType.CLICKABLE_BUTTON,
+                            buttons: [
+                                {child: "↺"},
+                                {child: "↻"}
+                            ],
+                        },
                     ]}
                 />
             </div>
