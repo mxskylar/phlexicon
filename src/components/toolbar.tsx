@@ -5,6 +5,7 @@ export type ToolbarButton = {
     text: string,
     isActive?: boolean,
     handleClick: Function,
+    value: string,
 };
 
 export type ToolbarButtonGroup = {
@@ -32,7 +33,13 @@ export class Toolbar extends React.Component<Props> {
     handleClick(e, buttonGroup: ToolbarButtonGroup, handleClick: Function) {
         if (buttonGroup.isToggle) {
             Array.from(e.target.parentElement.children)
-                .forEach(button => (button as Element).classList.remove(ACTIVE_CLASS));
+                .forEach((element, i) => {
+                    const button = element as Element;
+                    if (button.classList.contains(ACTIVE_CLASS)) {
+                        buttonGroup.buttons[i].handleClick(button);
+                        button.classList.remove(ACTIVE_CLASS);
+                    }
+                });
         }
         const {classList} = e.target;
         if (classList.contains(ACTIVE_CLASS)) {
@@ -40,7 +47,7 @@ export class Toolbar extends React.Component<Props> {
         } else {
             classList.add(ACTIVE_CLASS);
         }
-        handleClick(e);
+        handleClick(e.target);
     }
 
     render() {
@@ -68,13 +75,14 @@ export class Toolbar extends React.Component<Props> {
                             }
                             {
                                 group.buttons.map((button, i) => {
-                                    const {isActive, text, handleClick} = button;
+                                    const {isActive, text, handleClick, value} = button;
                                     return (
                                         <button
                                             type="button"
                                             className={`btn btn-outline-info${isActive ? " active" : ""}`}
                                             key={`${this.props.id}-button-${text}-${i}`}
                                             onClick={e => this.handleClick(e, group, handleClick)}
+                                            value={value}
                                         >
                                             {text}
                                         </button>

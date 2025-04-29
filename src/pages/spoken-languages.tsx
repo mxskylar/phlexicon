@@ -4,10 +4,10 @@ import { Option, Select, SelectSize } from '../components/select.tsx';
 import { sendQuery } from '../db/ipc.ts';
 import { Consonant } from '../phonemes/spoken/consonant.ts';
 import { SpokenDialect } from '../phonemes/spoken/spoken-dialect.ts';
-import { Vowel } from '../phonemes/spoken/vowel.ts';
+import { Vowel, VowelAttribute } from '../phonemes/spoken/vowel.ts';
 import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
 import { VowelDetails } from '../components/spoken/vowel-details.tsx';
-import { Toolbar, ToolbarButtonGroup } from '../components/toolbar.tsx';
+import { Toolbar, ToolbarButton, ToolbarButtonGroup } from '../components/toolbar.tsx';
 
 enum KeyboardType {
     VOWELS = "Vowels",
@@ -16,14 +16,57 @@ enum KeyboardType {
 
 type Props = {};
 
+type VowelFilters = {
+    // X-Axis
+    [VowelAttribute.FRONT]: boolean,
+    [VowelAttribute.CENTRAL]: boolean,
+    [VowelAttribute.BACK]: boolean,
+    // Color
+    [VowelAttribute.ROUNDED]: boolean,
+    [VowelAttribute.PALATAL]: boolean,
+    [VowelAttribute.LABIOVELAR]: boolean,
+    // Y-AXIS
+    [VowelAttribute.CLOSE]: boolean,
+    [VowelAttribute.NEAR_CLOSE]: boolean,
+    [VowelAttribute.CLOSE_MID]: boolean,
+    [VowelAttribute.MID]: boolean,
+    [VowelAttribute.OPEN_MID]: boolean,
+    [VowelAttribute.NEAR_OPEN]: boolean,
+    [VowelAttribute.OPEN]: boolean,
+    // Movement
+    [VowelAttribute.GLIDE]: boolean
+};
+
 type State = {
     dialectOptions: Option[],
     vowels: Vowel[],
+    vowelFilters: VowelFilters,
     consonants: Consonant[],
     keyboardType: KeyboardType,
 };
 
 const ALL_LANGUAGES_VALUE = "ALL";
+
+const DEFAULT_VOWEL_FILTERS: VowelFilters = {
+    // X-AXIS
+    front: false,
+    central: false,
+    back: false,
+    // Color
+    rounded: false,
+    palatal: false,
+    labiovelar: false,
+    // Y-AXIS
+    close: false,
+    near_close: false,
+    close_mid: false,
+    mid: false,
+    open_mid: false,
+    near_open: false,
+    open: false,
+    // Movement
+    glide: false,
+};
 
 export class SpokenLanguages extends React.Component<Props, State> {
     constructor(props) {
@@ -31,6 +74,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
         this.state = {
             dialectOptions: [],
             vowels: [],
+            vowelFilters: DEFAULT_VOWEL_FILTERS,
             consonants: [],
             keyboardType: KeyboardType.VOWELS,
         };
@@ -74,6 +118,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
         const dialectId = options[selectedIndex].value;
         this.setState({
             vowels: await this.getVowels(dialectId),
+            vowelFilters: DEFAULT_VOWEL_FILTERS,
             consonants: await this.getConsonants(dialectId),
         });
     }
@@ -83,12 +128,25 @@ export class SpokenLanguages extends React.Component<Props, State> {
         this.setState({keyboardType: options[selectedIndex].value as KeyboardType});
     }
 
+    filterPhonemes<Type>(
+        phonemes: Type[],
+        filters: {[index: string]: boolean}
+    ): Type[] {
+        const flags = Object.keys(filters)
+            .filter(attribute => filters[attribute]);
+        return phonemes.filter(phoneme => flags.every(attribute => phoneme[attribute]));
+    }
+
     getKeyboard(keyboardType: KeyboardType): React.ReactElement {
         switch(keyboardType) {
             case KeyboardType.VOWELS:
+                const vowels = this.filterPhonemes(
+                    this.state.vowels,
+                    this.state.vowelFilters,
+                );
                 return (
                     <Keyboard
-                        phonemes={this.state.vowels.map(vowel => {
+                        phonemes={vowels.map(vowel => {
                             const {symbol} = vowel;
                             return {
                                 symbol,
@@ -121,39 +179,51 @@ export class SpokenLanguages extends React.Component<Props, State> {
         }
     }
 
-    filterVowels(e) {
-
+    filterVowels(button) {
+        const attribute = button.value;
+        this.setState({vowelFilters: {
+            ...this.state.vowelFilters,
+            [attribute]: !this.state.vowelFilters[attribute],
+        }});
     }
 
     getToolbarGroups(keyboardType: KeyboardType): ToolbarButtonGroup[] {
         const handleClick = this.filterVowels.bind(this);
+        const getButton = (text: string, attribute: VowelAttribute): ToolbarButton => {
+            return {
+                text,
+                handleClick,
+                value: attribute,
+                isActive: this.state.vowelFilters[attribute],
+            };
+        };
         switch (keyboardType) {
             case KeyboardType.VOWELS:
                 return [
                     {
                         buttons: [
-                            {text: "Front", handleClick},
-                            {text: "Central", handleClick},
-                            {text: "Back", handleClick},
+                            getButton("Front", VowelAttribute.FRONT),
+                            getButton("Central", VowelAttribute.CENTRAL),
+                            getButton("Back", VowelAttribute.BACK),
                         ],
                     },
                     {
                         buttons: [
-                            {text: "Close", handleClick},
-                            {text: "Near-Close", handleClick},
-                            {text: "Close-Mid", handleClick},
-                            {text: "Mid", handleClick},
-                            {text: "Open-Mid", handleClick},
-                            {text: "Near-Mid", handleClick},
-                            {text: "Open", handleClick},
+                            getButton("Close", VowelAttribute.CLOSE),
+                            getButton("Near-Close", VowelAttribute.NEAR_CLOSE),
+                            getButton("Close-Mid", VowelAttribute.CLOSE_MID),
+                            getButton("Mid", VowelAttribute.MID),
+                            getButton("Open-Mid", VowelAttribute.OPEN_MID),
+                            getButton("Near-Open", VowelAttribute.NEAR_OPEN),
+                            getButton("Open", VowelAttribute.OPEN),
                         ],
                     },
                     {
                         buttons: [
-                            {text: "Glide", handleClick},
-                            {text: "Rounded", handleClick},
-                            {text: "Palatal", handleClick},
-                            {text: "Labiovelar", handleClick},
+                            getButton("Glide", VowelAttribute.GLIDE),
+                            getButton("Rounded", VowelAttribute.ROUNDED),
+                            getButton("Palatal", VowelAttribute.PALATAL),
+                            getButton("Labiovelar", VowelAttribute.LABIOVELAR),
                         ],
                     },
                 ];
