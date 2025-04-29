@@ -1,0 +1,37 @@
+.phoneme-picker .btn-toolbar {
+    margin-bottom: 0 !important;
+}
+
+/* Filters for keyboard keys & input field with typed characters */
+.keyboard-control {
+    margin-bottom: 10px;
+}
+
+/* Keyboard keys */
+.keyboard {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.keyboard button {
+    font-size: 32px;
+    margin-top: 0.25em;
+    margin-right: 0.25em;
+    padding-right: 0.75em;
+    padding-left: 0.75em;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+}
+
+.phoneme-details .modal-title {
+    text-align: center;
+    margin-left: auto;
+}
+
+.phoneme-details .copy-button svg {
+    margin-top: -5px; /* Negate the empty space at the top of the button's icon */
+}
+
+.phoneme-detail-item {
+    margin-bottom: 5px;
+}

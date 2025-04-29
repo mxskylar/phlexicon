@@ -1,0 +1,13 @@
+@font-face {
+    font-family: "Charles SIL";
+    src: url("CharisSIL-6.200/CharisSIL-Regular.ttf");
+}
+
+#spoken-languages .phoneme-symbol {
+    font-family: "Charles SIL"; 
+}
+
+#vowel-attributes-table {
+    margin-bottom: 0;
+    margin-top: 15px;
+}

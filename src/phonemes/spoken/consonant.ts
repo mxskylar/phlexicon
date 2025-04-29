@@ -63,3 +63,62 @@ export type Consonant = {
     // Movement
     [ConsonantAttribute.GLIDE]: string
 };
+
+export const CONSONANT_ATTRIBUTE_NAMES = {
+    // Place (X-Axis)
+    [ConsonantAttribute.BILABIAL]: "Bilabial",
+    [ConsonantAttribute.LABIODENTAL]: "Labiodental",
+    [ConsonantAttribute.DENTAL]: "Dental",
+    [ConsonantAttribute.ALVEOLAR]: "Alveolar",
+    [ConsonantAttribute.POSTALVEOLAR]: "Postalveolar",
+    [ConsonantAttribute.RETROFLEX]: "Retroflex",
+    [ConsonantAttribute.PALATAL]: "Palatal",
+    [ConsonantAttribute.VELAR]: "Velar",
+    [ConsonantAttribute.UVULAR]: "Uvular",
+    [ConsonantAttribute.PHARYNGEAL]: "Pharyngeal",
+    [ConsonantAttribute.EPIGLOTTAL]: "Epiglottal",
+    [ConsonantAttribute.GLOTTAL]: "Glottal",
+    // Manner (Y-Axis)
+    [ConsonantAttribute.NASAL]: "Nasal",
+    [ConsonantAttribute.AFFRICATE]: "Affricate",
+    [ConsonantAttribute.FRICATIVE]: "Fricative",
+    [ConsonantAttribute.APPROXIMANT]: "Approximant",
+    [ConsonantAttribute.LATERAL_APPROXIMANT]: "Lateral Approximant",
+    [ConsonantAttribute.FLAP]: "Flap",
+    [ConsonantAttribute.TRILL]: "Trill",
+    [ConsonantAttribute.IMPLOSIVE]: "Implosive",
+    [ConsonantAttribute.STOP]: "Stop",
+    [ConsonantAttribute.LATERAL_STOP]: "Lateral Stop",
+    [ConsonantAttribute.CLICK]: "Click",
+    // Movement
+    [ConsonantAttribute.GLIDE]: "Glide",
+};
+
+export const PLACE_CONSONANT_ATTRIBUTES = [
+    ConsonantAttribute.BILABIAL,
+    ConsonantAttribute.LABIODENTAL,
+    ConsonantAttribute.DENTAL,
+    ConsonantAttribute.ALVEOLAR,
+    ConsonantAttribute.POSTALVEOLAR,
+    ConsonantAttribute.RETROFLEX,
+    ConsonantAttribute.PALATAL,
+    ConsonantAttribute.VELAR,
+    ConsonantAttribute.UVULAR,
+    ConsonantAttribute.PHARYNGEAL,
+    ConsonantAttribute.EPIGLOTTAL,
+    ConsonantAttribute.GLOTTAL,
+];
+
+export const MANNER_CONSONANT_ATTRIBUTES = [
+    ConsonantAttribute.NASAL,
+    ConsonantAttribute.AFFRICATE,
+    ConsonantAttribute.FRICATIVE,
+    ConsonantAttribute.APPROXIMANT,
+    ConsonantAttribute.LATERAL_APPROXIMANT,
+    ConsonantAttribute.FLAP,
+    ConsonantAttribute.TRILL,
+    ConsonantAttribute.IMPLOSIVE,
+    ConsonantAttribute.STOP,
+    ConsonantAttribute.LATERAL_STOP,
+    ConsonantAttribute.CLICK,
+];
