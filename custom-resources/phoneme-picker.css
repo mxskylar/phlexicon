@@ -31,3 +31,7 @@
 .phoneme-details .copy-button svg {
     margin-top: -5px; /* Negate the empty space at the top of the button's icon */
 }
+
+.phoneme-detail-item {
+    margin-bottom: 5px;
+}

@@ -2,12 +2,13 @@ import * as React from 'react';
 import { Keyboard } from '../components/keyboard.tsx';
 import { Option, Select, SelectSize } from '../components/select.tsx';
 import { sendQuery } from '../db/ipc.ts';
-import { Consonant, ConsonantAttribute } from '../phonemes/spoken/consonant.ts';
+import { Consonant, CONSONANT_ATTRIBUTE_NAMES, ConsonantAttribute } from '../phonemes/spoken/consonant.ts';
 import { SpokenDialect } from '../phonemes/spoken/spoken-dialect.ts';
 import { Vowel, VowelAttribute } from '../phonemes/spoken/vowel.ts';
 import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
 import { VowelDetails } from '../components/spoken/vowel-details.tsx';
 import { Toolbar, ToolbarButton, ToolbarButtonGroup } from '../components/toolbar.tsx';
+import { ConsonantDetails } from '../components/spoken/consonant-details.tsx';
 
 enum KeyboardType {
     VOWELS = "Vowels",
@@ -231,7 +232,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                             return {
                                 symbol,
                                 type: "Consonant",
-                                body: (<p>Consonant body</p>),
+                                body: (<ConsonantDetails consonant={consonant} />),
                             };
 
                         })}
@@ -299,12 +300,9 @@ export class SpokenLanguages extends React.Component<Props, State> {
                     },
                 ];
             case KeyboardType.CONSONANTS:
-                const getConsonantButton = (
-                    text: string,
-                    attribute: ConsonantAttribute
-                ): ToolbarButton => {
+                const getConsonantButton = (attribute: ConsonantAttribute): ToolbarButton => {
                     return {
-                        text,
+                        text: CONSONANT_ATTRIBUTE_NAMES[attribute],
                         handleClick: this.filterConsonants.bind(this),
                         value: attribute,
                         isActive: this.state.consonantFilters[attribute],
@@ -313,37 +311,37 @@ export class SpokenLanguages extends React.Component<Props, State> {
                 return [
                     {
                         buttons: [
-                            getConsonantButton("Bilabial", ConsonantAttribute.BILABIAL),
-                            getConsonantButton("Labiodental", ConsonantAttribute.LABIODENTAL),
-                            getConsonantButton("Dental", ConsonantAttribute.DENTAL),
-                            getConsonantButton("Alveolar", ConsonantAttribute.ALVEOLAR),
-                            getConsonantButton("Postalveolar", ConsonantAttribute.POSTALVEOLAR),
-                            getConsonantButton("Retroflex", ConsonantAttribute.RETROFLEX),
-                            getConsonantButton("Palatal", ConsonantAttribute.PALATAL),
-                            getConsonantButton("Velar", ConsonantAttribute.VELAR),
-                            getConsonantButton("Uvular", ConsonantAttribute.UVULAR),
-                            getConsonantButton("Pharyngeal", ConsonantAttribute.PHARYNGEAL),
-                            getConsonantButton("Epiglottal", ConsonantAttribute.EPIGLOTTAL),
-                            getConsonantButton("Glottal", ConsonantAttribute.GLOTTAL),
+                            getConsonantButton(ConsonantAttribute.BILABIAL),
+                            getConsonantButton(ConsonantAttribute.LABIODENTAL),
+                            getConsonantButton(ConsonantAttribute.DENTAL),
+                            getConsonantButton(ConsonantAttribute.ALVEOLAR),
+                            getConsonantButton(ConsonantAttribute.POSTALVEOLAR),
+                            getConsonantButton(ConsonantAttribute.RETROFLEX),
+                            getConsonantButton(ConsonantAttribute.PALATAL),
+                            getConsonantButton(ConsonantAttribute.VELAR),
+                            getConsonantButton(ConsonantAttribute.UVULAR),
+                            getConsonantButton(ConsonantAttribute.PHARYNGEAL),
+                            getConsonantButton(ConsonantAttribute.EPIGLOTTAL),
+                            getConsonantButton(ConsonantAttribute.GLOTTAL),
                         ],
                     },
                     {
                         buttons: [
-                            getConsonantButton("Nasal", ConsonantAttribute.NASAL),
-                            getConsonantButton("Affricate", ConsonantAttribute.AFFRICATE),
-                            getConsonantButton("Fricative", ConsonantAttribute.FRICATIVE),
-                            getConsonantButton("Approximant", ConsonantAttribute.APPROXIMANT),
-                            getConsonantButton("Lateral Approximant", ConsonantAttribute.LATERAL_APPROXIMANT),
-                            getConsonantButton("Flap", ConsonantAttribute.FLAP),
-                            getConsonantButton("Trill", ConsonantAttribute.TRILL),
-                            getConsonantButton("Implosive", ConsonantAttribute.IMPLOSIVE),
-                            getConsonantButton("Stop", ConsonantAttribute.STOP),
-                            getConsonantButton("Lateral Stop", ConsonantAttribute.LATERAL_STOP),
-                            getConsonantButton("Click", ConsonantAttribute.CLICK),
+                            getConsonantButton(ConsonantAttribute.NASAL),
+                            getConsonantButton(ConsonantAttribute.AFFRICATE),
+                            getConsonantButton(ConsonantAttribute.FRICATIVE),
+                            getConsonantButton(ConsonantAttribute.APPROXIMANT),
+                            getConsonantButton(ConsonantAttribute.LATERAL_APPROXIMANT),
+                            getConsonantButton(ConsonantAttribute.FLAP),
+                            getConsonantButton(ConsonantAttribute.TRILL),
+                            getConsonantButton(ConsonantAttribute.IMPLOSIVE),
+                            getConsonantButton(ConsonantAttribute.STOP),
+                            getConsonantButton(ConsonantAttribute.LATERAL_STOP),
+                            getConsonantButton(ConsonantAttribute.CLICK),
                         ],
                     },
                     {
-                        buttons: [getConsonantButton("Glide", ConsonantAttribute.GLIDE)],
+                        buttons: [getConsonantButton(ConsonantAttribute.GLIDE)],
                     },
                 ];
         }
