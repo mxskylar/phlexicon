@@ -16,6 +16,9 @@ type State = {
     symbolRotationIndex: number,
     symbolRotation: SignWritingSymbolRotation,
     isRightHanded: boolean,
+    palmTowardsSymbol: string,
+    palmSidewaysSymbol: string,
+    palmAwaySymbol: string,
 };
 
 const ALL_LANGUAGES_VALUE = "ALL";
@@ -30,6 +33,9 @@ export class SignLanguages extends React.Component<Props, State> {
             symbolRotationIndex: 0,
             symbolRotation: SignWritingSymbolRotation.DEGREES_0_or_360,
             isRightHanded: true,
+            palmTowardsSymbol: "񆄡",
+            palmSidewaysSymbol: "񆄱",
+            palmAwaySymbol: "񆅁",
         };
     }
 
@@ -79,9 +85,11 @@ export class SignLanguages extends React.Component<Props, State> {
         const symbolRotationIndex = incrementedIndex > CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS.length - 1
             ? 0
             : incrementedIndex;
+        const symbolRotation = CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS[symbolRotationIndex];
         this.setState({
             symbolRotationIndex,
-            symbolRotation: CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS[symbolRotationIndex],
+            symbolRotation,
+            ...this.getPalmFilterSymbols(this.state.isRightHanded, symbolRotation),
         });
     }
 
@@ -90,18 +98,28 @@ export class SignLanguages extends React.Component<Props, State> {
         const symbolRotationIndex = decrementedIndex < 0
             ? CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS.length - 1
             : decrementedIndex;
+        const symbolRotation = CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS[symbolRotationIndex];
         this.setState({
             symbolRotationIndex,
-            symbolRotation: CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS[symbolRotationIndex],
+            symbolRotation,
+            ...this.getPalmFilterSymbols(this.state.isRightHanded, symbolRotation),
         });
     }
 
     setRightHand() {
-        this.setState({isRightHanded: true});
+        const isRightHanded = true;
+        this.setState({
+            isRightHanded,
+            ...this.getPalmFilterSymbols(isRightHanded, this.state.symbolRotation),
+        });
     }
 
     setLefttHand() {
-        this.setState({isRightHanded: false});
+        const isRightHanded = false;
+        this.setState({
+            isRightHanded,
+            ...this.getPalmFilterSymbols(isRightHanded, this.state.symbolRotation),
+        });
     }
 
     getPalmTowardsSymbol(hands: Hand[]): string {
@@ -111,7 +129,7 @@ export class SignLanguages extends React.Component<Props, State> {
                 return hand.symbol;
             }
         }
-        return "񆄡";
+        return this.state.palmTowardsSymbol;
     }
 
     getPalmSidewaysSymbol(hands: Hand[]): string {
@@ -121,7 +139,7 @@ export class SignLanguages extends React.Component<Props, State> {
                 return hand.symbol;
             }
         }
-        return "񆄱";
+        return this.state.palmSidewaysSymbol;
     }
 
     getPalmAwaySymbol(hands: Hand[]): string {
@@ -131,31 +149,29 @@ export class SignLanguages extends React.Component<Props, State> {
                 return hand.symbol;
             }
         }
-        return "񆅁";
+        return this.state.palmAwaySymbol;
     }
 
-    getPalmButtonSymbols(): {
+    getPalmFilterSymbols(
+        isRightHanded: boolean,
+        symbolRotation: SignWritingSymbolRotation,
+    ): {
         palmTowardsSymbol: string,
         palmSidewaysSymbol: string,
         palmAwaySymbol: string,
     } {
-        const palmFilterHands = this.state.palmFilterHands.filter(hand =>
-            hand.right_handed === this.state.isRightHanded &&
-            hand.symbol_rotation === this.state.symbolRotation
+        const filteredHands = this.state.palmFilterHands.filter(hand =>
+            hand.right_handed === isRightHanded &&
+            hand.symbol_rotation === symbolRotation
         );
         return {
-            palmTowardsSymbol: this.getPalmTowardsSymbol(palmFilterHands),
-            palmSidewaysSymbol: this.getPalmSidewaysSymbol(palmFilterHands),
-            palmAwaySymbol: this.getPalmAwaySymbol(palmFilterHands),
+            palmTowardsSymbol: this.getPalmTowardsSymbol(filteredHands),
+            palmSidewaysSymbol: this.getPalmSidewaysSymbol(filteredHands),
+            palmAwaySymbol: this.getPalmAwaySymbol(filteredHands),
         };
     }
 
     render() {
-        const{
-            palmTowardsSymbol,
-            palmSidewaysSymbol,
-            palmAwaySymbol
-        } = this.getPalmButtonSymbols();
         return (
             <div className="container-fluid" id="sign-languages">
                 <Select
@@ -193,16 +209,16 @@ export class SignLanguages extends React.Component<Props, State> {
                             type: ToolbarType.TOGGLE,
                             buttons: [
                                 {
-                                    text: palmTowardsSymbol,
+                                    text: this.state.palmTowardsSymbol,
                                     isActive: true,
                                     classes: [PHONEME_SYMOL_CLASS],
                                 },
                                 {
-                                    text: palmSidewaysSymbol,
+                                    text: this.state.palmSidewaysSymbol,
                                     classes: [PHONEME_SYMOL_CLASS],
                                 },
                                 {
-                                    text: palmAwaySymbol,
+                                    text: this.state.palmAwaySymbol,
                                     classes: [PHONEME_SYMOL_CLASS],
                                 },
                             ],
@@ -211,10 +227,12 @@ export class SignLanguages extends React.Component<Props, State> {
                             type: ToolbarType.CLICKABLE_BUTTON,
                             buttons: [
                                 {
-                                    text: "↺"
+                                    text: "↺",
+                                    handleClick: this.rotateCounterClockwise.bind(this),
                                 },
                                 {
-                                    text: "↻"
+                                    text: "↻",
+                                    handleClick: this.rotateClockwise.bind(this),
                                 },
                             ],
                         },
