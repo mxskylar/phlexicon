@@ -9,6 +9,12 @@ import { CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS, SignWritingSymbolRotation } fr
 
 type Props = {};
 
+enum PalmDirectionFilter {
+    TOWARDS,
+    SIDEWAYS,
+    AWAY,
+}
+
 type State = {
     dialectOptions: Option[],
     hands: Hand[],
@@ -16,9 +22,7 @@ type State = {
     symbolRotationIndex: number,
     symbolRotation: SignWritingSymbolRotation,
     isRightHanded: boolean,
-    palmTowards: boolean,
-    palmSideways: boolean,
-    palmAway: boolean,
+    palmDirection: PalmDirectionFilter,
 };
 
 const ALL_LANGUAGES_VALUE = "ALL";
@@ -33,9 +37,7 @@ export class SignLanguages extends React.Component<Props, State> {
             symbolRotationIndex: 0,
             symbolRotation: SignWritingSymbolRotation.DEGREES_0_or_360,
             isRightHanded: true,
-            palmTowards: true,
-            palmSideways: false,
-            palmAway: false,
+            palmDirection: PalmDirectionFilter.TOWARDS,
         };
     }
 
@@ -158,27 +160,15 @@ export class SignLanguages extends React.Component<Props, State> {
     }
 
     setPalmTowards() {
-        this.setState({
-            palmTowards: true,
-            palmSideways: false,
-            palmAway: false,
-        });
+        this.setState({palmDirection: PalmDirectionFilter.TOWARDS});
     }
 
     setPalmSideways() {
-        this.setState({
-            palmTowards: false,
-            palmSideways: true,
-            palmAway: false,
-        });
+        this.setState({palmDirection: PalmDirectionFilter.SIDEWAYS});
     }
 
     setPalmAway() {
-        this.setState({
-            palmTowards: false,
-            palmSideways: false,
-            palmAway: true,
-        });
+        this.setState({palmDirection: PalmDirectionFilter.AWAY});
     }
 
     render() {
@@ -238,19 +228,19 @@ export class SignLanguages extends React.Component<Props, State> {
                             buttons: [
                                 {
                                     text: palmTowardsSymbol,
-                                    isActive: this.state.palmTowards,
+                                    isActive: this.state.palmDirection === PalmDirectionFilter.TOWARDS,
                                     classes: [PHONEME_SYMOL_CLASS],
                                     handleClick: this.setPalmTowards.bind(this),
                                 },
                                 {
                                     text: palmSidewaysSymbol,
-                                    isActive: this.state.palmSideways,
+                                    isActive: this.state.palmDirection === PalmDirectionFilter.SIDEWAYS,
                                     classes: [PHONEME_SYMOL_CLASS],
                                     handleClick: this.setPalmSideways.bind(this),
                                 },
                                 {
                                     text: palmAwaySymbol,
-                                    isActive: this.state.palmAway,
+                                    isActive: this.state.palmDirection === PalmDirectionFilter.AWAY,
                                     classes: [PHONEME_SYMOL_CLASS],
                                     handleClick: this.setPalmAway.bind(this),
                                 },
