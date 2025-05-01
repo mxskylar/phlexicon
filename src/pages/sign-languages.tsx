@@ -140,7 +140,7 @@ export class SignLanguages extends React.Component<Props, State> {
         palmAwaySymbol: string,
     } {
         const palmFilterHands = this.state.palmFilterHands.filter(hand =>
-            hand.right_handed === this.state.isRightHanded &&
+            hand.right_handed == this.state.isRightHanded &&
             hand.symbol_rotation === this.state.symbolRotation
         );
         return {
@@ -189,6 +189,19 @@ export class SignLanguages extends React.Component<Props, State> {
                             ],
                         },
                         {
+                            type: ToolbarType.CLICKABLE_BUTTON,
+                            buttons: [
+                                {
+                                    text: "↺",
+                                    handleClick: this.rotateCounterClockwise.bind(this),
+                                },
+                                {
+                                    text: "↻",
+                                    handleClick: this.rotateClockwise.bind(this),
+                                },
+                            ],
+                        },
+                        {
                             name: "Palm",
                             type: ToolbarType.TOGGLE,
                             buttons: [
@@ -204,17 +217,6 @@ export class SignLanguages extends React.Component<Props, State> {
                                 {
                                     text: palmAwaySymbol,
                                     classes: [PHONEME_SYMOL_CLASS],
-                                },
-                            ],
-                        },
-                        {
-                            type: ToolbarType.CLICKABLE_BUTTON,
-                            buttons: [
-                                {
-                                    text: "↺"
-                                },
-                                {
-                                    text: "↻"
                                 },
                             ],
                         },
