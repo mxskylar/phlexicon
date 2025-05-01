@@ -266,7 +266,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                     attribute: VowelAttribute
                 ): ToolbarButton => {
                     return {
-                        child: text,
+                        text: text,
                         handleClick: this.filterVowels.bind(this),
                         value: attribute,
                         isActive: this.state.vowelFilters[attribute],
@@ -307,7 +307,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
             case KeyboardType.CONSONANTS:
                 const getConsonantButton = (attribute: ConsonantAttribute): ToolbarButton => {
                     return {
-                        child: CONSONANT_ATTRIBUTE_NAMES[attribute],
+                        text: CONSONANT_ATTRIBUTE_NAMES[attribute],
                         handleClick: this.filterConsonants.bind(this),
                         value: attribute,
                         isActive: this.state.consonantFilters[attribute],

@@ -2,11 +2,12 @@ import * as React from 'react';
 import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
 
 export type ToolbarButton = {
-    child: string | React.ReactElement,
+    text: string,
     value?: string,
     isActive?: boolean,
     isDisabled?: boolean,
     handleClick?: Function,
+    classes?: string[],
 };
 
 export enum ToolbarType {
@@ -58,7 +59,6 @@ export class Toolbar extends React.Component<Props> {
                 classList.remove(ACTIVE_CLASS);
             } else {
                 classList.add(ACTIVE_CLASS);
-                console.log(classList);
             }
         }
         if (handleClick) {
@@ -91,11 +91,22 @@ export class Toolbar extends React.Component<Props> {
                             }
                             {
                                 group.buttons.map((button, i) => {
-                                    const {isActive, isDisabled, child: text, handleClick, value} = button;
+                                    const {
+                                        isActive,
+                                        isDisabled,
+                                        text,
+                                        handleClick,
+                                        value,
+                                        classes
+                                    } = button;
+                                    const className = "btn btn-outline-info" +
+                                        (isActive ? ` ${ACTIVE_CLASS}` : "") +
+                                        (isDisabled ? ` ${DISABLED_CLASS}`: "") +
+                                        (classes ? ` ${classes.join(" ")}` : "");
                                     return (
                                         <button
                                             type="button"
-                                            className={`btn btn-outline-info${isActive ? ` ${ACTIVE_CLASS}` : ""}${isDisabled ? ` ${DISABLED_CLASS}`: ""}`}
+                                            className={className}
                                             key={`${this.props.id}-button-${text}-${i}`}
                                             onClick={e => this.handleClick(e, group, handleClick)}
                                             value={value}

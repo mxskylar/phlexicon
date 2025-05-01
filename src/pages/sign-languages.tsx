@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Option, Select } from '../components/select.tsx';
-import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
+import { KEYBOARD_CONTROL_CLASS, PHONEME_SYMOL_CLASS } from '../constants.ts';
 import { sendQuery } from '../db/ipc.ts';
 import { SignDialect } from '../phonemes/sign/sign-dialect.ts';
 import { Hand } from '../phonemes/sign/hand.ts';
@@ -54,7 +54,6 @@ export class SignLanguages extends React.Component<Props, State> {
     async switchDialect(e: React.BaseSyntheticEvent<HTMLSelectElement>) {
         const {selectedIndex, options} = e.target;
         const dialectId = options[selectedIndex].value;
-        console.log(dialectId);
         /*this.setState({
             handshapes: await this.getHands(dialectId),
         });*/
@@ -82,8 +81,8 @@ export class SignLanguages extends React.Component<Props, State> {
                             name: "Hand",
                             type: ToolbarType.TOGGLE,
                             buttons: [
-                                {child: "Left"},
-                                {child: "Right", isActive: true},
+                                {text: "Left"},
+                                {text: "Right", isActive: true},
                             ],
                         },
                         {
@@ -91,26 +90,25 @@ export class SignLanguages extends React.Component<Props, State> {
                             type: ToolbarType.TOGGLE,
                             buttons: [
                                 {
-                                    child: (
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                                        </svg>
-                                    ),
-                                    isActive: true
+                                    text: "񆄡",
+                                    isActive: true,
+                                    classes: [PHONEME_SYMOL_CLASS],
                                 },
-                                {child: "◑"},
-                                {child: (
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle-fill" viewBox="0 0 16 16">
-                                        <circle cx="8" cy="8" r="8"/>
-                                    </svg>
-                                )},
+                                {
+                                    text: "񆄱",
+                                    classes: [PHONEME_SYMOL_CLASS],
+                                },
+                                {
+                                    text: "񆅁",
+                                    classes: [PHONEME_SYMOL_CLASS],
+                                },
                             ],
                         },
                         {
                             type: ToolbarType.CLICKABLE_BUTTON,
                             buttons: [
-                                {child: "↺"},
-                                {child: "↻"}
+                                {text: "↺"},
+                                {text: "↻"}
                             ],
                         },
                     ]}

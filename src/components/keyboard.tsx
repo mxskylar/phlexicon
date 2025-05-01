@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { PHONEME_SYMOL_CLASS } from '../constants.ts';
 
 type Props = {
     phonemes: PhonemeDetails[],
@@ -57,7 +58,7 @@ export class Keyboard extends React.Component<Props, State> {
                                 <button
                                     key={`key-${symbol}`}
                                     type="button"
-                                    className="btn btn-outline-secondary phoneme-symbol"
+                                    className={`btn btn-outline-secondary ${PHONEME_SYMOL_CLASS}`}
                                     data-bs-toggle="modal"
                                     data-bs-target={`#${symbol}`}
                                 >
@@ -94,7 +95,7 @@ export class Keyboard extends React.Component<Props, State> {
                                                 } 
                                             </button>
                                             <div className="modal-title">
-                                                <h1 className="phoneme-symbol">{symbol}</h1>
+                                                <h1 className={PHONEME_SYMOL_CLASS}>{symbol}</h1>
                                                 <h6 className="text-secondary">{type}</h6>
                                             </div>
                                             <button
