@@ -35,3 +35,11 @@
 .phoneme-detail-item {
     margin-bottom: 5px;
 }
+
+/* 
+ * Same font-weight as h5.
+ * Must add class "text-primary" to have the same color.
+ */
+.inline-h5-font-weight {
+    font-weight: 500;
+}
