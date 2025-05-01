@@ -10,6 +10,7 @@ type Props = {};
 
 type State = {
     dialectOptions: Option[],
+    hands: Hand[],
 };
 
 const ALL_LANGUAGES_VALUE = "ALL";
@@ -19,29 +20,31 @@ export class SignLanguages extends React.Component<Props, State> {
         super(props);
         this.state = {
             dialectOptions: [],
+            hands: [],
         };
     }
 
     async getHands(dialectId: string): Promise<Hand[]> {
-        const getDialectPrimaryKeys = (dialectId: string): {
-            isoCode: string,
-            region: string,
-        } => {
+        const getDialectFilterQuery = (dialectId: string): string => {
             const primaryKeys = dialectId.split("-");
-            return {
-                isoCode: primaryKeys[0],
-                region: primaryKeys[1],
-            };
+            const isoCode = primaryKeys[0];
+            const region = primaryKeys[1];
+            return "SELECT h.* FROM hands h JOIN sign_dialect_phonemes p " +
+                "ON h.base_symbol = p.base_symbol " +
+                `WHERE iso_code = "${isoCode}" AND region = "${region}" ` +
+                "ORDER BY h.symbol;";
         };
-        const {isoCode, region} = getDialectPrimaryKeys(dialectId);
-        return [];
+        const query = dialectId === ALL_LANGUAGES_VALUE
+            ? "SELECT * FROM hands ORDER BY symbol;"
+            : getDialectFilterQuery(dialectId);
+        return await sendQuery(query).then(rows => rows as Hand[]);
     }
 
     async componentDidMount() {
         const dialects = await sendQuery("SELECT * FROM sign_dialects ORDER BY name;")
             .then(rows => rows as SignDialect[]);
         this.setState({
-            //handshapes: await this.getHands(ALL_LANGUAGES_VALUE),
+            hands: await this.getHands(ALL_LANGUAGES_VALUE),
             dialectOptions: dialects.map(dialect => {
                 return {
                     displayText: dialect.name,
@@ -49,14 +52,16 @@ export class SignLanguages extends React.Component<Props, State> {
                 }
             }),
         });
+        console.log(this.state.hands);
     }
 
     async switchDialect(e: React.BaseSyntheticEvent<HTMLSelectElement>) {
         const {selectedIndex, options} = e.target;
         const dialectId = options[selectedIndex].value;
-        /*this.setState({
-            handshapes: await this.getHands(dialectId),
-        });*/
+        this.setState({
+            hands: await this.getHands(dialectId),
+        });
+        console.log(this.state.hands);
     }
 
     render() {
