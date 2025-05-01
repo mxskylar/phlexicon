@@ -16,6 +16,9 @@ type State = {
     symbolRotationIndex: number,
     symbolRotation: SignWritingSymbolRotation,
     isRightHanded: boolean,
+    palmTowards: boolean,
+    palmSideways: boolean,
+    palmAway: boolean,
 };
 
 const ALL_LANGUAGES_VALUE = "ALL";
@@ -30,6 +33,9 @@ export class SignLanguages extends React.Component<Props, State> {
             symbolRotationIndex: 0,
             symbolRotation: SignWritingSymbolRotation.DEGREES_0_or_360,
             isRightHanded: true,
+            palmTowards: true,
+            palmSideways: false,
+            palmAway: false,
         };
     }
 
@@ -143,11 +149,36 @@ export class SignLanguages extends React.Component<Props, State> {
             hand.right_handed == this.state.isRightHanded &&
             hand.symbol_rotation === this.state.symbolRotation
         );
+        // TODO: Fix parsing bug that causes palm direction to be incorrect in DB
         return {
             palmTowardsSymbol: this.getPalmTowardsSymbol(palmFilterHands),
             palmSidewaysSymbol: this.getPalmSidewaysSymbol(palmFilterHands),
             palmAwaySymbol: this.getPalmAwaySymbol(palmFilterHands),
         };
+    }
+
+    setPalmTowards() {
+        this.setState({
+            palmTowards: true,
+            palmSideways: false,
+            palmAway: false,
+        });
+    }
+
+    setPalmSideways() {
+        this.setState({
+            palmTowards: false,
+            palmSideways: true,
+            palmAway: false,
+        });
+    }
+
+    setPalmAway() {
+        this.setState({
+            palmTowards: false,
+            palmSideways: false,
+            palmAway: true,
+        });
     }
 
     render() {
@@ -174,6 +205,19 @@ export class SignLanguages extends React.Component<Props, State> {
                     id="sign-languages-keyboard-controls"
                     groups={[
                         {
+                            type: ToolbarType.CLICKABLE_BUTTON,
+                            buttons: [
+                                {
+                                    text: "↺",
+                                    handleClick: this.rotateCounterClockwise.bind(this),
+                                },
+                                {
+                                    text: "↻",
+                                    handleClick: this.rotateClockwise.bind(this),
+                                },
+                            ],
+                        },
+                        {
                             name: "Hand",
                             type: ToolbarType.TOGGLE,
                             buttons: [
@@ -189,34 +233,26 @@ export class SignLanguages extends React.Component<Props, State> {
                             ],
                         },
                         {
-                            type: ToolbarType.CLICKABLE_BUTTON,
-                            buttons: [
-                                {
-                                    text: "↺",
-                                    handleClick: this.rotateCounterClockwise.bind(this),
-                                },
-                                {
-                                    text: "↻",
-                                    handleClick: this.rotateClockwise.bind(this),
-                                },
-                            ],
-                        },
-                        {
                             name: "Palm",
                             type: ToolbarType.TOGGLE,
                             buttons: [
                                 {
                                     text: palmTowardsSymbol,
-                                    isActive: true,
+                                    isActive: this.state.palmTowards,
                                     classes: [PHONEME_SYMOL_CLASS],
+                                    handleClick: this.setPalmTowards.bind(this),
                                 },
                                 {
                                     text: palmSidewaysSymbol,
+                                    isActive: this.state.palmSideways,
                                     classes: [PHONEME_SYMOL_CLASS],
+                                    handleClick: this.setPalmSideways.bind(this),
                                 },
                                 {
                                     text: palmAwaySymbol,
+                                    isActive: this.state.palmAway,
                                     classes: [PHONEME_SYMOL_CLASS],
+                                    handleClick: this.setPalmAway.bind(this),
                                 },
                             ],
                         },
