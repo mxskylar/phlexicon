@@ -9,6 +9,7 @@ import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
 import { VowelDetails } from '../components/spoken/vowel-details.tsx';
 import { Toolbar, ToolbarButton, ToolbarButtonGroup, ToolbarType } from '../components/toolbar.tsx';
 import { ConsonantDetails } from '../components/spoken/consonant-details.tsx';
+import { MultiSelect } from '../components/multi-select.tsx';
 
 enum KeyboardType {
     VOWELS = "Vowels",
@@ -382,6 +383,9 @@ export class SpokenLanguages extends React.Component<Props, State> {
                         };
                     })}
                     handleChange={this.switchKeyboard.bind(this)}
+                />
+                <MultiSelect
+                    id="spoken-phoneme-filters-multiselect"
                 />
                 <Toolbar
                     id="spoken-languages-keyboard-filters"
