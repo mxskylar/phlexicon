@@ -1,8 +1,23 @@
 import * as React from 'react';
 import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
 
+export type MultiSelectCheckbox = {
+    text: string,
+    value?: string,
+    isChecked?: boolean,
+    isDisabled?: boolean,
+    handleClick?: Function,
+};
+
+export type MultiSelectCheckboxGroup = {
+    name?: string,
+    checkboxes: MultiSelectCheckbox[],
+};
+
 type Props = {
     id: string,
+    prompt: string,
+    groups: MultiSelectCheckboxGroup[],
 };
 
 const TOGGLED_ON_CLASS = "on";
@@ -46,31 +61,58 @@ export class MultiSelect extends React.Component<Props> {
                     className="select-label form-select"
                     onClick={this.toggleDropDown.bind(this)}
                 >
-                    Select
+                    {this.props.prompt}
                 </label>
                 <div className="checkbox-list">
-                    <label className="section-label">
-                        <h6 className="text-dark first-section-header">Group 1</h6>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="dropdown-group" value="group1-1" />
-                            &nbsp;First Option
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="dropdown-group" value="group1-2" />
-                            &nbsp;Second Option
-                        </label>
-                    </label>
-                    <label className="section-label">
-                        <h6 className="text-dark subsequent-section-header">Group 2</h6>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="dropdown-group" value="group2-1" />
-                            &nbsp;First Option
-                        </label>
-                        <label className="checkbox-label">
-                            <input type="checkbox" name="dropdown-group" value="group2-2" disabled />
-                            &nbsp;Second Option
-                        </label>
-                    </label>
+                    {
+                        this.props.groups.map((group, i) => {
+                            const sectionHeaderClass = i > 0
+                                ? "subsequent-section-header"
+                                : "first-section-header";
+                            const {name} = group;
+                            return (
+                                <label
+                                    className="section-label"
+                                    key={`${this.props.id}-${name}-section-${i}`}
+                                >
+                                    {
+                                        name
+                                        ?   <h6 className={`text-dark ${sectionHeaderClass}`}>
+                                                {name}
+                                            </h6>
+                                        : ""
+                                    }
+                                    {
+                                        group.checkboxes.map((checkbox, i) => {
+                                            const {
+                                                text,
+                                                value,
+                                                isChecked,
+                                                isDisabled,
+                                                handleClick,
+                                            } = checkbox;
+                                            const handClickFn = handleClick ? handleClick : () => {};
+                                            return (
+                                                <label
+                                                    className="checkbox-label"
+                                                    key={`${this.props.id}-${name}-checkbox-${i}`}
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        value={value}
+                                                        defaultChecked={isChecked}
+                                                        disabled={isDisabled}
+                                                        onClick={e => handClickFn(e)}
+                                                    />
+                                                    &nbsp;{text}
+                                                </label>
+                                            )
+                                        })
+                                    }
+                                </label>
+                            )
+                        })
+                    }
                 </div>
             </div>
         );

@@ -386,6 +386,41 @@ export class SpokenLanguages extends React.Component<Props, State> {
                 />
                 <MultiSelect
                     id="spoken-phoneme-filters-multiselect"
+                    prompt="Filter vowels by attribute..."
+                    groups={[
+                        {
+                            name: "Horizontal Position",
+                            checkboxes: [
+                                {
+                                    text: "Front",
+                                    value: "front",
+                                    isChecked: true,
+                                },
+                                {
+                                    text: "Central",
+                                    value: "central",
+                                    isDisabled: true,
+                                },
+                                {
+                                    text: "Back",
+                                    value: "back",
+                                },
+                            ],
+                        },
+                        {
+                            name: "Vertical Position",
+                            checkboxes: [
+                                {
+                                    text: "Close",
+                                    value: "close",
+                                },
+                                {
+                                    text: "Near-Close",
+                                    value: "near_close",
+                                },
+                            ]
+                        }
+                    ]}
                 />
                 <Toolbar
                     id="spoken-languages-keyboard-filters"
