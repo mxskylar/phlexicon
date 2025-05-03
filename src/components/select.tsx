@@ -41,7 +41,3 @@ export const Select = (props: Props) => {
         </select>
     )
 };
-
-Select.defaultProps = {
-    classes: [],
-};

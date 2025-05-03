@@ -1,14 +1,15 @@
 import * as React from 'react';
+import { CheckboxProps } from '../components/checkbox.tsx';
 import { Keyboard } from '../components/keyboard.tsx';
+import { MultiSelect, MultiSelectGroup } from '../components/multi-select.tsx';
 import { Option, Select, SelectSize } from '../components/select.tsx';
+import { ConsonantDetails } from '../components/spoken/consonant-details.tsx';
+import { VowelDetails } from '../components/spoken/vowel-details.tsx';
+import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
 import { sendQuery } from '../db/ipc.ts';
 import { Consonant, CONSONANT_ATTRIBUTE_NAMES, ConsonantAttribute } from '../phonemes/spoken/consonant.ts';
 import { SpokenDialect } from '../phonemes/spoken/spoken-dialect.ts';
 import { Vowel, VowelAttribute } from '../phonemes/spoken/vowel.ts';
-import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
-import { VowelDetails } from '../components/spoken/vowel-details.tsx';
-import { Toolbar, ToolbarButton, ToolbarButtonGroup } from '../components/toolbar.tsx';
-import { ConsonantDetails } from '../components/spoken/consonant-details.tsx';
 
 enum KeyboardType {
     VOWELS = "Vowels",
@@ -69,11 +70,14 @@ type ConsonantFilters = {
 };
 
 type State = {
+    dialectId: string,
     dialectOptions: Option[],
-    vowels: Vowel[],
+    allVowels: Vowel[],
     vowelFilters: VowelFilters,
-    consonants: Consonant[],
+    filteredVowels: Vowel[],
+    allConsonants: Consonant[],
     consonantFilters: ConsonantFilters,
+    filteredConsonants: Consonant[],
     keyboardType: KeyboardType,
 };
 
@@ -134,11 +138,14 @@ export class SpokenLanguages extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
+            dialectId: ALL_LANGUAGES_VALUE,
             dialectOptions: [],
-            vowels: [],
+            allVowels: [],
             vowelFilters: DEFAULT_VOWEL_FILTERS,
-            consonants: [],
+            filteredVowels: [],
+            allConsonants: [],
             consonantFilters: DEFAULT_CONSONANT_FILTERS,
+            filteredConsonants: [],
             keyboardType: KeyboardType.VOWELS,
         };
     }
@@ -164,9 +171,13 @@ export class SpokenLanguages extends React.Component<Props, State> {
     async componentDidMount() {
         const dialects = await sendQuery("SELECT * FROM spoken_dialects ORDER BY name;")
             .then(rows => rows as SpokenDialect[]);
+        const vowels = await this.getVowels(this.state.dialectId);
+        const consonants = await this.getConsonants(this.state.dialectId);
         this.setState({
-            vowels: await this.getVowels(ALL_LANGUAGES_VALUE),
-            consonants: await this.getConsonants(ALL_LANGUAGES_VALUE),
+            allVowels: vowels,
+            filteredVowels: vowels,
+            allConsonants: consonants,
+            filteredConsonants: consonants,
             dialectOptions: dialects.map(dialect => {
                 return {
                     displayText: dialect.name,
@@ -179,17 +190,26 @@ export class SpokenLanguages extends React.Component<Props, State> {
     async switchDialect(e: React.BaseSyntheticEvent<HTMLSelectElement>) {
         const {selectedIndex, options} = e.target;
         const dialectId = options[selectedIndex].value;
-        this.setState({
-            vowels: await this.getVowels(dialectId),
-            vowelFilters: DEFAULT_VOWEL_FILTERS,
-            consonants: await this.getConsonants(dialectId),
-            consonantFilters: DEFAULT_CONSONANT_FILTERS,
-        });
+        const vowels = await this.getVowels(dialectId);
+        const consonants = await this.getConsonants(dialectId);
+        if (this.state.dialectId !== dialectId) {
+            this.setState({
+                dialectId,
+                allVowels: vowels,
+                filteredVowels: vowels,
+                vowelFilters: DEFAULT_VOWEL_FILTERS,
+                allConsonants: consonants,
+                filteredConsonants: consonants,
+                consonantFilters: DEFAULT_CONSONANT_FILTERS,
+            });
+        }
     }
 
     switchKeyboard(e: React.BaseSyntheticEvent<HTMLLinkElement>) {
         const {selectedIndex, options} = e.target;
-        this.setState({keyboardType: options[selectedIndex].value as KeyboardType});
+        this.setState({
+            keyboardType: options[selectedIndex].value as KeyboardType
+        });
     }
 
     filterPhonemes<Type>(
@@ -204,13 +224,9 @@ export class SpokenLanguages extends React.Component<Props, State> {
     getKeyboard(keyboardType: KeyboardType): React.ReactElement {
         switch(keyboardType) {
             case KeyboardType.VOWELS:
-                const vowels = this.filterPhonemes(
-                    this.state.vowels,
-                    this.state.vowelFilters,
-                );
                 return (
                     <Keyboard
-                        phonemes={vowels.map(vowel => {
+                        phonemes={this.state.filteredVowels.map(vowel => {
                             const {symbol} = vowel;
                             return {
                                 symbol,
@@ -221,135 +237,165 @@ export class SpokenLanguages extends React.Component<Props, State> {
                     />
                 );
             case KeyboardType.CONSONANTS:
-                const consonants = this.filterPhonemes(
-                    this.state.consonants,
-                    this.state.consonantFilters,
-                );
                 return (
                     <Keyboard
-                        phonemes={consonants.map(consonant => {
+                        phonemes={this.state.filteredConsonants.map(consonant => {
                             const {symbol} = consonant;
                             return {
                                 symbol,
                                 type: "Consonant",
                                 body: (<ConsonantDetails consonant={consonant} />),
                             };
-
                         })}
                     />
                 );
         }
     }
 
-    filterVowels(button) {
-        const attribute = button.value;
-        this.setState({vowelFilters: {
+    filterVowels(e: React.BaseSyntheticEvent<HTMLInputElement>) {
+        const attribute = e.target.value;
+        const vowelFilters = {
             ...this.state.vowelFilters,
             [attribute]: !this.state.vowelFilters[attribute],
-        }});
+        };
+        const filteredVowels = this.filterPhonemes(
+            this.state.allVowels,
+            vowelFilters,
+        );
+        this.setState({vowelFilters, filteredVowels});
     }
 
-    filterConsonants(button) {
-        const attribute = button.value;
-        this.setState({consonantFilters: {
+    filterConsonants(e: React.BaseSyntheticEvent<HTMLInputElement>) {
+        const attribute = e.target.value;
+        const consonantFilters = {
             ...this.state.consonantFilters,
             [attribute]: !this.state.consonantFilters[attribute],
-        }});
+        };
+        const filteredConsonants = this.filterPhonemes(
+            this.state.allConsonants,
+            consonantFilters,
+        );
+        this.setState({consonantFilters, filteredConsonants});
     }
 
-    getToolbarGroups(keyboardType: KeyboardType): ToolbarButtonGroup[] {
+    isAttributeDisabled<Type>(phonemes: Type[], attribute: string): boolean {
+        return phonemes.length > 0 && phonemes.every(phoneme => !phoneme[attribute]);
+    }
+
+    getVowelCheckboxGroups(): MultiSelectGroup[] {
+        const getCheckbox = (
+            text: string,
+            attribute: VowelAttribute
+        ): CheckboxProps => {
+            return {
+                text: text,
+                handleChange: this.filterVowels.bind(this),
+                value: attribute,
+                isChecked: this.state.vowelFilters[attribute],
+                isDisabled: this.isAttributeDisabled(
+                    this.state.filteredVowels,
+                    attribute,
+                ),
+            };
+        };
+        return [
+            {
+                name: "Horizontal Position",
+                checkboxes: [
+                    getCheckbox("Front", VowelAttribute.FRONT),
+                    getCheckbox("Central", VowelAttribute.CENTRAL),
+                    getCheckbox("Back", VowelAttribute.BACK),
+                ],
+            },
+            {
+                name: "Vertical Position",
+                checkboxes: [
+                    getCheckbox("Close", VowelAttribute.CLOSE),
+                    getCheckbox("Near-Close", VowelAttribute.NEAR_CLOSE),
+                    getCheckbox("Close-Mid", VowelAttribute.CLOSE_MID),
+                    getCheckbox("Mid", VowelAttribute.MID),
+                    getCheckbox("Open-Mid", VowelAttribute.OPEN_MID),
+                    getCheckbox("Near-Open", VowelAttribute.NEAR_OPEN),
+                    getCheckbox("Open", VowelAttribute.OPEN),
+                ],
+            },
+            {
+                name: "Other",
+                checkboxes: [
+                    getCheckbox("Glide", VowelAttribute.GLIDE),
+                    getCheckbox("Rounded", VowelAttribute.ROUNDED),
+                    getCheckbox("Palatal", VowelAttribute.PALATAL),
+                    getCheckbox("Labiovelar", VowelAttribute.LABIOVELAR),
+                ],
+            },
+        ];
+    }
+
+    getConsonantCheckboxGroups(): MultiSelectGroup[] {
+        const getCheckbox = (attribute: ConsonantAttribute): CheckboxProps => {
+            return {
+                text: CONSONANT_ATTRIBUTE_NAMES[attribute],
+                handleChange: this.filterConsonants.bind(this),
+                value: attribute,
+                isChecked: this.state.consonantFilters[attribute],
+                isDisabled: this.isAttributeDisabled(
+                    this.state.filteredConsonants,
+                    attribute,
+                ),
+            };
+        };
+        return [
+            {
+                name: "Place",
+                checkboxes: [
+                    getCheckbox(ConsonantAttribute.BILABIAL),
+                    getCheckbox(ConsonantAttribute.LABIODENTAL),
+                    getCheckbox(ConsonantAttribute.DENTAL),
+                    getCheckbox(ConsonantAttribute.ALVEOLAR),
+                    getCheckbox(ConsonantAttribute.POSTALVEOLAR),
+                    getCheckbox(ConsonantAttribute.RETROFLEX),
+                    getCheckbox(ConsonantAttribute.PALATAL),
+                    getCheckbox(ConsonantAttribute.VELAR),
+                    getCheckbox(ConsonantAttribute.UVULAR),
+                    getCheckbox(ConsonantAttribute.PHARYNGEAL),
+                    getCheckbox(ConsonantAttribute.EPIGLOTTAL),
+                    getCheckbox(ConsonantAttribute.GLOTTAL),
+                ],
+            },
+            {
+                name: "Manner",
+                checkboxes: [
+                    getCheckbox(ConsonantAttribute.NASAL),
+                    getCheckbox(ConsonantAttribute.AFFRICATE),
+                    getCheckbox(ConsonantAttribute.FRICATIVE),
+                    getCheckbox(ConsonantAttribute.APPROXIMANT),
+                    getCheckbox(ConsonantAttribute.LATERAL_APPROXIMANT),
+                    getCheckbox(ConsonantAttribute.FLAP),
+                    getCheckbox(ConsonantAttribute.TRILL),
+                    getCheckbox(ConsonantAttribute.IMPLOSIVE),
+                    getCheckbox(ConsonantAttribute.STOP),
+                    getCheckbox(ConsonantAttribute.LATERAL_STOP),
+                    getCheckbox(ConsonantAttribute.CLICK),
+                ],
+            },
+            {
+                name: "Other",
+                checkboxes: [getCheckbox(ConsonantAttribute.GLIDE)],
+            },
+        ];
+    }
+
+    getCheckboxGroups(keyboardType: KeyboardType): MultiSelectGroup[] {
         switch (keyboardType) {
             case KeyboardType.VOWELS:
-                const getVowelButton = (
-                    text: string,
-                    attribute: VowelAttribute
-                ): ToolbarButton => {
-                    return {
-                        text,
-                        handleClick: this.filterVowels.bind(this),
-                        value: attribute,
-                        isActive: this.state.vowelFilters[attribute],
-                        isDisabled: this.state.vowels.every(vowel => !vowel[attribute]),
-                    };
-                };
-                return [
-                    {
-                        buttons: [
-                            getVowelButton("Front", VowelAttribute.FRONT),
-                            getVowelButton("Central", VowelAttribute.CENTRAL),
-                            getVowelButton("Back", VowelAttribute.BACK),
-                        ],
-                    },
-                    {
-                        buttons: [
-                            getVowelButton("Close", VowelAttribute.CLOSE),
-                            getVowelButton("Near-Close", VowelAttribute.NEAR_CLOSE),
-                            getVowelButton("Close-Mid", VowelAttribute.CLOSE_MID),
-                            getVowelButton("Mid", VowelAttribute.MID),
-                            getVowelButton("Open-Mid", VowelAttribute.OPEN_MID),
-                            getVowelButton("Near-Open", VowelAttribute.NEAR_OPEN),
-                            getVowelButton("Open", VowelAttribute.OPEN),
-                        ],
-                    },
-                    {
-                        buttons: [
-                            getVowelButton("Glide", VowelAttribute.GLIDE),
-                            getVowelButton("Rounded", VowelAttribute.ROUNDED),
-                            getVowelButton("Palatal", VowelAttribute.PALATAL),
-                            getVowelButton("Labiovelar", VowelAttribute.LABIOVELAR),
-                        ],
-                    },
-                ];
+                return this.getVowelCheckboxGroups();
             case KeyboardType.CONSONANTS:
-                const getConsonantButton = (attribute: ConsonantAttribute): ToolbarButton => {
-                    return {
-                        text: CONSONANT_ATTRIBUTE_NAMES[attribute],
-                        handleClick: this.filterConsonants.bind(this),
-                        value: attribute,
-                        isActive: this.state.consonantFilters[attribute],
-                        isDisabled: this.state.consonants.every(consonant => !consonant[attribute]),
-                    };
-                };
-                return [
-                    {
-                        buttons: [
-                            getConsonantButton(ConsonantAttribute.BILABIAL),
-                            getConsonantButton(ConsonantAttribute.LABIODENTAL),
-                            getConsonantButton(ConsonantAttribute.DENTAL),
-                            getConsonantButton(ConsonantAttribute.ALVEOLAR),
-                            getConsonantButton(ConsonantAttribute.POSTALVEOLAR),
-                            getConsonantButton(ConsonantAttribute.RETROFLEX),
-                            getConsonantButton(ConsonantAttribute.PALATAL),
-                            getConsonantButton(ConsonantAttribute.VELAR),
-                            getConsonantButton(ConsonantAttribute.UVULAR),
-                            getConsonantButton(ConsonantAttribute.PHARYNGEAL),
-                            getConsonantButton(ConsonantAttribute.EPIGLOTTAL),
-                            getConsonantButton(ConsonantAttribute.GLOTTAL),
-                        ],
-                    },
-                    {
-                        buttons: [
-                            getConsonantButton(ConsonantAttribute.NASAL),
-                            getConsonantButton(ConsonantAttribute.AFFRICATE),
-                            getConsonantButton(ConsonantAttribute.FRICATIVE),
-                            getConsonantButton(ConsonantAttribute.APPROXIMANT),
-                            getConsonantButton(ConsonantAttribute.LATERAL_APPROXIMANT),
-                            getConsonantButton(ConsonantAttribute.FLAP),
-                            getConsonantButton(ConsonantAttribute.TRILL),
-                            getConsonantButton(ConsonantAttribute.IMPLOSIVE),
-                            getConsonantButton(ConsonantAttribute.STOP),
-                            getConsonantButton(ConsonantAttribute.LATERAL_STOP),
-                            getConsonantButton(ConsonantAttribute.CLICK),
-                        ],
-                    },
-                    {
-                        buttons: [getConsonantButton(ConsonantAttribute.GLIDE)],
-                    },
-                ];
+                return this.getConsonantCheckboxGroups();
         }
     }
 
     render() {
+        const {keyboardType} = this.state;
         return (
             <div className="container-fluid phoneme-picker" id="spoken-languages">
                 <Select
@@ -376,11 +422,12 @@ export class SpokenLanguages extends React.Component<Props, State> {
                     })}
                     handleChange={this.switchKeyboard.bind(this)}
                 />
-                <Toolbar
-                    id="spoken-languages-keyboard-filters"
-                    groups={this.getToolbarGroups(this.state.keyboardType)}
+                <MultiSelect
+                    id="spoken-phoneme-filters-multiselect"
+                    prompt="Filter by attribute..."
+                    groups={this.getCheckboxGroups(keyboardType)}
                 />
-                {this.getKeyboard(this.state.keyboardType)}
+                {this.getKeyboard(keyboardType)}
             </div>
         );
     }

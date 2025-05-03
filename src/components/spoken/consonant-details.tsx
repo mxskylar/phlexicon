@@ -14,7 +14,7 @@ export const ConsonantDetails = (props: Props) => {
     return (
         <div>
             <p>
-                <b className="text-dark">Glide: </b>
+                <span className="text-primary inline-h5-font-weight">Glide: </span>
                 {consonant.glide ? "Yes" : "No"}
             </p>
             {

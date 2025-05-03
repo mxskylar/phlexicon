@@ -1,0 +1,39 @@
+.multi-select label {
+    display: block;
+}
+
+.multi-select .checkbox-list {
+    display: none;
+    max-height: 150px;
+    overflow-y: scroll;
+    /* Same as padding & border for form-select class */
+    padding: .375rem 2.25rem .375rem .75rem;
+    border-right: 1px solid rgb(222, 226, 230);
+    border-left: 1px solid rgb(222, 226, 230);
+    border-bottom: 1px solid rgb(222, 226, 230);
+    border-bottom-left-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+}
+
+.multi-select.on {
+    .select-label {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .checkbox-list {
+        display: block;
+    }
+}
+
+.multi-select .checkbox-list h6 {
+    margin-bottom: 5px;
+}
+
+.multi-select .checkbox-list .first-section-header {
+    margin-top: 5px;
+}
+
+.multi-select .checkbox-list .subsequent-section-header {
+    margin-top: 15px;
+}

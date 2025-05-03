@@ -3,15 +3,22 @@ import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
 
 export type ToolbarButton = {
     text: string,
+    value?: string,
     isActive?: boolean,
     isDisabled?: boolean,
-    handleClick: Function,
-    value: string,
+    handleClick?: Function,
+    classes?: string[],
 };
+
+export enum ToolbarType {
+    CLICKABLE_BUTTON = "CLICKABLE_BUTTON",
+    MULTI_SELECT = "MULTI_SELECT",
+    TOGGLE = "TOGGLE",
+}
 
 export type ToolbarButtonGroup = {
     name?: string,
-    isToggle?: boolean,
+    type: ToolbarType,
     buttons: ToolbarButton[],
 };
 
@@ -24,32 +31,39 @@ const ACTIVE_CLASS = "active";
 const DISABLED_CLASS = "disabled";
 
 export class Toolbar extends React.Component<Props> {
-    public static defaultProps = {
-        isToggle: true,
-    };
-
     constructor(props) {
         super(props);
     }
 
-    handleClick(e, buttonGroup: ToolbarButtonGroup, handleClick: Function) {
-        if (buttonGroup.isToggle) {
+    handleClick(e, buttonGroup: ToolbarButtonGroup, handleClick?: Function) {
+        // TODO: Ensure that e.target is always button that is clicked
+        // And never the button's children
+        const {type} = buttonGroup;
+        if (type === ToolbarType.TOGGLE) {
             Array.from(e.target.parentElement.children)
-                .forEach((element, i) => {
-                    const button = element as Element;
+                .map(element => element as Element)
+                .filter(element => element.tagName === "BUTTON")
+                .forEach((button, i) => {
                     if (button.classList.contains(ACTIVE_CLASS)) {
-                        buttonGroup.buttons[i].handleClick(button);
+                        const handleParallelClick = buttonGroup.buttons[i].handleClick;
+                        if (handleParallelClick) {
+                            handleParallelClick(button);
+                        }
                         button.classList.remove(ACTIVE_CLASS);
                     }
                 });
         }
-        const {classList} = e.target;
-        if (classList.contains(ACTIVE_CLASS)) {
-            classList.remove(ACTIVE_CLASS);
-        } else {
-            classList.add(ACTIVE_CLASS);
+        if ([ToolbarType.MULTI_SELECT, ToolbarType.TOGGLE].includes(type)) {
+            const {classList} = e.target;
+            if (classList.contains(ACTIVE_CLASS)) {
+                classList.remove(ACTIVE_CLASS);
+            } else {
+                classList.add(ACTIVE_CLASS);
+            }
         }
-        handleClick(e.target);
+        if (handleClick) {
+            handleClick(e.target);
+        }
     }
 
     render() {
@@ -77,11 +91,22 @@ export class Toolbar extends React.Component<Props> {
                             }
                             {
                                 group.buttons.map((button, i) => {
-                                    const {isActive, isDisabled, text, handleClick, value} = button;
+                                    const {
+                                        isActive,
+                                        isDisabled,
+                                        text,
+                                        handleClick,
+                                        value,
+                                        classes
+                                    } = button;
+                                    const className = "btn btn-outline-info" +
+                                        (isActive ? ` ${ACTIVE_CLASS}` : "") +
+                                        (isDisabled ? ` ${DISABLED_CLASS}`: "") +
+                                        (classes ? ` ${classes.join(" ")}` : "");
                                     return (
                                         <button
                                             type="button"
-                                            className={`btn btn-outline-info${isActive ? ` ${ACTIVE_CLASS}` : ""}${isDisabled ? ` ${DISABLED_CLASS}`: ""}`}
+                                            className={className}
                                             key={`${this.props.id}-button-${text}-${i}`}
                                             onClick={e => this.handleClick(e, group, handleClick)}
                                             value={value}
