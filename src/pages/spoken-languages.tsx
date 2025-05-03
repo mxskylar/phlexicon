@@ -72,9 +72,9 @@ type ConsonantFilters = {
 type State = {
     dialectId: string,
     dialectOptions: Option[],
-    vowels: Vowel[],
+    allVowels: Vowel[],
     vowelFilters: VowelFilters,
-    consonants: Consonant[],
+    allConsonants: Consonant[],
     consonantFilters: ConsonantFilters,
     keyboardType: KeyboardType,
 };
@@ -138,9 +138,9 @@ export class SpokenLanguages extends React.Component<Props, State> {
         this.state = {
             dialectId: ALL_LANGUAGES_VALUE,
             dialectOptions: [],
-            vowels: [],
+            allVowels: [],
             vowelFilters: DEFAULT_VOWEL_FILTERS,
-            consonants: [],
+            allConsonants: [],
             consonantFilters: DEFAULT_CONSONANT_FILTERS,
             keyboardType: KeyboardType.VOWELS,
         };
@@ -168,8 +168,8 @@ export class SpokenLanguages extends React.Component<Props, State> {
         const dialects = await sendQuery("SELECT * FROM spoken_dialects ORDER BY name;")
             .then(rows => rows as SpokenDialect[]);
         this.setState({
-            vowels: await this.getVowels(this.state.dialectId),
-            consonants: await this.getConsonants(this.state.dialectId),
+            allVowels: await this.getVowels(this.state.dialectId),
+            allConsonants: await this.getConsonants(this.state.dialectId),
             dialectOptions: dialects.map(dialect => {
                 return {
                     displayText: dialect.name,
@@ -185,9 +185,9 @@ export class SpokenLanguages extends React.Component<Props, State> {
         if (this.state.dialectId !== dialectId) {
             this.setState({
                 dialectId,
-                vowels: await this.getVowels(dialectId),
+                allVowels: await this.getVowels(dialectId),
                 vowelFilters: DEFAULT_VOWEL_FILTERS,
-                consonants: await this.getConsonants(dialectId),
+                allConsonants: await this.getConsonants(dialectId),
                 consonantFilters: DEFAULT_CONSONANT_FILTERS,
             });
         }
@@ -213,7 +213,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
         switch(keyboardType) {
             case KeyboardType.VOWELS:
                 const vowels = this.filterPhonemes(
-                    this.state.vowels,
+                    this.state.allVowels,
                     this.state.vowelFilters,
                 );
                 return (
@@ -230,7 +230,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                 );
             case KeyboardType.CONSONANTS:
                 const consonants = this.filterPhonemes(
-                    this.state.consonants,
+                    this.state.allConsonants,
                     this.state.consonantFilters,
                 );
                 return (
@@ -275,7 +275,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                 handleChange: this.filterVowels.bind(this),
                 value: attribute,
                 isChecked: this.state.vowelFilters[attribute],
-                isDisabled: this.state.vowels.every(vowel => !vowel[attribute]),
+                isDisabled: this.state.allVowels.every(vowel => !vowel[attribute]),
             };
         };
         return [
@@ -318,7 +318,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                 handleChange: this.filterConsonants.bind(this),
                 value: attribute,
                 isChecked: this.state.consonantFilters[attribute],
-                isDisabled: this.state.consonants.every(consonant => !consonant[attribute]),
+                isDisabled: this.state.allConsonants.every(consonant => !consonant[attribute]),
             };
         };
         return [
