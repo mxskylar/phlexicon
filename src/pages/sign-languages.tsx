@@ -6,13 +6,15 @@ import { sendQuery } from '../db/ipc.ts';
 import { Hand } from '../phonemes/sign/hand.ts';
 import { SignDialect } from '../phonemes/sign/sign-dialect.ts';
 import { CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS, SignWritingSymbolRotation } from '../phonemes/sign/sign-writing.ts';
+import { Keyboard } from '../components/keyboard.tsx';
+import { HandDetails } from '../components/sign/hand-details.tsx';
 
 type Props = {};
 
 enum PalmDirectionFilter {
-    TOWARDS,
-    SIDEWAYS,
-    AWAY,
+    TOWARDS = "palm_towards",
+    SIDEWAYS = "palm_sideways",
+    AWAY = "palm_away",
 }
 
 type State = {
@@ -24,6 +26,7 @@ type State = {
     symbolRotation: SignWritingSymbolRotation,
     isRightHanded: boolean,
     palmDirection: PalmDirectionFilter,
+    isVertical: boolean,
 };
 
 const ALL_LANGUAGES_VALUE = "ALL";
@@ -32,10 +35,12 @@ const DEFAULT_HAND_FILTERS: {
     symbolRotation: SignWritingSymbolRotation,
     isRightHanded: boolean,
     palmDirection: PalmDirectionFilter,
+    isVertical: boolean,
 } = {
     symbolRotation: SignWritingSymbolRotation.DEGREES_0_or_360,
     isRightHanded: true,
     palmDirection: PalmDirectionFilter.TOWARDS,
+    isVertical: true,
 }
 
 export class SignLanguages extends React.Component<Props, State> {
@@ -67,13 +72,19 @@ export class SignLanguages extends React.Component<Props, State> {
         return await sendQuery(query).then(rows => rows as Hand[]);
     }
 
-    filterHands(
+    getFilterHands(
         allHands: Hand[],
         symbolRotation: SignWritingSymbolRotation,
         isRightHanded: boolean,
         palmDirection: PalmDirectionFilter,
+        isVertical: boolean,
     ): Hand[] {
-        return allHands;
+        return allHands.filter(hand =>
+            hand.symbol_rotation === symbolRotation &&
+            hand.right_handed == isRightHanded &&
+            hand[palmDirection.valueOf()] &&
+            hand.vertical == isVertical
+        );
     }
 
     async componentDidMount() {
@@ -88,11 +99,12 @@ export class SignLanguages extends React.Component<Props, State> {
                 }
             }),
             allHands,
-            filteredHands: this.filterHands(
+            filteredHands: this.getFilterHands(
                 allHands,
                 this.state.symbolRotation,
                 this.state.isRightHanded,
                 this.state.palmDirection,
+                this.state.isVertical,
             ),
             palmFilterHands: await sendQuery(
                 'SELECT * FROM hands WHERE base_symbol = "񆄱"'
@@ -106,11 +118,12 @@ export class SignLanguages extends React.Component<Props, State> {
         const allHands = await this.getHands(dialectId);
         this.setState({
             allHands,
-            filteredHands: this.filterHands(
+            filteredHands: this.getFilterHands(
                 allHands,
                 this.state.symbolRotation,
                 this.state.isRightHanded,
                 this.state.palmDirection,
+                this.state.isVertical,
             ),
         });
     }
@@ -280,6 +293,19 @@ export class SignLanguages extends React.Component<Props, State> {
                             ],
                         },
                     ]}
+                />
+                <Keyboard
+                    phonemes={this.state.filteredHands.map(hand => {
+                        const {symbol} = hand;
+                        return {
+                            symbol,
+                            type: "Oriented Handshape",
+                            body: (
+                                <HandDetails
+                                />
+                            ),
+                        };
+                    })}
                 />
             </div>
         );

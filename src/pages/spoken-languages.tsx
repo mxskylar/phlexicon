@@ -212,7 +212,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
         });
     }
 
-    filterPhonemes<Type>(
+    getFilteredPhonemes<Type>(
         phonemes: Type[],
         filters: {[index: string]: boolean}
     ): Type[] {
@@ -258,7 +258,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
             ...this.state.vowelFilters,
             [attribute]: !this.state.vowelFilters[attribute],
         };
-        const filteredVowels = this.filterPhonemes(
+        const filteredVowels = this.getFilteredPhonemes(
             this.state.allVowels,
             vowelFilters,
         );
@@ -271,7 +271,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
             ...this.state.consonantFilters,
             [attribute]: !this.state.consonantFilters[attribute],
         };
-        const filteredConsonants = this.filterPhonemes(
+        const filteredConsonants = this.getFilteredPhonemes(
             this.state.allConsonants,
             consonantFilters,
         );
