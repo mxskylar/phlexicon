@@ -184,7 +184,6 @@ export class SignLanguages extends React.Component<Props, State> {
             hand.right_handed == this.state.isRightHanded &&
             hand.symbol_rotation === this.state.symbolRotation
         );
-        // TODO: Fix parsing bug that causes palm direction to be incorrect in DB
         return {
             palmTowardsSymbol: this.getPalmTowardsSymbol(palmFilterHands),
             palmSidewaysSymbol: this.getPalmSidewaysSymbol(palmFilterHands),
