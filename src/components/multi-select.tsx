@@ -11,13 +11,18 @@ type Props = {
     id: string,
     prompt: string,
     groups: MultiSelectGroup[],
+    handleReset: Function,
+    scrollTop?: boolean,
 };
 
 const TOGGLED_ON_CLASS = "on";
 
 export class MultiSelect extends React.Component<Props> {
+    checkboxListId: string;
+
     constructor(props) {
         super(props);
+        this.checkboxListId = `${this.props.id}-checkbox-list`;
     }
 
     componentDidMount() {
@@ -45,7 +50,17 @@ export class MultiSelect extends React.Component<Props> {
             classList.remove(TOGGLED_ON_CLASS);
         } else {
             classList.add(TOGGLED_ON_CLASS);
+            if (this.props.scrollTop) {
+                document.getElementById(this.checkboxListId).scrollTop = 0;
+            }
         }
+    }
+
+    reset(e) {
+        const checkboxes = document.getElementById(this.checkboxListId)
+            .querySelectorAll("input");
+        checkboxes.forEach(checkbox => checkbox.checked = false);
+        this.props.handleReset(e);
     }
 
     render() {
@@ -61,39 +76,50 @@ export class MultiSelect extends React.Component<Props> {
                 >
                     {this.props.prompt}
                 </label>
-                <div className="checkbox-list">
-                    {
-                        this.props.groups.map((group, i) => {
-                            const sectionHeaderClass = i > 0
-                                ? "subsequent-section-header"
-                                : "first-section-header";
-                            const {name} = group;
-                            return (
-                                <label
-                                    className="section-label"
-                                    key={`${this.props.id}-${name}-section-${i}`}
-                                >
-                                    {
-                                        name
-                                        ?   <h6 className={`text-dark ${sectionHeaderClass}`}>
-                                                {name}
-                                            </h6>
-                                        : ""
-                                    }
-                                    {
-                                        group.checkboxes.map((checkbox, i) => {
-                                            return (
-                                                <Checkbox
-                                                    key={`${this.props.id}-${name}-checkbox-${i}`}
-                                                    {...checkbox}
-                                                />
-                                            )
-                                        })
-                                    }
-                                </label>
-                            )
-                        })
-                    }
+                <div className="dropdown">
+                    <div className="reset-container">
+                        <a
+                            className="text-secondary"
+                            href="#"
+                            onClick={this.reset.bind(this)}
+                        >
+                            Reset
+                        </a>
+                    </div>
+                    <div className="checkbox-list" id={this.checkboxListId}>
+                        {
+                            this.props.groups.map((group, i) => {
+                                const sectionHeaderClass = i > 0
+                                    ? "subsequent-section-header"
+                                    : "first-section-header";
+                                const {name} = group;
+                                return (
+                                    <label
+                                        className="section-label"
+                                        key={`${this.props.id}-${name}-section-${i}`}
+                                    >
+                                        {
+                                            name
+                                            ?   <h6 className={`text-dark ${sectionHeaderClass}`}>
+                                                    {name}
+                                                </h6>
+                                            : ""
+                                        }
+                                        {
+                                            group.checkboxes.map((checkbox, i) => {
+                                                return (
+                                                    <Checkbox
+                                                        key={`${this.props.id}-${name}-checkbox-${i}`}
+                                                        {...checkbox}
+                                                    />
+                                                )
+                                            })
+                                        }
+                                    </label>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             </div>
         );
