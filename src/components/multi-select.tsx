@@ -1,23 +1,16 @@
 import * as React from 'react';
 import { KEYBOARD_CONTROL_CLASS } from '../constants.ts';
+import { Checkbox, CheckboxProps } from './checkbox.tsx';
 
-export type MultiSelectCheckbox = {
-    text: string,
-    value?: string,
-    isChecked?: boolean,
-    isDisabled?: boolean,
-    handleClick?: Function,
-};
-
-export type MultiSelectCheckboxGroup = {
+export type MultiSelectGroup = {
     name?: string,
-    checkboxes: MultiSelectCheckbox[],
+    checkboxes: CheckboxProps[],
 };
 
 type Props = {
     id: string,
     prompt: string,
-    groups: MultiSelectCheckboxGroup[],
+    groups: MultiSelectGroup[],
 };
 
 const TOGGLED_ON_CLASS = "on";
@@ -84,28 +77,11 @@ export class MultiSelect extends React.Component<Props> {
                                     }
                                     {
                                         group.checkboxes.map((checkbox, i) => {
-                                            const {
-                                                text,
-                                                value,
-                                                isChecked,
-                                                isDisabled,
-                                                handleClick,
-                                            } = checkbox;
-                                            const handClickFn = handleClick ? handleClick : () => {};
                                             return (
-                                                <label
-                                                    className="checkbox-label"
+                                                <Checkbox
                                                     key={`${this.props.id}-${name}-checkbox-${i}`}
-                                                >
-                                                    <input
-                                                        type="checkbox"
-                                                        value={value}
-                                                        defaultChecked={isChecked}
-                                                        disabled={isDisabled}
-                                                        onClick={e => handClickFn(e)}
-                                                    />
-                                                    &nbsp;{text}
-                                                </label>
+                                                    {...checkbox}
+                                                />
                                             )
                                         })
                                     }
