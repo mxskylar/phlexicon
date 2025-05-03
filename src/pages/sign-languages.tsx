@@ -133,9 +133,18 @@ export class SignLanguages extends React.Component<Props, State> {
         const symbolRotationIndex = incrementedIndex > CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS.length - 1
             ? 0
             : incrementedIndex;
+        const symbolRotation = CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS[symbolRotationIndex];
+        const filteredHands = this.getFilterHands(
+            this.state.allHands,
+            symbolRotation,
+            this.state.isRightHanded,
+            this.state.palmDirection,
+            this.state.isVertical,
+        );
         this.setState({
             symbolRotationIndex,
-            symbolRotation: CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS[symbolRotationIndex],
+            symbolRotation,
+            filteredHands,
         });
     }
 
@@ -144,18 +153,41 @@ export class SignLanguages extends React.Component<Props, State> {
         const symbolRotationIndex = decrementedIndex < 0
             ? CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS.length - 1
             : decrementedIndex;
+        const symbolRotation = CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS[symbolRotationIndex];
+        const filteredHands = this.getFilterHands(
+            this.state.allHands,
+            symbolRotation,
+            this.state.isRightHanded,
+            this.state.palmDirection,
+            this.state.isVertical,
+        );
         this.setState({
             symbolRotationIndex,
-            symbolRotation: CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS[symbolRotationIndex],
+            symbolRotation,
+            filteredHands,
         });
     }
 
     setIsRightHanded(isRightHanded: boolean) {
-        this.setState({isRightHanded});
+        const filteredHands = this.getFilterHands(
+            this.state.allHands,
+            this.state.symbolRotation,
+            isRightHanded,
+            this.state.palmDirection,
+            this.state.isVertical,
+        );
+        this.setState({isRightHanded, filteredHands});
     }
 
     setIsVertical(isVertical: boolean) {
-        this.setState({isVertical});
+        const filteredHands = this.getFilterHands(
+            this.state.allHands,
+            this.state.symbolRotation,
+            this.state.isRightHanded,
+            this.state.palmDirection,
+            isVertical,
+        );
+        this.setState({isVertical, filteredHands});
     }
 
     getPalmTowardsSymbol(hands: Hand[]): string {
@@ -206,7 +238,14 @@ export class SignLanguages extends React.Component<Props, State> {
     }
 
     setPalmDirection(palmDirection: PalmDirectionFilter) {
-        this.setState({palmDirection});
+        const filteredHands = this.getFilterHands(
+            this.state.allHands,
+            this.state.symbolRotation,
+            this.state.isRightHanded,
+            palmDirection,
+            this.state.isVertical,
+        );
+        this.setState({palmDirection, filteredHands});
     }
 
     render() {
