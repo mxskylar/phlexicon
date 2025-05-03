@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Option, Select } from '../components/select.tsx';
+import { Toolbar, ToolbarType } from '../components/toolbar.tsx';
 import { KEYBOARD_CONTROL_CLASS, PHONEME_SYMOL_CLASS } from '../constants.ts';
 import { sendQuery } from '../db/ipc.ts';
-import { SignDialect } from '../phonemes/sign/sign-dialect.ts';
 import { Hand } from '../phonemes/sign/hand.ts';
-import { Toolbar, ToolbarButton, ToolbarType } from '../components/toolbar.tsx';
+import { SignDialect } from '../phonemes/sign/sign-dialect.ts';
 import { CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS, SignWritingSymbolRotation } from '../phonemes/sign/sign-writing.ts';
 
 type Props = {};
