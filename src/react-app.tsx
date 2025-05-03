@@ -6,9 +6,10 @@ import { SpokenLanguages } from './pages/spoken-languages.tsx';
 import { SignLanguages } from './pages/sign-languages.tsx';
 import { ExportData } from './pages/export-data.tsx';
 
+const NAV_BAR_ID = "navigation-bar";
 const NAV_BAR_TOGGLE_BUTTON_ID = "navigation-bar-toggle-button";
 
-const hideNavMenu = e => {
+const hideNavMenu = () => {
     const navBarToggleButton = document.getElementById(NAV_BAR_TOGGLE_BUTTON_ID);
     if (navBarToggleButton.getAttribute("aria-expanded") === "true") {
         navBarToggleButton.click();
@@ -17,7 +18,10 @@ const hideNavMenu = e => {
 
 const Navbar = () => {
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
+        <nav
+            className="navbar navbar-expand-lg navbar-dark bg-primary mb-2"
+            id={NAV_BAR_ID}
+        >
             <div className="container-fluid">
                 <div className="navbar-brand">Phlexicon</div>
                 <button
@@ -38,7 +42,7 @@ const Navbar = () => {
                             <Link
                                 className="nav-link"
                                 to="/spoken-languages"
-                                onClick={e => hideNavMenu(e)}
+                                onClick={e => hideNavMenu()}
                             >
                                 🗣️&nbsp;&nbsp;Spoken Languages
                             </Link>
@@ -47,7 +51,7 @@ const Navbar = () => {
                             <Link
                                 className="nav-link"
                                 to="/sign-languages"
-                                onClick={e => hideNavMenu(e)}
+                                onClick={e => hideNavMenu()}
                             >
                                 🤟&nbsp;&nbsp;Sign Languages
                             </Link>
@@ -56,7 +60,7 @@ const Navbar = () => {
                             <Link
                                 className="nav-link"
                                 to="/export-data"
-                                onClick={e => hideNavMenu(e)}
+                                onClick={e => hideNavMenu()}
                             >
                                 💾&nbsp;&nbsp;Export Data
                             </Link>
@@ -66,7 +70,7 @@ const Navbar = () => {
                                 className="nav-link"
                                 href="https://mxskylar.github.io/phlexicon"
                                 target="_blank"
-                                onClick={e => hideNavMenu(e)}
+                                onClick={e => hideNavMenu()}
                             >
                                 📖&nbsp;&nbsp;User Guide
                             </a>
@@ -78,18 +82,37 @@ const Navbar = () => {
     );
 }
 
-const App = () => {
-    return (
-        <BrowserRouter>
-            <Navbar/>
-            <Routes>
-                <Route path="/spoken-languages" element={<SpokenLanguages/>}/>
-                <Route path="/sign-languages"  element={<SignLanguages/>}/>
-                <Route path="/export-data"  element={<ExportData/>}/>
-                <Route path="*" element={<Navigate to="/spoken-languages" replace />}/>
-            </Routes>
-        </BrowserRouter>
-    );
+class App extends React.Component {
+    componentDidMount() {
+        document.body.addEventListener("click", e => {
+            const element = e.target as Node;
+            const navBar = document.getElementById(NAV_BAR_ID);
+            // If element is not a child of the nav bar
+            // and is not the nav bar itself
+            if (element !== navBar && !navBar.contains(element)) {
+               hideNavMenu();
+            }
+        });
+        document.body.addEventListener("keydown", e => {
+            if (e.key == "Escape") {
+                hideNavMenu();
+            }
+        });
+    }
+
+    render() {
+        return (
+            <BrowserRouter>
+                <Navbar/>
+                <Routes>
+                    <Route path="/spoken-languages" element={<SpokenLanguages/>}/>
+                    <Route path="/sign-languages"  element={<SignLanguages/>}/>
+                    <Route path="/export-data"  element={<ExportData/>}/>
+                    <Route path="*" element={<Navigate to="/spoken-languages" replace />}/>
+                </Routes>
+            </BrowserRouter>
+        );
+    }
   }
 
 const node = document.getElementById('react-app');
