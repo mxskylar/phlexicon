@@ -282,15 +282,15 @@ export class SignWritingFontParser implements DataParser {
             case 80:
                 return {
                     palm_towards: false,
-                    palm_away: false,
-                    palm_sideways: true,
+                    palm_away: true,
+                    palm_sideways: false,
                 };
             case 16:
             case 64:
                 return {
                     palm_towards: false,
-                    palm_away: true,
-                    palm_sideways: false,
+                    palm_away: false,
+                    palm_sideways: true,
                 };
             // 0 or 48
             default:
