@@ -4,7 +4,6 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes, Link, Navigate } from 'react-router-dom';
 import { SpokenLanguages } from './pages/spoken-languages.tsx';
 import { SignLanguages } from './pages/sign-languages.tsx';
-import { ExportData } from './pages/export-data.tsx';
 
 const NAV_BAR_ID = "navigation-bar";
 const NAV_BAR_TOGGLE_BUTTON_ID = "navigation-bar-toggle-button";
@@ -57,15 +56,6 @@ const Navbar = () => {
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link
-                                className="nav-link"
-                                to="/export-data"
-                                onClick={e => hideNavMenuIfShown()}
-                            >
-                                💾&nbsp;&nbsp;Export Data
-                            </Link>
-                        </li>
-                        <li className="nav-item">
                             <a
                                 className="nav-link"
                                 href="https://mxskylar.github.io/phlexicon"
@@ -107,7 +97,6 @@ class App extends React.Component {
                 <Routes>
                     <Route path="/spoken-languages" element={<SpokenLanguages/>}/>
                     <Route path="/sign-languages"  element={<SignLanguages/>}/>
-                    <Route path="/export-data"  element={<ExportData/>}/>
                     <Route path="*" element={<Navigate to="/spoken-languages" replace />}/>
                 </Routes>
             </BrowserRouter>
