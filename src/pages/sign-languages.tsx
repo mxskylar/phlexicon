@@ -28,6 +28,16 @@ type State = {
 
 const ALL_LANGUAGES_VALUE = "ALL";
 
+const DEFAULT_HAND_FILTERS: {
+    symbolRotation: SignWritingSymbolRotation,
+    isRightHanded: boolean,
+    palmDirection: PalmDirectionFilter,
+} = {
+    symbolRotation: SignWritingSymbolRotation.DEGREES_0_or_360,
+    isRightHanded: true,
+    palmDirection: PalmDirectionFilter.TOWARDS,
+}
+
 export class SignLanguages extends React.Component<Props, State> {
     constructor(props) {
         super(props);
@@ -37,9 +47,7 @@ export class SignLanguages extends React.Component<Props, State> {
             filteredHands: [],
             palmFilterHands: [],
             symbolRotationIndex: 0,
-            symbolRotation: SignWritingSymbolRotation.DEGREES_0_or_360,
-            isRightHanded: true,
-            palmDirection: PalmDirectionFilter.TOWARDS,
+            ...DEFAULT_HAND_FILTERS,
         };
     }
 
@@ -59,9 +67,19 @@ export class SignLanguages extends React.Component<Props, State> {
         return await sendQuery(query).then(rows => rows as Hand[]);
     }
 
+    filterHands(
+        allHands: Hand[],
+        symbolRotation: SignWritingSymbolRotation,
+        isRightHanded: boolean,
+        palmDirection: PalmDirectionFilter,
+    ): Hand[] {
+        return allHands;
+    }
+
     async componentDidMount() {
         const dialects = await sendQuery("SELECT * FROM sign_dialects ORDER BY name;")
             .then(rows => rows as SignDialect[]);
+        const allHands = await this.getHands(ALL_LANGUAGES_VALUE);
         this.setState({
             dialectOptions: dialects.map(dialect => {
                 return {
@@ -69,7 +87,13 @@ export class SignLanguages extends React.Component<Props, State> {
                     value: `${dialect.iso_code}-${dialect.region}`,
                 }
             }),
-            allHands: await this.getHands(ALL_LANGUAGES_VALUE),
+            allHands,
+            filteredHands: this.filterHands(
+                allHands,
+                this.state.symbolRotation,
+                this.state.isRightHanded,
+                this.state.palmDirection,
+            ),
             palmFilterHands: await sendQuery(
                 'SELECT * FROM hands WHERE base_symbol = "񆄱"'
             ) as Hand[],
@@ -79,8 +103,15 @@ export class SignLanguages extends React.Component<Props, State> {
     async switchDialect(e: React.BaseSyntheticEvent<HTMLSelectElement>) {
         const {selectedIndex, options} = e.target;
         const dialectId = options[selectedIndex].value;
+        const allHands = await this.getHands(dialectId);
         this.setState({
-            allHands: await this.getHands(dialectId),
+            allHands,
+            filteredHands: this.filterHands(
+                allHands,
+                this.state.symbolRotation,
+                this.state.isRightHanded,
+                this.state.palmDirection,
+            ),
         });
     }
 
@@ -215,11 +246,12 @@ export class SignLanguages extends React.Component<Props, State> {
                             buttons: [
                                 {
                                     text: "Left",
+                                    isActive: !this.state.isRightHanded,
                                     handleClick: this.setLefttHand.bind(this),
                                 },
                                 {
                                     text: "Right",
-                                    isActive: true,
+                                    isActive: this.state.isRightHanded,
                                     handleClick: this.setRightHand.bind(this),
                                 },
                             ],
