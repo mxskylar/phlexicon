@@ -18,7 +18,6 @@ export class Checkbox extends React.Component<CheckboxProps, State> {
         this.state = {
             isChecked: this.props.isChecked ? true : false,
         };
-        console.log(this.props);
     }
 
     handleChange(e: React.BaseSyntheticEvent<HTMLInputElement>) {
