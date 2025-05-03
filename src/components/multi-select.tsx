@@ -22,6 +22,11 @@ export class MultiSelect extends React.Component<Props> {
 
     componentDidMount() {
         document.body.addEventListener("click", this.maybeHideDropDown.bind(this));
+        document.body.addEventListener('keydown', e => {
+            if (e.key == "Escape") {
+                document.getElementById(this.props.id).classList.remove(TOGGLED_ON_CLASS);
+            }
+        });
     }
 
     maybeHideDropDown(e) {
