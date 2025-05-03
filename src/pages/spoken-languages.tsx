@@ -190,12 +190,16 @@ export class SpokenLanguages extends React.Component<Props, State> {
     async switchDialect(e: React.BaseSyntheticEvent<HTMLSelectElement>) {
         const {selectedIndex, options} = e.target;
         const dialectId = options[selectedIndex].value;
+        const vowels = await this.getVowels(dialectId);
+        const consonants = await this.getConsonants(dialectId);
         if (this.state.dialectId !== dialectId) {
             this.setState({
                 dialectId,
-                allVowels: await this.getVowels(dialectId),
+                allVowels: vowels,
+                filteredVowels: vowels,
                 vowelFilters: DEFAULT_VOWEL_FILTERS,
-                allConsonants: await this.getConsonants(dialectId),
+                allConsonants: consonants,
+                filteredConsonants: consonants,
                 consonantFilters: DEFAULT_CONSONANT_FILTERS,
             });
         }
