@@ -17,7 +17,8 @@ enum PalmDirectionFilter {
 
 type State = {
     dialectOptions: Option[],
-    hands: Hand[],
+    allHands: Hand[],
+    filteredHands: Hand[],
     palmFilterHands: Hand[],
     symbolRotationIndex: number,
     symbolRotation: SignWritingSymbolRotation,
@@ -32,7 +33,8 @@ export class SignLanguages extends React.Component<Props, State> {
         super(props);
         this.state = {
             dialectOptions: [],
-            hands: [],
+            allHands: [],
+            filteredHands: [],
             palmFilterHands: [],
             symbolRotationIndex: 0,
             symbolRotation: SignWritingSymbolRotation.DEGREES_0_or_360,
@@ -67,7 +69,7 @@ export class SignLanguages extends React.Component<Props, State> {
                     value: `${dialect.iso_code}-${dialect.region}`,
                 }
             }),
-            hands: await this.getHands(ALL_LANGUAGES_VALUE),
+            allHands: await this.getHands(ALL_LANGUAGES_VALUE),
             palmFilterHands: await sendQuery(
                 'SELECT * FROM hands WHERE base_symbol = "񆄱"'
             ) as Hand[],
@@ -78,7 +80,7 @@ export class SignLanguages extends React.Component<Props, State> {
         const {selectedIndex, options} = e.target;
         const dialectId = options[selectedIndex].value;
         this.setState({
-            hands: await this.getHands(dialectId),
+            allHands: await this.getHands(dialectId),
         });
     }
 
