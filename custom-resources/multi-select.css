@@ -4,7 +4,7 @@
 
 .multi-select .checkbox-list {
     display: none;
-    max-height: 150px;
+    max-height: 350px;
     overflow-y: scroll;
     /* Same as padding & border for form-select class */
     padding: .375rem 2.25rem .375rem .75rem;
