@@ -7,7 +7,7 @@ const db = new sqlite3.Database(DATABASE_FILE_PATH);
 
 const createWindow = () => {
     const window = new BrowserWindow({
-        width: IS_DEV ? 1000 : 700,
+        width: IS_DEV ? 1100 : 700,
         height: 700,
         webPreferences: {
             nodeIntegration: true,

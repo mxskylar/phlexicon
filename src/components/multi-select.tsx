@@ -68,39 +68,44 @@ export class MultiSelect extends React.Component<Props> {
                 >
                     {this.props.prompt}
                 </label>
-                <div className="checkbox-list" id={this.checkboxListId}>
-                    {
-                        this.props.groups.map((group, i) => {
-                            const sectionHeaderClass = i > 0
-                                ? "subsequent-section-header"
-                                : "first-section-header";
-                            const {name} = group;
-                            return (
-                                <label
-                                    className="section-label"
-                                    key={`${this.props.id}-${name}-section-${i}`}
-                                >
-                                    {
-                                        name
-                                        ?   <h6 className={`text-dark ${sectionHeaderClass}`}>
-                                                {name}
-                                            </h6>
-                                        : ""
-                                    }
-                                    {
-                                        group.checkboxes.map((checkbox, i) => {
-                                            return (
-                                                <Checkbox
-                                                    key={`${this.props.id}-${name}-checkbox-${i}`}
-                                                    {...checkbox}
-                                                />
-                                            )
-                                        })
-                                    }
-                                </label>
-                            )
-                        })
-                    }
+                <div className="dropdown">
+                    <div className="reset-container">
+                        <a className="text-secondary" href="#">Reset</a>
+                    </div>
+                    <div className="checkbox-list" id={this.checkboxListId}>
+                        {
+                            this.props.groups.map((group, i) => {
+                                const sectionHeaderClass = i > 0
+                                    ? "subsequent-section-header"
+                                    : "first-section-header";
+                                const {name} = group;
+                                return (
+                                    <label
+                                        className="section-label"
+                                        key={`${this.props.id}-${name}-section-${i}`}
+                                    >
+                                        {
+                                            name
+                                            ?   <h6 className={`text-dark ${sectionHeaderClass}`}>
+                                                    {name}
+                                                </h6>
+                                            : ""
+                                        }
+                                        {
+                                            group.checkboxes.map((checkbox, i) => {
+                                                return (
+                                                    <Checkbox
+                                                        key={`${this.props.id}-${name}-checkbox-${i}`}
+                                                        {...checkbox}
+                                                    />
+                                                )
+                                            })
+                                        }
+                                    </label>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             </div>
         );

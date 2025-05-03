@@ -2,12 +2,9 @@
     display: block;
 }
 
-.multi-select .checkbox-list {
+.multi-select .dropdown {
     display: none;
-    max-height: 350px;
-    overflow-y: scroll;
-    /* Same as padding & border for form-select class */
-    padding: .375rem 2.25rem .375rem .75rem;
+    /* Same as border for form-select class */
     border-right: 1px solid rgb(222, 226, 230);
     border-left: 1px solid rgb(222, 226, 230);
     border-bottom: 1px solid rgb(222, 226, 230);
@@ -21,9 +18,36 @@
         border-bottom-right-radius: 0;
     }
 
-    .checkbox-list {
+    .dropdown {
         display: block;
     }
+}
+
+.multi-select .checkbox-list {
+    max-height: 325px;
+    overflow-y: scroll;
+}
+
+.multi-select .checkbox-list {
+    /* Same as padding for form-select class */
+    padding: .375rem 2.25rem .375rem .75rem;
+}
+
+.multi-select .reset-container {
+    font-size: 12px;
+    text-align: right;
+    position: absolute;
+    right: 25px;
+    /* Same as padding-top for form-select class */
+    padding-top: .375rem;
+}
+
+.multi-select .reset-container a {
+    text-decoration: none;
+}
+
+.multi-select .reset-container a:hover {
+    text-decoration: underline;
 }
 
 .multi-select .checkbox-list h6 {
