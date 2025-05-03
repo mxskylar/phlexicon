@@ -15,23 +15,53 @@ type Props = {
     scrollTop?: boolean,
 };
 
+type EventListener = {
+    type: string,
+    fn,
+}
+
 const TOGGLED_ON_CLASS = "on";
 
 export class MultiSelect extends React.Component<Props> {
     checkboxListId: string;
+    toggleOnClickOutside: EventListener;
+    hideOnEscape: EventListener;
 
     constructor(props) {
         super(props);
         this.checkboxListId = `${this.props.id}-checkbox-list`;
+        this.toggleOnClickOutside = {
+            type: "click",
+            fn: this.maybeHideDropDown.bind(this),
+        };
+        this.hideOnEscape = {
+            type: "keydown",
+            fn: e => {
+                if (e.key == "Escape") {
+                    document.getElementById(this.props.id).classList.remove(TOGGLED_ON_CLASS);
+                }
+            },
+        };
+    }
+
+    addEventListenerToBody(eventListener: EventListener) {
+        const {type, fn} = eventListener;
+        document.body.addEventListener(type, fn);
     }
 
     componentDidMount() {
-        document.body.addEventListener("click", this.maybeHideDropDown.bind(this));
-        document.body.addEventListener('keydown', e => {
-            if (e.key == "Escape") {
-                document.getElementById(this.props.id).classList.remove(TOGGLED_ON_CLASS);
-            }
-        });
+        this.addEventListenerToBody(this.toggleOnClickOutside);
+        this.addEventListenerToBody(this.hideOnEscape);
+    }
+
+    removeEventListenerFromBody(eventListener: EventListener){
+        const {type, fn} = eventListener;
+        document.body.removeEventListener(type, fn);
+    }
+
+    componentWillUnmount() {
+        this.removeEventListenerFromBody(this.toggleOnClickOutside);
+        this.removeEventListenerFromBody(this.hideOnEscape);
     }
 
     maybeHideDropDown(e) {
