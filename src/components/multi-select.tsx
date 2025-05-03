@@ -11,13 +11,17 @@ type Props = {
     id: string,
     prompt: string,
     groups: MultiSelectGroup[],
+    scrollTop?: boolean,
 };
 
 const TOGGLED_ON_CLASS = "on";
 
 export class MultiSelect extends React.Component<Props> {
+    checkboxListId: string;
+
     constructor(props) {
         super(props);
+        this.checkboxListId = `${this.props.id}-checkbox-list`;
     }
 
     componentDidMount() {
@@ -45,6 +49,9 @@ export class MultiSelect extends React.Component<Props> {
             classList.remove(TOGGLED_ON_CLASS);
         } else {
             classList.add(TOGGLED_ON_CLASS);
+            if (this.props.scrollTop) {
+                document.getElementById(this.checkboxListId).scrollTop = 0;
+            }
         }
     }
 
@@ -61,7 +68,7 @@ export class MultiSelect extends React.Component<Props> {
                 >
                     {this.props.prompt}
                 </label>
-                <div className="checkbox-list">
+                <div className="checkbox-list" id={this.checkboxListId}>
                     {
                         this.props.groups.map((group, i) => {
                             const sectionHeaderClass = i > 0

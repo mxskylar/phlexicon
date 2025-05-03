@@ -426,6 +426,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                     id="spoken-phoneme-filters-multiselect"
                     prompt="Filter by attribute..."
                     groups={this.getCheckboxGroups(keyboardType)}
+                    scrollTop
                 />
                 {this.getKeyboard(keyboardType)}
             </div>
