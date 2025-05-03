@@ -278,6 +278,10 @@ export class SpokenLanguages extends React.Component<Props, State> {
         this.setState({consonantFilters, filteredConsonants});
     }
 
+    isAttributeDisabled<Type>(phonemes: Type[], attribute: string): boolean {
+        return phonemes.length > 0 && phonemes.every(phoneme => !phoneme[attribute]);
+    }
+
     getVowelCheckboxGroups(): MultiSelectGroup[] {
         const getCheckbox = (
             text: string,
@@ -288,7 +292,10 @@ export class SpokenLanguages extends React.Component<Props, State> {
                 handleChange: this.filterVowels.bind(this),
                 value: attribute,
                 isChecked: this.state.vowelFilters[attribute],
-                isDisabled: this.state.filteredVowels.every(vowel => !vowel[attribute]),
+                isDisabled: this.isAttributeDisabled(
+                    this.state.filteredVowels,
+                    attribute,
+                ),
             };
         };
         return [
@@ -331,7 +338,10 @@ export class SpokenLanguages extends React.Component<Props, State> {
                 handleChange: this.filterConsonants.bind(this),
                 value: attribute,
                 isChecked: this.state.consonantFilters[attribute],
-                isDisabled: this.state.filteredConsonants.every(consonant => !consonant[attribute]),
+                isDisabled: this.isAttributeDisabled(
+                    this.state.filteredConsonants,
+                    attribute,
+                ),
             };
         };
         return [
