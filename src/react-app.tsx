@@ -9,7 +9,7 @@ import { ExportData } from './pages/export-data.tsx';
 const NAV_BAR_ID = "navigation-bar";
 const NAV_BAR_TOGGLE_BUTTON_ID = "navigation-bar-toggle-button";
 
-const hideNavMenu = () => {
+const hideNavMenuIfShown = () => {
     const navBarToggleButton = document.getElementById(NAV_BAR_TOGGLE_BUTTON_ID);
     if (navBarToggleButton.getAttribute("aria-expanded") === "true") {
         navBarToggleButton.click();
@@ -42,7 +42,7 @@ const Navbar = () => {
                             <Link
                                 className="nav-link"
                                 to="/spoken-languages"
-                                onClick={e => hideNavMenu()}
+                                onClick={e => hideNavMenuIfShown()}
                             >
                                 🗣️&nbsp;&nbsp;Spoken Languages
                             </Link>
@@ -51,7 +51,7 @@ const Navbar = () => {
                             <Link
                                 className="nav-link"
                                 to="/sign-languages"
-                                onClick={e => hideNavMenu()}
+                                onClick={e => hideNavMenuIfShown()}
                             >
                                 🤟&nbsp;&nbsp;Sign Languages
                             </Link>
@@ -60,7 +60,7 @@ const Navbar = () => {
                             <Link
                                 className="nav-link"
                                 to="/export-data"
-                                onClick={e => hideNavMenu()}
+                                onClick={e => hideNavMenuIfShown()}
                             >
                                 💾&nbsp;&nbsp;Export Data
                             </Link>
@@ -70,7 +70,7 @@ const Navbar = () => {
                                 className="nav-link"
                                 href="https://mxskylar.github.io/phlexicon"
                                 target="_blank"
-                                onClick={e => hideNavMenu()}
+                                onClick={e => hideNavMenuIfShown()}
                             >
                                 📖&nbsp;&nbsp;User Guide
                             </a>
@@ -90,12 +90,12 @@ class App extends React.Component {
             // If element is not a child of the nav bar
             // and is not the nav bar itself
             if (element !== navBar && !navBar.contains(element)) {
-               hideNavMenu();
+               hideNavMenuIfShown();
             }
         });
         document.body.addEventListener("keydown", e => {
             if (e.key == "Escape") {
-                hideNavMenu();
+                hideNavMenuIfShown();
             }
         });
     }
