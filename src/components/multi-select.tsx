@@ -11,6 +11,7 @@ type Props = {
     id: string,
     prompt: string,
     groups: MultiSelectGroup[],
+    handleReset: Function,
     scrollTop?: boolean,
 };
 
@@ -55,6 +56,13 @@ export class MultiSelect extends React.Component<Props> {
         }
     }
 
+    reset(e) {
+        const checkboxes = document.getElementById(this.checkboxListId)
+            .querySelectorAll("input");
+        checkboxes.forEach(checkbox => checkbox.checked = false);
+        this.props.handleReset(e);
+    }
+
     render() {
         return (
             <div
@@ -70,7 +78,13 @@ export class MultiSelect extends React.Component<Props> {
                 </label>
                 <div className="dropdown">
                     <div className="reset-container">
-                        <a className="text-secondary" href="#">Reset</a>
+                        <a
+                            className="text-secondary"
+                            href="#"
+                            onClick={this.reset.bind(this)}
+                        >
+                            Reset
+                        </a>
                     </div>
                     <div className="checkbox-list" id={this.checkboxListId}>
                         {

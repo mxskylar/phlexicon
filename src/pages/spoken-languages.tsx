@@ -385,12 +385,43 @@ export class SpokenLanguages extends React.Component<Props, State> {
         ];
     }
 
-    getCheckboxGroups(keyboardType: KeyboardType): MultiSelectGroup[] {
+    resetVowelFilters() {
+        this.setState({
+            filteredVowels: this.state.allVowels,
+            vowelFilters: DEFAULT_VOWEL_FILTERS,
+        });
+    }
+
+    resetConsonantFilters() {
+        this.setState({
+            filteredConsonants: this.state.allConsonants,
+            consonantFilters: DEFAULT_CONSONANT_FILTERS,
+        });
+    }
+
+    getAttributeFilters(keyboardType: KeyboardType): React.ReactElement {
+        const props = {
+            id: "spoken-phoneme-filters-multiselect",
+            prompt: "Filter by attribute...",
+            scrollTop: true,
+        };
         switch (keyboardType) {
             case KeyboardType.VOWELS:
-                return this.getVowelCheckboxGroups();
+                return (
+                    <MultiSelect
+                        {...props}
+                        groups={this.getVowelCheckboxGroups()}
+                        handleReset={this.resetVowelFilters.bind(this)}
+                    />
+                );
             case KeyboardType.CONSONANTS:
-                return this.getConsonantCheckboxGroups();
+                return (
+                    <MultiSelect
+                        {...props}
+                        groups={this.getConsonantCheckboxGroups()}
+                        handleReset={this.resetConsonantFilters.bind(this)}
+                    />
+                );
         }
     }
 
@@ -422,12 +453,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
                     })}
                     handleChange={this.switchKeyboard.bind(this)}
                 />
-                <MultiSelect
-                    id="spoken-phoneme-filters-multiselect"
-                    prompt="Filter by attribute..."
-                    groups={this.getCheckboxGroups(keyboardType)}
-                    scrollTop
-                />
+                {this.getAttributeFilters(keyboardType)}
                 {this.getKeyboard(keyboardType)}
             </div>
         );
