@@ -13,8 +13,9 @@
         "init-app": "npx tsx ci/app/init.ts",
         "compile-typescript": "tsc",
         "compile-react": "webpack --mode development --config webpack.react.config.js",
+        "build": "npm run init-app && npm run compile-typescript && npm run compile-react",
         "electron": "electron .",
-        "app": "npm run init-app && npm run compile-typescript && npm run compile-react && npm run electron",
+        "app": "npm run build && npm run electron",
         "start": "npm install && npm run app",
         "app:dir": "electron-builder --dir",
         "app:dist": "electron-builder"

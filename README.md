@@ -103,6 +103,16 @@ npm run compile-react
 
 ---
 
+Creates the database from scratch, inserts data, transpiles Typescript into JavaScript, then bundles the application with [Webpack](https://webpack.js.org/).
+
+```bash
+npm run build
+```
+
+*Deletes cache?* **Yes**, deletes the bundle for the previous version of the app, if it exists, then re-creates it.
+
+---
+
 Launches the Electron application.
 
 ```bash
@@ -110,3 +120,23 @@ npm run electron
 ```
 
 *Deletes cache?* **No**, launches the app using its existing bundle.
+
+---
+
+Generates distribution directory without packaging the application.
+
+```bash
+npm run app:dir
+```
+
+*Deletes cache?* **No**
+
+---
+
+Packages app distribution for current operating system.
+
+```bash
+npm run app:dist
+```
+
+*Deletes cache?* **Yes**, replaces files for previous app distribution, if they exist.
