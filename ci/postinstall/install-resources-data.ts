@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import StreamZip from 'node-stream-zip';
-import { readPsd } from 'ag-psd';
-import 'ag-psd/initialize-canvas';
+import PSD from 'psd';
 import { Agent } from 'undici';
 import { getSeperatedValueData, recreateDirectory } from '../utils';
 import {
@@ -37,7 +36,7 @@ const downloadFile = async (url: string, dir: string) => {
 recreateDirectory(INSTALLED_RESOURCES_DIR);
 
 // Bootswatch theme for Bootstrap UI: https://bootswatch.com/cerulean/
-/*await downloadFile("https://bootswatch.com/5/cerulean/bootstrap.min.css", INSTALLED_RESOURCES_DIR);
+await downloadFile("https://bootswatch.com/5/cerulean/bootstrap.min.css", INSTALLED_RESOURCES_DIR);
 
 // Bootstrap UI components & framework: https://getbootstrap.com/docs/5.0/getting-started/introduction/
 // Minified bundle downloaded from CDN: https://getbootstrap.com/docs/5.3/getting-started/download/#cdn-via-jsdelivr
@@ -123,7 +122,7 @@ const signWritingAlphabets = await Promise.all(
     })
 );
 fs.writeFileSync(SIGN_WRITING_ALPHABETS_FILE_PATH, JSON.stringify(signWritingAlphabets));
-console.log(`=> Wrote ${signWritingDictionaries.length} SignWriting alphabets to: ${SIGN_WRITING_ALPHABETS_FILE_PATH}`);*/
+console.log(`=> Wrote ${signWritingDictionaries.length} SignWriting alphabets to: ${SIGN_WRITING_ALPHABETS_FILE_PATH}`);
 
 // Hand pictures
 const HAND_PICTURES_INSTALL_DIR = `${INSTALLED_RESOURCES_DIR}/${HAND_PICTURES_DIR}`;
@@ -146,17 +145,11 @@ const getHandPictures = (baseSymbolId: string, orientationNumber: number): Promi
 const convertPsdToPng = (dirPath: string, fileName: string) => {
     const psdFilePath = `${dirPath}/${fileName}.psd`;
     const buffer = fs.readFileSync(psdFilePath);
-    const psd = readPsd(buffer, {skipThumbnail: true});
-    if (psd && psd.children) {
-        console.log(psd.children[0].canvas);
-    } else {
-        console.log("undefined!!!");
-    }
-    if (!psd || !psd.children) {
-        throw new Error(`Failed to parse ${psdFilePath}`);
-    }
-    fs.writeFileSync(`${dirPath}/${fileName}.png`, (psd.children[0].canvas as any).toBuffer());
-    fs.rmSync(psdFilePath);
+    PSD.open(psdFilePath)
+        .then(psd => {
+            psd.image.saveAsPng(`${dirPath}/${fileName}.png`);
+            fs.rmSync(psdFilePath);
+        });
 };
 
 const baseSymbolIds = getSeperatedValueData(ISWA_BASE_SYMBOLS_FILE_PATH, {delimiter: "\t"})
@@ -166,19 +159,20 @@ const ORIENTATION_NUMBERS = [1, 2, 3, 4, 5, 6];
 const totalPictures = (baseSymbolIds.length * ORIENTATION_NUMBERS.length) - 2;
 fs.mkdirSync(HAND_PICTURES_INSTALL_DIR);
 console.log(`=> Downloading and converting ${totalPictures} hand pictures...`);
-let numDownloadedAndConverted = 0;
+let numFinishedPics = 0;
 baseSymbolIds.forEach(baseSymbolId => {
     // This base symbol only has 4 orientations, so it only has 4 pictures:
     // https://www.movementwriting.org/symbolbank/downloads/ISWA2010/ISWA2010_Photos/01-05/01-05-016/
     const numbers = baseSymbolId === "01-05-016-01" ? ORIENTATION_NUMBERS.slice(0, 4) : ORIENTATION_NUMBERS;
-    return numbers.forEach(n => 
-        getHandPictures(baseSymbolId, n)
+    return numbers.forEach(n => {
+        const getPics = () => getHandPictures(baseSymbolId, n)
             .then(fileName => {
                 convertPsdToPng(HAND_PICTURES_INSTALL_DIR, fileName);
-                numDownloadedAndConverted++;
-                if (numDownloadedAndConverted % totalPictures === 10) {
-                    console.log(`==> Downloaded & converted ${numDownloadedAndConverted}/${totalPictures} hand pictures, ${totalPictures - numDownloadedAndConverted} left...`);
+                numFinishedPics++
+                if (numFinishedPics % 100 == 0) {
+                    console.log(`==> Downloaded & converted hand picture ${numFinishedPics}/${totalPictures}, ${totalPictures - numFinishedPics} left...`);
                 }
-            })
-    );
+            });
+        getPics().catch(error => setTimeout(getPics, 1000))
+    });
 });
