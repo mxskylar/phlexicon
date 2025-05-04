@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { ASSETS_DIR, BUILD_DIR, DEV_DATABASE_FILE_PATH } from '../../src/build-constants';
+import { BUILD_DIR, DATABASE_FILE_PATH } from '../../src/build-constants';
 import { Database } from '../../src/db/database';
 import {
     CONSONANTS_TABLE,
@@ -32,9 +32,8 @@ import { SpokenDialectParser } from './spoken/spoken-dialect-parser';
 import { SignWritingFontParser } from './sign/sign-writing-font-parser';
 import { SignPhonemeParser } from './sign/sign-phoneme-parser';
 
-// STEP 1: Prep the build & assets directories
+// STEP 1: Prep the build directory
 recreateDirectory(BUILD_DIR);
-recreateDirectory(ASSETS_DIR);
 
 // Installed Resources
 console.log(`Copying contents of ${INSTALLED_RESOURCES_DIR} to ${BUILD_DIR}`);
@@ -46,8 +45,8 @@ console.log(`Copying contents of ${CUSTOM_RESOURCES_DIR} to ${BUILD_DIR}`);
 fs.cpSync(CUSTOM_RESOURCES_DIR, BUILD_DIR, {recursive: true});
 
 // Database
-console.log(`Creating database: ${DEV_DATABASE_FILE_PATH}`);
-const db = new Database(DEV_DATABASE_FILE_PATH);
+console.log(`Creating database: ${DATABASE_FILE_PATH}`);
+const db = new Database(DATABASE_FILE_PATH);
 
 // STEP 2: Insert data into the database
 // SPOKEN DIALECTS
