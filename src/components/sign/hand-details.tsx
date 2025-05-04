@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Hand } from '../../phonemes/sign/hand.ts';
 import { PHONEME_SYMBOL_CLASS } from '../../constants.ts';
 import { CopyButton } from '../copy-button.tsx';
+import { HAND_PICTURES_DIR } from '../../build-constants.ts';
 
 type Props = {
     hand: Hand,
@@ -21,7 +22,7 @@ export const HandDetails = (props: Props) => {
         <div className="hand-details">
             <img
                 className="hand-picture"
-                src={`palm-orientation-pictures/01-05-014-01-02.jpg`}
+                src={`${HAND_PICTURES_DIR}/01-05-014-01-02.jpg`}
             />
             <table className="table table-borderless initial-details">
                 <tbody>
