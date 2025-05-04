@@ -69,7 +69,7 @@ export class Toolbar extends React.Component<Props> {
     render() {
         return (
             <div
-                className="btn-toolbar mb-3"
+                className="btn-toolbar"
                 role="toolbar"
                 aria-label="Toolbar with button groups"
                 id={this.props.id}
