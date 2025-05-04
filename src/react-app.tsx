@@ -80,7 +80,7 @@ class App extends React.Component {
             // If element is not a child of the nav bar
             // and is not the nav bar itself
             if (element !== navBar && !navBar.contains(element)) {
-               hideNavMenuIfShown();
+                hideNavMenuIfShown();
             }
         });
         document.body.addEventListener("keydown", e => {
@@ -102,7 +102,7 @@ class App extends React.Component {
             </BrowserRouter>
         );
     }
-  }
+}
 
 const node = document.getElementById('react-app');
 if (node !== null) {
