@@ -271,7 +271,7 @@ export class SignLanguages extends React.Component<Props, State> {
         this.setState({palmDirection, filteredHands});
     }
 
-    getPalmDirectionSymbolId(hand: Hand): string {
+    getPictureName(hand: Hand): string {
         const {
             allPalmDirections,
             allRotatablePalmDirections,
@@ -288,20 +288,23 @@ export class SignLanguages extends React.Component<Props, State> {
                 return palmDirection.id;
             }
         }
-        const rotatablePalmDirections = allRotatablePalmDirections
+        const rotatablePalmDirectionsForBaseSymbol = allRotatablePalmDirections
             .filter(palmDirection => hand.base_symbol === palmDirection.base_symbol);
+        // A few symbols do not have pictures for their corresponding ID
+        const rotatablePalmDirections = [rotatablePalmDirectionsForBaseSymbol[0]]
+            .concat(rotatablePalmDirectionsForBaseSymbol.slice(3));
         if (rotatablePalmDirections.length === 0) {
             throw Error(`Failed to get palm direction symbol ID for symbol: ${hand.symbol}`);
         }
-        for(const i in allRotatablePalmDirections) {
-            const palmDirection = allRotatablePalmDirections[i];
+        for(const i in rotatablePalmDirections) {
+            const palmDirection = rotatablePalmDirections[i];
             if (hand.symbol_rotation === palmDirection.symbol_rotation) {
                 return palmDirection.id;
             }
         }
-        // A few symbols do not have pictures for their corresponding ID
-        // In those cases, use the picture with the closes palm orientation
-        return rotatablePalmDirections[rotatablePalmDirections.length - 1].id;
+        // When symbol has no corresponding picture,
+        // use the picture with the closes palm orientation (135 degrees)
+        return rotatablePalmDirections[1].id;
     }
 
     render() {
@@ -407,7 +410,7 @@ export class SignLanguages extends React.Component<Props, State> {
                                 <HandDetails
                                     hand={hand}
                                     isoCode={this.state.isoCode}
-                                    symbolId={this.getPalmDirectionSymbolId(hand)}
+                                    symbolId={this.getPictureName(hand)}
                                 />
                             ),
                         };
