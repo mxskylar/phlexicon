@@ -1,10 +1,11 @@
 import { app, BrowserWindow, ipcMain, shell, globalShortcut } from 'electron';
 import sqlite3 from 'sqlite3';
+import path from 'path';
 import { BUILD_DIR, DATABASE_FILE_NAME, DEV_DATABASE_FILE_PATH } from './build-constants.ts';
 
 const IS_DEV = !app.isPackaged;
 const db = new sqlite3.Database(
-    IS_DEV ? DEV_DATABASE_FILE_PATH : DATABASE_FILE_NAME
+    IS_DEV ? DEV_DATABASE_FILE_PATH : path.join(process.resourcesPath, DATABASE_FILE_NAME)
 );
 
 const createWindow = () => {

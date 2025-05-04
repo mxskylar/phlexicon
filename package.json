@@ -54,6 +54,9 @@
         "productName": "Phlexicon",
         "files": [
             "build/**/*"
+        ],
+        "extraResources": [
+            "./build/phlexicon.db"
         ]
     }
 }
