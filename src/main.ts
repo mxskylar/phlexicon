@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, shell, globalShortcut } from 'electron';
 import sqlite3 from 'sqlite3';
 import { BUILD_DIR, DATABASE_FILE_PATH } from './build-constants.ts';
 
@@ -24,6 +24,18 @@ const createWindow = () => {
         window.webContents.openDevTools();
     }
 }
+
+// Register then unregister keyboard shortcuts
+// to prevent refreshing the page and breaking the app
+// on ctrl / cmd + R or F5
+app.on('browser-window-focus', function () {
+    globalShortcut.register("CommandOrControl+R", () => {});
+    globalShortcut.register("F5", () => {});
+});
+app.on('browser-window-blur', function () {
+    globalShortcut.unregister('CommandOrControl+R');
+    globalShortcut.unregister('F5');
+});
 
 app.whenReady().then(() => {
     createWindow();
