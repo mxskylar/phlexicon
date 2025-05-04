@@ -41,6 +41,7 @@ export const Keyboard = (props: Props) => (
                         id={symbol}
                         tabIndex={-1}
                         key={`modal-${symbol}`}
+                        aria-hidden="true"
                     >
                         <div className="modal-dialog">
                             <div className="modal-content">
