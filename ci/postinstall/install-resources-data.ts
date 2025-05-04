@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import StreamZip from 'node-stream-zip';
+import PSD from 'psd';
 import { Agent } from 'undici';
 import { getSeperatedValueData, recreateDirectory } from '../utils';
 import {
@@ -9,10 +10,9 @@ import {
     ISO_FILE,
     SIGN_WRITING_ALPHABETS_FILE_PATH,
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
-    SIGN_WRITING_FILL_FONT_FILE,
-    SIGN_WRITING_LINE_FONT_FILE,
     ISWA_BASE_SYMBOLS_FILE_PATH,
 } from './constants';
+import { HAND_PICTURES_DIR } from "../../src/build-constants";
 
 const downloadFile = async (url: string, dir: string) => {
     const path = new URL(url).pathname.split("/");
@@ -53,11 +53,10 @@ await charlesSilZipFile.close();
 fs.rmSync(charisSilZipFilePath);
 
 // SignWriting Fonts: https://www.sutton-signwriting.io/#fonts
-const SIGN_WRITING_FONT_REPO = "https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font"
-await downloadFile(`${SIGN_WRITING_FONT_REPO}/${SIGN_WRITING_ONE_D_FONT_FILE}`, INSTALLED_RESOURCES_DIR);
-await downloadFile(`${SIGN_WRITING_FONT_REPO}/${SIGN_WRITING_FILL_FONT_FILE}`, INSTALLED_RESOURCES_DIR);
-await downloadFile(`${SIGN_WRITING_FONT_REPO}/${SIGN_WRITING_LINE_FONT_FILE}`, INSTALLED_RESOURCES_DIR);
-
+await downloadFile(
+    `https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/${SIGN_WRITING_ONE_D_FONT_FILE}`,
+    INSTALLED_RESOURCES_DIR
+);
 
 // RAW DB DATA
 recreateDirectory(INSTALLED_DATA_DIR);
@@ -119,48 +118,61 @@ fs.writeFileSync(SIGN_WRITING_DICTIONARIES_FILE_PATH, JSON.stringify(signWriting
 console.log(`=> Fetching ${signWritingDictionaries.length} SignWriting alphabets...`);
 const signWritingAlphabets = await Promise.all(
     signWritingDictionaries.map(dictionary => {
-        const makeRequest = () => getSignWritingAlphabet(dictionary, signWritingDictionaries.length);
-        return makeRequest().catch(error => setTimeout(makeRequest, 1000));
+        return getSignWritingAlphabet(dictionary, signWritingDictionaries.length);
     })
 );
 fs.writeFileSync(SIGN_WRITING_ALPHABETS_FILE_PATH, JSON.stringify(signWritingAlphabets));
 console.log(`=> Wrote ${signWritingDictionaries.length} SignWriting alphabets to: ${SIGN_WRITING_ALPHABETS_FILE_PATH}`);
 
-// Palm orientation pictures
-const PALM_ORIENTATION_PICTURE_DIR = `${INSTALLED_RESOURCES_DIR}/palm-orientation-pictures`;
-let numFetchedPictures = 0;
-const getPalmOrientationPicture = (baseSymbolId: string, orientationNumber: number, totalPictures) => {
+// Hand pictures
+const HAND_PICTURES_INSTALL_DIR = `${INSTALLED_RESOURCES_DIR}/${HAND_PICTURES_DIR}`;
+const getHandPictures = (baseSymbolId: string, orientationNumber: number): Promise<string> => {
     const idParts = baseSymbolId.split("-");
     const symbolGroupId = `${idParts[0]}-${idParts[1]}`;
-    const fileName = `${baseSymbolId}-0${orientationNumber}.psd`;
+    const fileName = `${baseSymbolId}-0${orientationNumber}`;
+    const psdFileName = `${fileName}.psd`;
     const url = "https://www.movementwriting.org/symbolbank/downloads/ISWA2010/ISWA2010_Photos/"
-        + `${symbolGroupId}/${symbolGroupId}-${idParts[2]}/${fileName}`;
+        + `${symbolGroupId}/${symbolGroupId}-${idParts[2]}/${psdFileName}`;
     const options = {method: "GET", dispatcher: new Agent({ connectTimeout: 100000 })};
     return fetch(url, options)
         .then(response => response.arrayBuffer())
         .then(responseData => {
-            numFetchedPictures++;
-            if (numFetchedPictures % 100 === 0) {
-                console.log(`==> Fetched palm orientation picture ${numFetchedPictures}/${totalPictures}, ${totalPictures - numFetchedPictures} left...`);
-            }
-            fs.appendFileSync(`${PALM_ORIENTATION_PICTURE_DIR}/${fileName}`, Buffer.from(responseData));
+            fs.appendFileSync(`${HAND_PICTURES_INSTALL_DIR}/${psdFileName}`, Buffer.from(responseData));
+            return fileName;
         });
-    }
+};
+
+const convertPsdToPng = (dirPath: string, fileName: string) => {
+    const psdFilePath = `${dirPath}/${fileName}.psd`;
+    const buffer = fs.readFileSync(psdFilePath);
+    PSD.open(psdFilePath)
+        .then(psd => {
+            psd.image.saveAsPng(`${dirPath}/${fileName}.png`);
+            fs.rmSync(psdFilePath);
+        });
+};
 
 const baseSymbolIds = getSeperatedValueData(ISWA_BASE_SYMBOLS_FILE_PATH, {delimiter: "\t"})
     .filter((row, i) => i < 261) // Filter for base symbols of handshapes only
     .map(baseSymbol => baseSymbol.symbolId);
 const ORIENTATION_NUMBERS = [1, 2, 3, 4, 5, 6];
 const totalPictures = (baseSymbolIds.length * ORIENTATION_NUMBERS.length) - 2;
-fs.mkdirSync(PALM_ORIENTATION_PICTURE_DIR);
-console.log(`=> Downloading ${totalPictures} palm orientation pictures...`);
-await Promise.all(baseSymbolIds.map(baseSymbolId => {
+fs.mkdirSync(HAND_PICTURES_INSTALL_DIR);
+console.log(`=> Downloading and converting ${totalPictures} hand pictures...`);
+let numFinishedPics = 0;
+baseSymbolIds.forEach(baseSymbolId => {
     // This base symbol only has 4 orientations, so it only has 4 pictures:
     // https://www.movementwriting.org/symbolbank/downloads/ISWA2010/ISWA2010_Photos/01-05/01-05-016/
     const numbers = baseSymbolId === "01-05-016-01" ? ORIENTATION_NUMBERS.slice(0, 4) : ORIENTATION_NUMBERS;
-    return numbers.map(n => {
-        const makeRequest = () => getPalmOrientationPicture(baseSymbolId, n, totalPictures);
-        return makeRequest().catch(error => setTimeout(makeRequest, 1000));
+    return numbers.forEach(n => {
+        const getPics = () => getHandPictures(baseSymbolId, n)
+            .then(fileName => {
+                convertPsdToPng(HAND_PICTURES_INSTALL_DIR, fileName);
+                numFinishedPics++
+                if (numFinishedPics % 100 == 0) {
+                    console.log(`==> Downloaded & converted hand picture ${numFinishedPics}/${totalPictures}, ${totalPictures - numFinishedPics} left...`);
+                }
+            });
+        getPics().catch(error => setTimeout(getPics, 1000))
     });
-}));
-console.log(`=> Downloaded ${totalPictures} palm orientation pictures!`);
+});

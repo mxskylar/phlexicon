@@ -6,3 +6,27 @@
 #sign-languages .phoneme-symbol {
     font-family: "SuttonSignWritingOneD"; 
 }
+
+.hand-details table.initial-details {
+    vertical-align: middle;
+}
+
+.hand-details table.initial-details td {
+    padding: .75em .5em .75em .5em;
+}
+
+.hand-details table.initial-details td:first-child {
+    padding-left: 0;
+}
+
+.hand-details table.initial-details td:nth-child(3) {
+    padding-left: 1em;
+    padding-right: 1em;
+    letter-spacing: .15em;
+}
+
+.hand-details img.hand-picture {
+    display: block;
+    margin: auto;
+    margin-bottom: 10px;
+}

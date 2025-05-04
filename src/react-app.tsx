@@ -1,10 +1,9 @@
 
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Route, Routes, Link, Navigate } from 'react-router-dom';
-import { SpokenLanguages } from './pages/spoken-languages.tsx';
+import { HashRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
 import { SignLanguages } from './pages/sign-languages.tsx';
-import { ExportData } from './pages/export-data.tsx';
+import { SpokenLanguages } from './pages/spoken-languages.tsx';
 
 const NAV_BAR_ID = "navigation-bar";
 const NAV_BAR_TOGGLE_BUTTON_ID = "navigation-bar-toggle-button";
@@ -57,15 +56,6 @@ const Navbar = () => {
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link
-                                className="nav-link"
-                                to="/export-data"
-                                onClick={e => hideNavMenuIfShown()}
-                            >
-                                💾&nbsp;&nbsp;Export Data
-                            </Link>
-                        </li>
-                        <li className="nav-item">
                             <a
                                 className="nav-link"
                                 href="https://mxskylar.github.io/phlexicon"
@@ -90,7 +80,7 @@ class App extends React.Component {
             // If element is not a child of the nav bar
             // and is not the nav bar itself
             if (element !== navBar && !navBar.contains(element)) {
-               hideNavMenuIfShown();
+                hideNavMenuIfShown();
             }
         });
         document.body.addEventListener("keydown", e => {
@@ -102,18 +92,17 @@ class App extends React.Component {
 
     render() {
         return (
-            <BrowserRouter>
+            <HashRouter>
                 <Navbar/>
                 <Routes>
                     <Route path="/spoken-languages" element={<SpokenLanguages/>}/>
                     <Route path="/sign-languages"  element={<SignLanguages/>}/>
-                    <Route path="/export-data"  element={<ExportData/>}/>
                     <Route path="*" element={<Navigate to="/spoken-languages" replace />}/>
                 </Routes>
-            </BrowserRouter>
+            </HashRouter>
         );
     }
-  }
+}
 
 const node = document.getElementById('react-app');
 if (node !== null) {

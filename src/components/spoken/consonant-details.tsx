@@ -12,7 +12,7 @@ export const ConsonantDetails = (props: Props) => {
     const mannerAttributes = MANNER_CONSONANT_ATTRIBUTES
         .filter(manner => consonant[manner]);
     return (
-        <div>
+        <>
             <p>
                 <span className="text-primary inline-h5-font-weight">Glide: </span>
                 {consonant.glide ? "Yes" : "No"}
@@ -41,7 +41,7 @@ export const ConsonantDetails = (props: Props) => {
             {
                 mannerAttributes.length > 0
                     ? (
-                        <div>
+                        <>
                             <h5>Manner</h5>
                             <ul className="list-group list-group-flush">
                                 {
@@ -55,10 +55,10 @@ export const ConsonantDetails = (props: Props) => {
                                     ))
                                 }
                             </ul>
-                        </div>
+                        </>
                     )
                     : ""
             }
-        </div>
+        </>
     );
 };

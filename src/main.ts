@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, shell, globalShortcut } from 'electron';
 import sqlite3 from 'sqlite3';
 import { BUILD_DIR, DATABASE_FILE_PATH } from './build-constants.ts';
 
@@ -7,8 +7,8 @@ const db = new sqlite3.Database(DATABASE_FILE_PATH);
 
 const createWindow = () => {
     const window = new BrowserWindow({
-        width: IS_DEV ? 1100 : 700,
-        height: 700,
+        width: IS_DEV ? 1250 : 850,
+        height: 850,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -24,6 +24,18 @@ const createWindow = () => {
         window.webContents.openDevTools();
     }
 }
+
+// Register then unregister keyboard shortcuts
+// to prevent refreshing the page and breaking the app
+// on ctrl / cmd + R or F5
+app.on('browser-window-focus', function () {
+    globalShortcut.register("CommandOrControl+R", () => {});
+    globalShortcut.register("F5", () => {});
+});
+app.on('browser-window-blur', function () {
+    globalShortcut.unregister('CommandOrControl+R');
+    globalShortcut.unregister('F5');
+});
 
 app.whenReady().then(() => {
     createWindow();

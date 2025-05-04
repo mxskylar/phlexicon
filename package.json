@@ -1,6 +1,6 @@
 {
     "name": "Phlexicon",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "description": "A phonetic catalog for lexicons: Study a language. Document vocabulary. Analyze accents.",
     "main": "build/main.js",
     "author": "https://github.com/mxskylar",
@@ -43,6 +43,7 @@
         "webpack": "^5.98.0",
         "webpack-cli": "^6.0.1",
         "opentype.js": "^1.3.4",
-        "undici": "^7.8.0"
+        "undici": "^7.8.0",
+        "psd": "^3.4.0"
     }
 }
