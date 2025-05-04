@@ -4,3 +4,4 @@ build
 installed-resources
 installed-data
 .DS_Store
+dist
