@@ -7,6 +7,7 @@ import { HAND_PICTURES_DIR } from '../../build-constants.ts';
 type Props = {
     hand: Hand,
     isoCode: string | null,
+    symbolId: string,
 };
 
 export const HandDetails = (props: Props) => {
@@ -22,7 +23,7 @@ export const HandDetails = (props: Props) => {
         <div className="hand-details">
             <img
                 className="hand-picture"
-                src={`${HAND_PICTURES_DIR}/01-05-014-01-02.jpg`}
+                src={`${HAND_PICTURES_DIR}/${props.symbolId}.png`}
             />
             <table className="table table-borderless initial-details">
                 <tbody>

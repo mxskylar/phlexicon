@@ -3,7 +3,7 @@ import { Option, Select } from '../components/select.tsx';
 import { Toolbar, ToolbarType } from '../components/toolbar.tsx';
 import { KEYBOARD_CONTROL_CLASS, PHONEME_SYMBOL_CLASS } from '../constants.ts';
 import { sendQuery } from '../db/ipc.ts';
-import { Hand } from '../phonemes/sign/hand.ts';
+import { Hand, PalmDirection, RotatablePalmDirection } from '../phonemes/sign/hand.ts';
 import { SignDialect } from '../phonemes/sign/sign-dialect.ts';
 import { CLOCKWISE_SIGN_WRITING_SYMBOL_ROTATIONS, SignWritingSymbolRotation } from '../phonemes/sign/sign-writing.ts';
 import { Keyboard } from '../components/keyboard.tsx';
@@ -28,6 +28,8 @@ type State = {
     isRightHanded: boolean,
     palmDirection: PalmDirectionFilter,
     isVertical: boolean,
+    allPalmDirections: PalmDirection[],
+    allRotatablePalmDirections: RotatablePalmDirection[],
 };
 
 const ALL_LANGUAGES_VALUE = "ALL";
@@ -54,6 +56,8 @@ export class SignLanguages extends React.Component<Props, State> {
             filteredHands: [],
             palmFilterHands: [],
             symbolRotationIndex: 0,
+            allPalmDirections: [],
+            allRotatablePalmDirections: [],
             ...DEFAULT_HAND_FILTERS,
         };
     }
@@ -101,6 +105,13 @@ export class SignLanguages extends React.Component<Props, State> {
         const dialects = await sendQuery("SELECT * FROM sign_dialects ORDER BY name;")
             .then(rows => rows as SignDialect[]);
         const allHands = await this.getHands(ALL_LANGUAGES_VALUE);
+        const palmFilterHands =
+            await sendQuery('SELECT * FROM hands WHERE base_symbol = "񆄱"') as Hand[];
+        const allPalmDirections =
+            await sendQuery('SELECT * FROM palm_directions') as PalmDirection[];
+        const allRotatablePalmDirections = await sendQuery(
+            'SELECT * FROM rotatable_palm_directions ORDER BY base_symbol, symbol_rotation'
+        ) as RotatablePalmDirection[];
         this.setState({
             dialectOptions: dialects.map(dialect => {
                 return {
@@ -116,9 +127,9 @@ export class SignLanguages extends React.Component<Props, State> {
                 this.state.palmDirection,
                 this.state.isVertical,
             ),
-            palmFilterHands: await sendQuery(
-                'SELECT * FROM hands WHERE base_symbol = "񆄱"'
-            ) as Hand[],
+            palmFilterHands,
+            allPalmDirections,
+            allRotatablePalmDirections,
         });
     }
 
@@ -260,6 +271,39 @@ export class SignLanguages extends React.Component<Props, State> {
         this.setState({palmDirection, filteredHands});
     }
 
+    getPalmDirectionSymbolId(hand: Hand): string {
+        const {
+            allPalmDirections,
+            allRotatablePalmDirections,
+        } = this.state;
+        for(const i in allPalmDirections) {
+            const palmDirection = allPalmDirections[i];
+            if (
+                hand.base_symbol === palmDirection.base_symbol &&
+                hand.palm_towards === palmDirection.palm_towards &&
+                hand.palm_sideways === palmDirection.palm_sideways &&
+                hand.palm_away === palmDirection.palm_away &&
+                hand.vertical === palmDirection.vertical
+            ) {
+                return palmDirection.id;
+            }
+        }
+        const rotatablePalmDirections = allRotatablePalmDirections
+            .filter(palmDirection => hand.base_symbol === palmDirection.base_symbol);
+        if (rotatablePalmDirections.length === 0) {
+            throw Error(`Failed to get palm direction symbol ID for symbol: ${hand.symbol}`);
+        }
+        for(const i in allRotatablePalmDirections) {
+            const palmDirection = allRotatablePalmDirections[i];
+            if (hand.symbol_rotation === palmDirection.symbol_rotation) {
+                return palmDirection.id;
+            }
+        }
+        // A few symbols do not have pictures for their corresponding ID
+        // In those cases, use the picture with the closes palm orientation
+        return rotatablePalmDirections[rotatablePalmDirections.length - 1].id;
+    }
+
     render() {
         const{
             palmTowardsSymbol,
@@ -363,6 +407,7 @@ export class SignLanguages extends React.Component<Props, State> {
                                 <HandDetails
                                     hand={hand}
                                     isoCode={this.state.isoCode}
+                                    symbolId={this.getPalmDirectionSymbolId(hand)}
                                 />
                             ),
                         };
