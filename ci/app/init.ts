@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { BUILD_DIR, DEV_DATABASE_FILE_PATH } from '../../src/build-constants';
+import { ASSETS_DIR, BUILD_DIR, DEV_DATABASE_FILE_PATH } from '../../src/build-constants';
 import { Database } from '../../src/db/database';
 import {
     CONSONANTS_TABLE,
@@ -32,8 +32,9 @@ import { SpokenDialectParser } from './spoken/spoken-dialect-parser';
 import { SignWritingFontParser } from './sign/sign-writing-font-parser';
 import { SignPhonemeParser } from './sign/sign-phoneme-parser';
 
-// STEP 1: Prep the build directory
+// STEP 1: Prep the build & assets directories
 recreateDirectory(BUILD_DIR);
+recreateDirectory(ASSETS_DIR);
 
 // Installed Resources
 console.log(`Copying contents of ${INSTALLED_RESOURCES_DIR} to ${BUILD_DIR}`);

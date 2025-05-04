@@ -171,6 +171,7 @@ export class SpokenLanguages extends React.Component<Props, State> {
     async componentDidMount() {
         const dialects = await sendQuery("SELECT * FROM spoken_dialects ORDER BY name;")
             .then(rows => rows as SpokenDialect[]);
+        console.log(dialects);
         const vowels = await this.getVowels(this.state.dialectId);
         const consonants = await this.getConsonants(this.state.dialectId);
         this.setState({

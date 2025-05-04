@@ -53,11 +53,13 @@
     "build": {
         "appId": "phlexicon.app",
         "productName": "Phlexicon",
-        "files": [
-            "build/**/*"
-        ],
+        "files": ["build/**/*"],
         "extraResources": [
-            "./build/phlexicon.db"
+            {
+                "from": "./assets/",
+                "to": "assets/",
+                "filter": ["**/*"]
+            }
         ]
     }
 }
