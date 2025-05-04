@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Option, Select } from '../components/select.tsx';
 import { Toolbar, ToolbarType } from '../components/toolbar.tsx';
-import { KEYBOARD_CONTROL_CLASS, PHONEME_SYMOL_CLASS } from '../constants.ts';
+import { KEYBOARD_CONTROL_CLASS, PHONEME_SYMBOL_CLASS } from '../constants.ts';
 import { sendQuery } from '../db/ipc.ts';
 import { Hand } from '../phonemes/sign/hand.ts';
 import { SignDialect } from '../phonemes/sign/sign-dialect.ts';
@@ -18,6 +18,7 @@ enum PalmDirectionFilter {
 }
 
 type State = {
+    isoCode: string | null,
     dialectOptions: Option[],
     allHands: Hand[],
     filteredHands: Hand[],
@@ -47,6 +48,7 @@ export class SignLanguages extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
+            isoCode: null,
             dialectOptions: [],
             allHands: [],
             filteredHands: [],
@@ -56,11 +58,19 @@ export class SignLanguages extends React.Component<Props, State> {
         };
     }
 
+    getDialectFromValue(dialectId: string): {
+        isoCode: string,
+        region: string,
+    } {
+        const parts = dialectId.split("-");
+        const isoCode = parts[0];
+        const region = parts[1];
+        return {isoCode, region};
+    }
+
     async getHands(dialectId: string): Promise<Hand[]> {
         const getDialectFilterQuery = (dialectId: string): string => {
-            const primaryKeys = dialectId.split("-");
-            const isoCode = primaryKeys[0];
-            const region = primaryKeys[1];
+            const {isoCode, region} = this.getDialectFromValue(dialectId);
             return "SELECT h.* FROM hands h JOIN sign_dialect_phonemes p " +
                 "ON h.base_symbol = p.base_symbol " +
                 `WHERE iso_code = "${isoCode}" AND region = "${region}" ` +
@@ -115,8 +125,10 @@ export class SignLanguages extends React.Component<Props, State> {
     async switchDialect(e: React.BaseSyntheticEvent<HTMLSelectElement>) {
         const {selectedIndex, options} = e.target;
         const dialectId = options[selectedIndex].value;
+        const {isoCode} = this.getDialectFromValue(dialectId);
         const allHands = await this.getHands(dialectId);
         this.setState({
+            isoCode,
             allHands,
             filteredHands: this.getFilterHands(
                 allHands,
@@ -322,19 +334,19 @@ export class SignLanguages extends React.Component<Props, State> {
                                 {
                                     text: palmTowardsSymbol,
                                     isActive: this.state.palmDirection === PalmDirectionFilter.TOWARDS,
-                                    classes: [PHONEME_SYMOL_CLASS],
+                                    classes: [PHONEME_SYMBOL_CLASS],
                                     handleClick: this.setPalmDirection.bind(this, PalmDirectionFilter.TOWARDS),
                                 },
                                 {
                                     text: palmSidewaysSymbol,
                                     isActive: this.state.palmDirection === PalmDirectionFilter.SIDEWAYS,
-                                    classes: [PHONEME_SYMOL_CLASS],
+                                    classes: [PHONEME_SYMBOL_CLASS],
                                     handleClick: this.setPalmDirection.bind(this, PalmDirectionFilter.SIDEWAYS),
                                 },
                                 {
                                     text: palmAwaySymbol,
                                     isActive: this.state.palmDirection === PalmDirectionFilter.AWAY,
-                                    classes: [PHONEME_SYMOL_CLASS],
+                                    classes: [PHONEME_SYMBOL_CLASS],
                                     handleClick: this.setPalmDirection.bind(this, PalmDirectionFilter.AWAY),
                                 },
                             ],
@@ -349,6 +361,8 @@ export class SignLanguages extends React.Component<Props, State> {
                             type: "Oriented Handshape",
                             body: (
                                 <HandDetails
+                                    hand={hand}
+                                    isoCode={this.state.isoCode}
                                 />
                             ),
                         };

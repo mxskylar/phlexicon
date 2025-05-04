@@ -9,8 +9,6 @@ import {
     ISO_FILE,
     SIGN_WRITING_ALPHABETS_FILE_PATH,
     SIGN_WRITING_DICTIONARIES_FILE_PATH,
-    SIGN_WRITING_FILL_FONT_FILE,
-    SIGN_WRITING_LINE_FONT_FILE,
     ISWA_BASE_SYMBOLS_FILE_PATH,
 } from './constants';
 
@@ -53,11 +51,10 @@ await charlesSilZipFile.close();
 fs.rmSync(charisSilZipFilePath);
 
 // SignWriting Fonts: https://www.sutton-signwriting.io/#fonts
-const SIGN_WRITING_FONT_REPO = "https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font"
-await downloadFile(`${SIGN_WRITING_FONT_REPO}/${SIGN_WRITING_ONE_D_FONT_FILE}`, INSTALLED_RESOURCES_DIR);
-await downloadFile(`${SIGN_WRITING_FONT_REPO}/${SIGN_WRITING_FILL_FONT_FILE}`, INSTALLED_RESOURCES_DIR);
-await downloadFile(`${SIGN_WRITING_FONT_REPO}/${SIGN_WRITING_LINE_FONT_FILE}`, INSTALLED_RESOURCES_DIR);
-
+await downloadFile(
+    `https://unpkg.com/@sutton-signwriting/font-ttf@1.0.0/font/${SIGN_WRITING_ONE_D_FONT_FILE}`,
+    INSTALLED_RESOURCES_DIR
+);
 
 // RAW DB DATA
 recreateDirectory(INSTALLED_DATA_DIR);

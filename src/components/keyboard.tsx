@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PHONEME_SYMOL_CLASS } from '../constants.ts';
+import { PHONEME_SYMBOL_CLASS } from '../constants.ts';
 import { CopyButton } from './copy-button.tsx';
 
 type Props = {
@@ -22,7 +22,7 @@ export const Keyboard = (props: Props) => (
                         <button
                             key={`key-${symbol}`}
                             type="button"
-                            className={`btn btn-outline-secondary ${PHONEME_SYMOL_CLASS}`}
+                            className={`btn btn-outline-secondary ${PHONEME_SYMBOL_CLASS}`}
                             data-bs-toggle="modal"
                             data-bs-target={`#${symbol}`}
                         >
@@ -47,7 +47,7 @@ export const Keyboard = (props: Props) => (
                                 <div className="modal-header">
                                     <CopyButton text={symbol} />
                                     <div className="modal-title">
-                                        <h1 className={PHONEME_SYMOL_CLASS}>{symbol}</h1>
+                                        <h1 className={PHONEME_SYMBOL_CLASS}>{symbol}</h1>
                                         <h6 className="text-secondary">{type}</h6>
                                     </div>
                                     <button
