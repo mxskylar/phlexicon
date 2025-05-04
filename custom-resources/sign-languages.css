@@ -24,3 +24,9 @@
     padding-right: 1em;
     letter-spacing: .15em;
 }
+
+.hand-details img.hand-picture {
+    display: block;
+    margin: auto;
+    margin-bottom: 10px;
+}

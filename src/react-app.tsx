@@ -1,9 +1,9 @@
 
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Route, Routes, Link, Navigate } from 'react-router-dom';
-import { SpokenLanguages } from './pages/spoken-languages.tsx';
+import { HashRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
 import { SignLanguages } from './pages/sign-languages.tsx';
+import { SpokenLanguages } from './pages/spoken-languages.tsx';
 
 const NAV_BAR_ID = "navigation-bar";
 const NAV_BAR_TOGGLE_BUTTON_ID = "navigation-bar-toggle-button";
@@ -92,14 +92,14 @@ class App extends React.Component {
 
     render() {
         return (
-            <BrowserRouter>
+            <HashRouter>
                 <Navbar/>
                 <Routes>
                     <Route path="/spoken-languages" element={<SpokenLanguages/>}/>
                     <Route path="/sign-languages"  element={<SignLanguages/>}/>
                     <Route path="*" element={<Navigate to="/spoken-languages" replace />}/>
                 </Routes>
-            </BrowserRouter>
+            </HashRouter>
         );
     }
 }

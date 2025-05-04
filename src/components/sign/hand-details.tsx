@@ -19,6 +19,10 @@ export const HandDetails = (props: Props) => {
     const twoDText = `${symbol}𝣠𝣠`
     return (
         <div className="hand-details">
+            <img
+                className="hand-picture"
+                src={`palm-orientation-pictures/01-05-014-01-02.jpg`}
+            />
             <table className="table table-borderless initial-details">
                 <tbody>
                     <tr>
