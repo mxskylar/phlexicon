@@ -140,23 +140,3 @@ docker-compose up dist-win-linux
 ```
 
 *Deletes cache?* **Partially**, replaces files for previous app Windows & Linux distributions, if they exist.
-
----
-
-Publishes app distributions to GitHub.
-
-```bash
-npm run publish
-```
-
-*Deletes cache?* **No**
-
----
-
-Packages app, then publishes it to GitHub.
-
-```bash
-docker-compose up dist-win-linux
-```
-
-*Deletes cache?* **Yes**, replaces files for previous distributions, if they exist.
