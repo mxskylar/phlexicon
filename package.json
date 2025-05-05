@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "A phonetic catalog for lexicons: Study a language. Document vocabulary. Analyze accents.",
     "main": "build/main.js",
-    "author": "https://github.com/mxskylar",
+    "author": "https://github.com/mxskylar <11418651+mxskylar@users.noreply.github.com>",
     "license": "GNU General Public License v3.0",
     "type": "module",
     "scripts": {
@@ -60,6 +60,41 @@
                 "to": "assets/",
                 "filter": ["**/*"]
             }
-        ]
+        ],
+        "mac": {
+            "target": {
+                "target": "default",
+                "arch": [
+                    "arm64",
+                    "x64"
+                ]
+            }
+        },
+        "win": {
+            "target": {
+                "target": "nsis",
+                "arch": [
+                    "x64"
+                ]
+            },
+            "artifactName": "${productName}-Setup-${version}.${ext}"
+        },
+        "linux": {
+            "category": "Utility",
+            "target": [
+                {
+                    "target": "rpm",
+                    "arch": [
+                        "x64"
+                    ]
+                },
+                {
+                    "target": "deb",
+                    "arch": [
+                        "x64"
+                    ]
+                }
+            ]
+        }
     }
 }

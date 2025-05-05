@@ -140,3 +140,13 @@ npm run app:dist
 ```
 
 *Deletes cache?* **Yes**, replaces files for previous app distribution, if they exist.
+
+---
+
+Packages app distribution for all supported operating systems.
+
+```bash
+./electron-builder
+```
+
+*Deletes cache?* **Yes**, replaces files for previous app distribution, if they exist.
