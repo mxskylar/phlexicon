@@ -1,0 +1,5 @@
+services:
+  dist-win-linux:
+    build:
+      context: .
+    command: npm run dist-win-linux

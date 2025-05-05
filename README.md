@@ -123,30 +123,40 @@ npm run electron
 
 ---
 
-Generates distribution directory without packaging the application.
+Packages app distribution for macOS. Only works when run on macOS.
 
 ```bash
-npm run app:dir
+npm run dist-mac
+```
+
+*Deletes cache?* **Partially**, replaces files for previous app macOS distribution, if they exist.
+
+---
+
+Packages app distribution for Windows & Linux.
+
+```bash
+docker-compose up dist-win-linux
+```
+
+*Deletes cache?* **Partially**, replaces files for previous app Windows & Linux distributions, if they exist.
+
+---
+
+Publishes app distributions to GitHub.
+
+```bash
+npm run publish
 ```
 
 *Deletes cache?* **No**
 
 ---
 
-Packages app distribution for current operating system.
+Packages app, then publishes it to GitHub.
 
 ```bash
-npm run app:dist
+docker-compose up dist-win-linux
 ```
 
-*Deletes cache?* **Yes**, replaces files for previous app distribution, if they exist.
-
----
-
-Packages app distribution for all supported operating systems.
-
-```bash
-./electron-builder
-```
-
-*Deletes cache?* **Yes**, replaces files for previous app distribution, if they exist.
+*Deletes cache?* **Yes**, replaces files for previous distributions, if they exist.
