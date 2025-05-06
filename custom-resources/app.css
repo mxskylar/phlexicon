@@ -1,3 +1,18 @@
 body {
     height: 100vh;
 }
+
+#navigation-bar .navbar-brand {
+    font-family: 'Merriweather', serif;
+}
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background: #ffffff;
+    padding: 5px;
+    text-align: center;
+    font-size: 10px;
+    width: 100%;
+}

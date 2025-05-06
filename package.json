@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "A phonetic catalog for lexicons: Study a language. Document vocabulary. Analyze accents.",
     "main": "build/main.js",
-    "author": "https://github.com/mxskylar",
+    "author": "https://github.com/mxskylar <11418651+mxskylar@users.noreply.github.com>",
     "license": "GNU General Public License v3.0",
     "type": "module",
     "scripts": {
@@ -13,9 +13,13 @@
         "init-app": "npx tsx ci/app/init.ts",
         "compile-typescript": "tsc",
         "compile-react": "webpack --mode development --config webpack.react.config.js",
+        "build": "npm run init-app && npm run compile-typescript && npm run compile-react",
         "electron": "electron .",
-        "app": "npm run init-app && npm run compile-typescript && npm run compile-react && npm run electron",
-        "start": "npm install && npm run app"
+        "app": "npm run build && npm run electron",
+        "start": "npm install && npm run app",
+        "dist-mac": "electron-builder -m",
+        "dist-win": "electron-builder -w",
+        "dist-linux": "electron-builder -l"
     },
     "dependencies": {
         "react": "^19.0.0",
@@ -44,6 +48,59 @@
         "webpack-cli": "^6.0.1",
         "opentype.js": "^1.3.4",
         "undici": "^7.8.0",
-        "psd": "^3.4.0"
+        "psd": "^3.4.0",
+        "electron-builder": "^26.0.12"
+    },
+    "build": {
+        "appId": "phlexicon.app",
+        "productName": "Phlexicon",
+        "files": ["build/**/*"],
+        "extraResources": [
+            {
+                "from": "./assets/",
+                "to": "assets/",
+                "filter": ["**/*"]
+            }
+        ],
+        "mac": {
+            "target": {
+                "target": "default",
+                "arch": [
+                    "arm64",
+                    "x64"
+                ]
+            }
+        },
+        "win": {
+            "target": {
+                "target": "nsis",
+                "arch": ["x64"]
+            },
+            "signAndEditExecutable": false
+        },
+        "nsis": {
+            "deleteAppDataOnUninstall": true
+        },
+        "linux": {
+            "category": "Utility",
+            "target": [
+                {
+                    "target": "rpm",
+                    "arch": ["x64"]
+                },
+                {
+                    "target": "deb",
+                    "arch": ["x64"]
+                },
+                {
+                    "target": "AppImage",
+                    "arch": ["x64"]
+                },
+                {
+                    "target": "pacman",
+                    "arch": ["x64"]
+                }
+            ]
+        }
     }
 }

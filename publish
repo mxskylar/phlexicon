@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -o xtrace
+
+npm run dist-mac
+docker-compose up dist-win-linux
+npm run publish

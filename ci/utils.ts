@@ -21,6 +21,6 @@ export const recreateDirectory = (path: string) => {
             recursive: true,
             force: true
         });
-        fs.mkdirSync(path);
     }
+    fs.mkdirSync(path);
 };
