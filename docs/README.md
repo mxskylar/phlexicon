@@ -1,5 +1,3 @@
-# Phlexicon
-
 ![Demo of Phlexicon app](demo.gif)
 
 ## Install
