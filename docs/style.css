@@ -1,0 +1,11 @@
+header, footer {
+    text-align: center;
+}
+
+a {
+    color: #2fa4e7;
+}
+
+a:hover {
+    font-weight: normal;
+}
