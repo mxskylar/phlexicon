@@ -4,7 +4,8 @@ A catalog of [phonemes](https://en.wikipedia.org/wiki/Phoneme) in hundreds of la
 
 ![Demo of Phlexicon app](docs/demo.gif)
 
-Read the [user guide](https://mxskylar.github.io/phlexicon/) for more.
+See the [user guide](https://mxskylar.github.io/phlexicon/) for details about the app.
+Read the reast of this README for technical details.
 
 > Phlexicon would be nothing without the open source data and frameworks it depends on.
 > Read more about those [here](https://mxskylar.github.io/phlexicon/attribution).
