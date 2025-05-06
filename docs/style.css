@@ -14,7 +14,3 @@ header h1 {
 a {
     color: #2fa4e7;
 }
-
-a:hover {
-    font-weight: default;
-}
