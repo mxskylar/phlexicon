@@ -4,3 +4,4 @@ plugins:
   - jekyll-remote-theme
 title: Phlexicon
 description: "A catalog of phonemes in hundreds of languages, dialects, and lexicons—both signed and spoken."
+logo: "logo.png"
