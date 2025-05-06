@@ -6,4 +6,4 @@ Download the [latest release](https://github.com/mxskylar/phlexicon/releases/lat
 
 - **macOS:** If your Mac uses an M1 chip, download an `arm64` file. Download either a `zip` or `dmg` file.
 - **Windows:** Download the `exe` installer.
-- **Linux:** Download an `rpm`, `deb`, `AppImage`, `pacman` file.
+- **Linux:** Download an `rpm`, `deb`, `AppImage`, or `pacman` file.
