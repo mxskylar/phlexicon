@@ -14,6 +14,13 @@ unless there is a [bug](https://github.com/mxskylar/phlexicon/issues).
 See the [data parsing source code](https://github.com/mxskylar/phlexicon/blob/main/ci/app/init.ts)
 to better understand how the original datasets are normalized, simplified, and parsed.
 
+## Can I export Phlexicon's data?
+
+At the moment, there's no way to export the data from the UI,
+but if you're tech savvy, you can build the [development version of the app](https://github.com/mxskylar/phlexicon/?tab=readme-ov-file#development)
+and [export data directly from the SQLite database](https://sqlite.org/cli.html#export_to_csv).
+
+
 ## What fonts does Phlexicon use?
 
 The [Charis SIL font](https://software.sil.org/charis/) for spoken phonemes in the
