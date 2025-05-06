@@ -10,7 +10,7 @@
 /* Keyboard keys */
 .keyboard {
     text-align: center;
-    margin-bottom: 10px;
+    padding-bottom: 50px;
 }
 
 .keyboard button {

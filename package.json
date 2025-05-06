@@ -1,6 +1,6 @@
 {
     "name": "Phlexicon",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A phonetic catalog for lexicons: Study a language. Document vocabulary. Analyze accents.",
     "main": "build/main.js",
     "author": "https://github.com/mxskylar <11418651+mxskylar@users.noreply.github.com>",
