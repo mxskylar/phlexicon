@@ -1,4 +1,4 @@
-![Demo of Phlexicon app](assets/demo.gif)
+![Demo of Phlexicon app](demo.gif)
 
 ## Install
 
