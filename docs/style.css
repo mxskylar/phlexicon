@@ -7,6 +7,10 @@ header h1 {
     font-family: 'Merriweather', serif;
 }
 
+#logo {
+    height: 150px;
+}
+
 a {
     color: #2fa4e7;
 }
