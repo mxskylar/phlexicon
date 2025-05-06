@@ -1,10 +1,10 @@
 header, footer {
     text-align: center;
-    margin-bottom: 0;
 }
 
 header h1 {
     font-family: 'Merriweather', serif;
+    margin-bottom: 0;
 }
 
 #logo {
