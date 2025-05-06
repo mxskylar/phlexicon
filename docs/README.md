@@ -3,7 +3,9 @@
 A catalog of [phonemes](https://en.wikipedia.org/wiki/Phoneme) in hundreds of languages, dialects, and lexicons—
 both [signed](https://www.signwriting.org/about/) and [spoken](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet).
 
-![Demo of Phlexicon app](demo.gif)
+<video controls autoplay>
+  <source src="demo.mov" type="video/mov">
+</video>
 
 ## Install
 
