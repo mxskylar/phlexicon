@@ -5,7 +5,7 @@ Phlexicon would be nothing without the open source data and frameworks it depend
 |  | Description | License |
 |---|---|---|
 | [PBase](https://pbase.phon.chass.ncsu.edu/) | Phonetic data for spoken languages | [Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/) |
-| [International SignWriting Alphabet 2010](https://www.signbank.org/iswa/), [SignWriting](https://www.signwriting.org/), & [SignPuddle 3.0](https://signpuddle.org/) | Writing system, font, & phonetic data for sign languages | [Attribution-ShareAlike 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/) |
+| [International SignWriting Alphabet 2010](https://www.signbank.org/iswa/), [SignWriting](https://www.signwriting.org/), & [SignPuddle 3.0](https://signpuddle.org/) | Writing system, font, phonetic data, & handshape pictures for sign languages | [Attribution-ShareAlike 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/) |
 | [SIL ISO 639-3](https://iso639-3.sil.org/) | Language names & identifiers |  |
 | [Charis SIL](https://software.sil.org/charis/) | Font that supports International Phonetic Alphabet (IPA) symbols |  |
 | [Bootstrap](https://getbootstrap.com/) | UI framework | [MIT](https://github.com/twbs/bootstrap/blob/main/LICENSE) |
