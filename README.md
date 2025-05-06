@@ -136,7 +136,7 @@ npm run dist-mac
 Packages app distribution for Windows.
 
 ```bash
-./electron-builder-win
+./electron-builder-docker win
 npm run dist-win
 ```
 
@@ -153,7 +153,8 @@ These commands may give the following, expected error while still succeeding to 
 Packages app distribution for Linux.
 
 ```bash
-docker-compose run --build dist-linux
+./electron-builder-docker linux
+npm run dist-linux
 ```
 
 *Deletes cache?* **Partially**, replaces files for previous app Linux distributions, if they exist.
