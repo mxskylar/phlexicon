@@ -1,0 +1,15 @@
+header, footer {
+    text-align: center;
+}
+
+header h1 {
+    font-family: 'Merriweather', serif;
+}
+
+a {
+    color: #2fa4e7;
+}
+
+a:hover {
+    font-weight: normal;
+}
