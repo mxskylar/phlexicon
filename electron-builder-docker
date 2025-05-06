@@ -1,5 +1,5 @@
 #!/bin/bash
-# https://www.electron.build/multi-platform-build
+# https://www.electron.build/multi-platform-build#build-electron-app-using-docker-on-a-local-machine
 
 IMAGE_VERSION=""
 if [[ "$1" == "win" ]]; then
