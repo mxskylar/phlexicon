@@ -3,7 +3,7 @@
 
 IMAGE_VERSION=""
 if [[ "$1" == "win" ]]; then
-    IMAGE_VERSION="wine"
+    IMAGE_VERSION=":wine"
 fi
 
 set -o xtrace
@@ -15,4 +15,4 @@ docker run --rm -ti \
     -v ${PWD##*/}-node-modules:/project/node_modules \
     -v ~/.cache/electron:/root/.cache/electron \
     -v ~/.cache/electron-builder:/root/.cache/electron-builder \
-    electronuserland/builder:$IMAGE_VERSION
+    electronuserland/builder$IMAGE_VERSION
