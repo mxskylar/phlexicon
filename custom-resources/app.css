@@ -5,3 +5,15 @@ body {
 #navigation-bar .navbar-brand {
     font-family: 'Merriweather', serif;
 }
+
+footer {
+    position: relative;
+    left: 0;
+    bottom: 5px;
+    text-align: center;
+    margin-top: 30px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    font-size: 12px;
+}

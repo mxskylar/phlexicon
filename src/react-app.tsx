@@ -99,6 +99,10 @@ class App extends React.Component {
                     <Route path="/sign-languages"  element={<SignLanguages/>}/>
                     <Route path="*" element={<Navigate to="/spoken-languages" replace />}/>
                 </Routes>
+                <footer className="text-secondary">
+                    Phlexicon would be nothing without the open source data and frameworks it depends on.
+                    Read more about those <a href="https://mxskylar.github.io/phlexicon/attribution" target="_blank">here</a>.
+                </footer>
             </HashRouter>
         );
     }
