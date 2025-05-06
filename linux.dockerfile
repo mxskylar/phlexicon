@@ -1,4 +1,5 @@
-FROM electronuserland/builder:wine
+# https://www.electron.build/multi-platform-build
+FROM electronuserland/builder
 
 USER root
 WORKDIR /project

@@ -133,10 +133,27 @@ npm run dist-mac
 
 ---
 
-Packages app distribution for Windows & Linux.
+Packages app distribution for Windows.
 
 ```bash
-docker-compose up dist-win-linux
+./electron-builder-win
+npm run dist-win
 ```
 
-*Deletes cache?* **Partially**, replaces files for previous app Windows & Linux distributions, if they exist.
+These commands may give the following, expected error while still succeeding to package the app for Windows.
+
+```
+0024:err:environ:run_wineboot failed to start wineboot 1
+```
+
+*Deletes cache?* **Partially**, replaces files for previous app Windows distributions, if they exist.
+
+---
+
+Packages app distribution for Linux.
+
+```bash
+docker-compose run --build dist-linux
+```
+
+*Deletes cache?* **Partially**, replaces files for previous app Linux distributions, if they exist.

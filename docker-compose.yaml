@@ -1,5 +1,6 @@
 services:
-  dist-win-linux:
+  dist-linux:
     build:
       context: .
-    command: npm run dist-win-linux
+      dockerfile: "linux.dockerfile"
+    command: npm run dist-linux

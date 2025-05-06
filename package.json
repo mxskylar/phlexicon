@@ -18,7 +18,8 @@
         "app": "npm run build && npm run electron",
         "start": "npm install && npm run app",
         "dist-mac": "electron-builder -m",
-        "dist-win-linux": "electron-builder -wl"
+        "dist-win": "electron-builder -w",
+        "dist-linux": "electron-builder -l"
     },
     "dependencies": {
         "react": "^19.0.0",
@@ -73,27 +74,31 @@
         "win": {
             "target": {
                 "target": "nsis",
-                "arch": [
-                    "x64"
-                ]
+                "arch": ["x64"]
             },
-            "artifactName": "${productName}-Setup-${version}.${ext}",
             "signAndEditExecutable": false
+        },
+        "nsis": {
+            "deleteAppDataOnUninstall": true
         },
         "linux": {
             "category": "Utility",
             "target": [
                 {
                     "target": "rpm",
-                    "arch": [
-                        "x64"
-                    ]
+                    "arch": ["x64"]
                 },
                 {
                     "target": "deb",
-                    "arch": [
-                        "x64"
-                    ]
+                    "arch": ["x64"]
+                },
+                {
+                    "target": "AppImage",
+                    "arch": ["x64"]
+                },
+                {
+                    "target": "pacman",
+                    "arch": ["x64"]
                 }
             ]
         }
